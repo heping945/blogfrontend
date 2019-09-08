@@ -1,0 +1,34 @@
+<template>
+  <div class="main-wrapper">
+    <router-view name="header" keep-alive ></router-view>
+    <transition name="fade" :duration="100">
+      <router-view name="content"></router-view>
+    </transition>
+    <router-view name="footer" keep-alive></router-view>
+  </div>
+</template>
+
+<script>
+  export default {
+    name: "Index",
+    data() {
+      return {
+      }
+    }
+  }
+</script>
+
+<style scoped>
+  .main-wrapper {
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .fade-enter-active, .fade-leave-active {
+    transition: opacity .5s
+  }
+
+  .fade-enter, .fade-leave-active {
+    opacity: 0
+  }
+</style>
