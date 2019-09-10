@@ -33,9 +33,7 @@
                   <Button type="default" size="small">关注</Button>
                 </template>
               </div>
-              <div style="clear: both">
 
-              </div>
 
             </div>
             <!--标题-->
@@ -121,7 +119,7 @@
           res => {
             this.postdatail = res.data;
             this.author = this.postdatail.author;
-            this.$store.commit('SetPostTitle', this.postdatail.title);
+            this.$store.dispatch('SetPostTitle', this.postdatail.title);
             console.log(this.author, '22222222222222')
             if (this.$store.state.userinfo.username) {
               if (this.$store.state.userinfo.username == this.author.username) {

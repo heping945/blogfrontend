@@ -1,7 +1,10 @@
 <template>
   <div class="sidebarright">
     <div class="feedbackbutton">
-    <Icon type="ios-chatbubbles" :size="20" color="#007FFF"/>
+      <router-link to="/feedback" title="建议反馈" target="_blank">
+          <Icon type="ios-chatbubbles" :size="20" color="#007FFF"/>
+      </router-link>
+
     </div>
     <BackTop></BackTop>
   </div>
@@ -23,6 +26,7 @@
     right: 30px;
     height: 30px;
     width: 30px;
+    /*cursor: pointer;*/
     border-radius: 50%;
     background: white;
     border: 1px solid #f1f1f1;

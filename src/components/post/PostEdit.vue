@@ -23,7 +23,6 @@
           <FormItem prop="body_md">
             <article>
               <mavon-editor v-model="post.body_md" fontSize="18px" :codeStyle="post.codestyle" :boxShadow="false"
-                            @save="saveMavon"
                             @fullScreen="changezindex" :tabSize="4" @change="change_render_value"/>
             </article>
           </FormItem>
@@ -70,7 +69,7 @@
             <Input type="url" v-model="post.reproduce_source" disabled clearable placeholder="请输入转载来源地址">
             </Input>
           </FormItem>
-          <Button type="primary" @click="updatepost('post')" long>更新文章</Button>
+          <Button type="primary" @click="updatepost('post')" long :disabled="updatetag">更新文章</Button>
         </Form>
       </Col>
     </Row>
@@ -91,6 +90,7 @@
     data() {
       return {
         defaultData: "edit",
+        updatetag:false,
         codestylelist: [],
         postdatail: {},
         categoryList: [],
@@ -217,6 +217,7 @@
                   content: '文章更新成功,3s后返回文章页面',
                   duration: 3
                 });
+                this.updatetag =true;
                 setTimeout(() => {
                   this.$router.push({name: 'postdetail', params: {id: res.data.id}})
                 }, 3000);

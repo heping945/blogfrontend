@@ -119,11 +119,17 @@
         scrollB: 0
       }
     },
+    created(){
+      alert(this.urlpath)
+    },
     computed: {
       avatar() {
         if (this.$store.state.userinfo) {
           return this.host + this.$store.state.userinfo.avatar
         }
+      },
+      urlpath(){
+        return this.$route.path
       },
       postheadershow() {
         if (this.$route.name == 'postdetail') {
@@ -147,7 +153,7 @@
       },
       //注销
       logout() {
-        this.$store.commit('ClearToken');
+        this.ClearToken()
         if (this.$route.meta.requireAuth) {
           this.$router.push({name: 'index'})
         }
@@ -257,7 +263,7 @@
     display: none;
   }
 
-  #show-in-post{
+  #show-in-post {
     padding-left: 2rem;
     font-size: 2rem;
 

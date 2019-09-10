@@ -16,6 +16,7 @@ export default new Vuex.Store({
   },
   mutations: {
     SaveToken(state, usertoken) {
+      //账号登录
       state.userinfo.username = usertoken.username;
       state.userinfo.token = usertoken.token;
       state.userinfo.avatar = usertoken.avatar;
@@ -24,12 +25,10 @@ export default new Vuex.Store({
       Cookie.set('avatar', usertoken.avatar, 60 * 60 * 24 * 7);
     },
     ClearToken(state) {
-      // 清除  userinfo 数据
+      // 清除  userinfo 数据,注销登录
       state.userinfo.username = null;
       state.userinfo.token = null;
       state.userinfo.avatar = null;
-      // 如果注销页面需要认证  直接返回首页
-      console.log('path======', this.$route);
       Cookie.remove('username');
       Cookie.remove('token')
       Cookie.remove('avatar')
@@ -38,7 +37,18 @@ export default new Vuex.Store({
       state.post_title = title
     },
   },
+  actions: {
+    SaveToken({commit}, usertoken) {
+      commit('SaveToken', usertoken)
+    },
+    ClearToken({commit}) {
+      commit('ClearToken')
+    },
+    SetPostTitle(context, title) {
+      context.commit('SetPostTitle', title)
+    },
+  },
   getters: {},
-  actions: {}
+
 
 })

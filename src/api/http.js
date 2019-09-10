@@ -1,5 +1,7 @@
 import axios from 'axios';
 import vue from '../main'
+// import {Message} from 'iview'
+
 
 const api = axios.create({
   baseURL: 'http://127.0.0.1:6655/api/v1/',
@@ -14,12 +16,11 @@ api.interceptors.request.use((config) => {
   let token = vue.$store.state.userinfo.token
   if (token) {
     config.headers['Authorization'] = 'JWT '+token;
+    // Message.info('test')   ? 测试用
   }
   return config
 },(err)=>{
-  console.log('这是axios拦截器产生的错误');
+  // Message.error('服务器错误')
   return Promise.reject(err)
 });
-
-
 export default api

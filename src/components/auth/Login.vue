@@ -128,7 +128,6 @@
               login(
                 this.userinfo
               ).then(data => {
-                // console.log('success');
                 this.$Message.info({
                   content: '登录成功',
                   duration: 1,
@@ -137,14 +136,11 @@
                 });
                 console.log(data);
                 console.log(this.$store);
-                this.$store.commit('SaveToken', {
+                this.$store.dispatch('SaveToken', {
                   token: data.data.token,
                   username: data.data.username,
                   avatar: data.data.avatar
                 });
-                console.log(this.$store.state.userinfo.token);
-                console.log(this.$store.state.userinfo.username);
-                console.log(this.$store.state.userinfo.avatar);
                 //  如果登录成功,且有参数
                 var backurl = this.$route.query.backurl;
                 console.log(backurl)

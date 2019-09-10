@@ -22,6 +22,7 @@
   .main-wrapper {
     width: 100%;
     margin: 0 auto;
+    /*animation-duration: 5s;*/
   }
 
   .fade-enter-active, .fade-leave-active {
