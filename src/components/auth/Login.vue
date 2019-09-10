@@ -51,7 +51,7 @@
                   </Input>
                 </FormItem>
                 <FormItem>
-                  <Button type="primary" @click="denglu('formInline')">登录</Button>
+                  <Button type="primary" @click="denglu('formInline')" :disabled="isDisable">登录</Button>
                 </FormItem>
                 <a href="#">忘记密码？</a>
               </Form>
@@ -87,6 +87,7 @@
     data() {
       return {
         err: '',
+        isDisable: false,
         ifshow: false,
         userinfo: {
           username: 'heping',
@@ -120,6 +121,11 @@
       }
       ,
       denglu() {
+        //防止重复提交
+        this.isDisable = true
+        setTimeout(() => {
+          this.isDisable = false
+        }, 1000);
         this.$refs.formInline.validate((valid) => {
           if (valid) {
             // 验证成功,发送数据

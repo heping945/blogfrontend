@@ -101,6 +101,8 @@
 </template>
 
 <script>
+  import {mapActions} from 'vuex'
+
   export default {
     name: "Header",
     data() {
@@ -119,17 +121,11 @@
         scrollB: 0
       }
     },
-    created(){
-      alert(this.urlpath)
-    },
     computed: {
       avatar() {
         if (this.$store.state.userinfo) {
           return this.host + this.$store.state.userinfo.avatar
         }
-      },
-      urlpath(){
-        return this.$route.path
       },
       postheadershow() {
         if (this.$route.name == 'postdetail') {
@@ -147,6 +143,7 @@
       window.addEventListener('scroll', this.showBtn) //scroll 滚动事件
     },
     methods: {
+      ...mapActions(['ClearToken']),
       // 切换dropmenu 选择dropitem进行路由切换
       selectmenu(name) {
         this.indexshow = name;

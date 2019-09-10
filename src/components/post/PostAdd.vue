@@ -23,7 +23,7 @@
               <mavon-editor v-model="post.body_md" :subfield="false" :defaultOpen="defaultData" ref="md"
                             :codeStyle="post.codestyle" :boxShadow="false" @fullScreen="changezindex"
                             @save="saveMavon" @change="change_render_value"
-                            />
+              />
             </article>
           </FormItem>
           <FormItem prop="codestyle">
@@ -68,7 +68,7 @@
             <Input type="url" v-model="post.reproduce_source" disabled clearable placeholder="请输入转载来源地址">
             </Input>
           </FormItem>
-          <Button type="primary" @click="addpost('post')" long>创建文章</Button>
+          <Button type="primary" @click="addpost('post')" long :disabled="isDisable">创建文章</Button>
         </Form>
       </Col>
     </Row>
@@ -87,6 +87,7 @@
     name: "PostAdd",
     data() {
       return {
+        isDisable: false,
         defaultData: "edit",
         codestylelist: [],
         categoryList: [],
@@ -152,6 +153,10 @@
       },
       // 提交文章   包含数据验证
       addpost() {
+        this.isDisable = true
+        setTimeout(() => {
+          this.isDisable = false
+        }, 1000);
         this.$refs.post.validate((valid) => {
           if (valid) {
             // 验证成功, 发送数据
@@ -164,6 +169,7 @@
                   content: '文章添加成功,3s后返回文章页面',
                   duration: 3
                 });
+                this.isDisable = true;
                 setTimeout(() => {
                   this.$router.push({name: 'postdetail', params: {id: res.data.id}})
                 }, 3000);
@@ -226,7 +232,6 @@
               }).then(res => {
                 this.$Message.success("标签:" + res.data.name + "创建成功")
                 this.tagList.push(res.data)
-
               }).catch(err => {
                 this.$Message.error(err.response.data.name[0])
               })

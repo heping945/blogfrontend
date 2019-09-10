@@ -69,7 +69,7 @@
             <Input type="url" v-model="post.reproduce_source" disabled clearable placeholder="请输入转载来源地址">
             </Input>
           </FormItem>
-          <Button type="primary" @click="updatepost('post')" long :disabled="updatetag">更新文章</Button>
+          <Button type="primary" @click="updatepost('post')" long :disabled="isDisable">更新文章</Button>
         </Form>
       </Col>
     </Row>
@@ -90,7 +90,7 @@
     data() {
       return {
         defaultData: "edit",
-        updatetag:false,
+        isDisable:false,
         codestylelist: [],
         postdatail: {},
         categoryList: [],
@@ -217,11 +217,10 @@
                   content: '文章更新成功,3s后返回文章页面',
                   duration: 3
                 });
-                this.updatetag =true;
+                this.isDisable =true;
                 setTimeout(() => {
                   this.$router.push({name: 'postdetail', params: {id: res.data.id}})
                 }, 3000);
-
               }).catch(err => {
                 console.log(err.response);
                 console.log(this.post);
