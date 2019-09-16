@@ -23,7 +23,8 @@
           <FormItem prop="body_md">
             <article>
               <mavon-editor v-model="post.body_md" fontSize="18px" :codeStyle="post.codestyle" :boxShadow="false"
-                            @fullScreen="changezindex" :tabSize="4" @change="change_render_value"/>
+                            @fullScreen="changezindex" :tabSize="4" @change="change_render_value"
+                            ref=md @imgAdd="$imgAdd" @imgDel="$imgDel"/>
             </article>
           </FormItem>
           <FormItem prop="codestyle">
@@ -73,15 +74,18 @@
         </Form>
       </Col>
     </Row>
+    <SuspensionPanel></SuspensionPanel>
   </div>
 </template>
 
 <script>
+  import SuspensionPanel from '../utils/SuspensionPanel'
   import {getcategorylist} from '../../api/api'
   import {getPostDetail} from '../../api/api'
   import {updatePost} from '../../api/api'
   import {gettaglist} from '../../api/api'
   import {createTag} from '../../api/api'
+  import {postimgupload} from '../../api/api'
   import authenticate from '../../assets/js/authenticate'
   import Axios from 'axios'
 
@@ -90,7 +94,7 @@
     data() {
       return {
         defaultData: "edit",
-        isDisable:false,
+        isDisable: false,
         codestylelist: [],
         postdatail: {},
         categoryList: [],
@@ -100,6 +104,7 @@
         tagseleted: [],
         tagList: [],
         tag: [],
+        img_file: {},
         post: {
           title: '',
           body: '',
@@ -122,6 +127,9 @@
         ifauthor: false
       }
     },
+    components: {
+      SuspensionPanel
+    },
     computed: {
       transdatapost() {
         this.post['id'] = this.$route.params.id;
@@ -130,7 +138,7 @@
         if (!this.post.reproduce) {
           this.post.reproduce_source = null
         }
-        return this.post
+        return this.post;
       }
     },
 
@@ -202,6 +210,31 @@
           this.$router.push({name: 'index'})
         }
       },
+      // 绑定@imgAdd event
+      $imgAdd(pos, $file) {
+        // 第一步.将图片上传到服务器.
+        // 缓存图片信息
+        this.img_file[pos] = $file;
+        var formdata = new FormData();
+        formdata.append('img', $file);
+        postimgupload(formdata).then((url) => {
+          // 第二步.将返回的url替换到文本原位置![...](0) -> ![...](url)
+          /**
+           * $vm 指为mavonEditor实例，可以通过如下两种方式获取
+           * 1. 通过引入对象获取: `import {mavonEditor} from ...` 等方式引入后，`$vm`为`mavonEditor`
+           * 2. 通过$refs获取: html声明ref : `<mavon-editor ref=md ></mavon-editor>，`$vm`为 `this.$refs.md`
+           */
+          //   alert(1)
+          // console.log(url)
+          this.$refs.md.$img2Url(pos, url.data.img);
+          // $vm.$img2Url(pos, url.data.img);
+        }).catch(err => {
+          alert(2)
+        })
+      },
+      $imgDel(pos) {
+        delete this.img_file[pos];
+      },
       // 提交文章   包含数据验证
       updatepost() {
         this.$refs.post.validate((valid) => {
@@ -217,7 +250,7 @@
                   content: '文章更新成功,3s后返回文章页面',
                   duration: 3
                 });
-                this.isDisable =true;
+                this.isDisable = true;
                 setTimeout(() => {
                   this.$router.push({name: 'postdetail', params: {id: res.data.id}})
                 }, 3000);

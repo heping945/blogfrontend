@@ -20,9 +20,9 @@
 
           <FormItem prop="body_md">
             <article>
-              <mavon-editor v-model="post.body_md" :subfield="false" :defaultOpen="defaultData" ref="md"
+              <mavon-editor v-model="post.body_md" :subfield="false" :defaultOpen="defaultData"
                             :codeStyle="post.codestyle" :boxShadow="false" @fullScreen="changezindex"
-                            @save="saveMavon" @change="change_render_value"
+                            @save="saveMavon" @change="change_render_value" ref=md @imgAdd="$imgAdd" @imgDel="$imgDel"
               />
             </article>
           </FormItem>
@@ -72,14 +72,17 @@
         </Form>
       </Col>
     </Row>
+    <SuspensionPanel></SuspensionPanel>
   </div>
 </template>
 
 <script>
+  import SuspensionPanel from '../utils/SuspensionPanel'
   import {getcategorylist} from '../../api/api'
   import {createPost} from '../../api/api'
   import {createTag} from '../../api/api'
   import {gettaglist} from '../../api/api'
+  import {postimgupload} from '../../api/api'
   import storage from '../../assets/js/storage'
   import Axios from 'axios'
 
@@ -94,6 +97,7 @@
         tagvalue: '',
         tagseleted: [],
         tagList: [],
+        img_file: {},
         post: {
           title: '',
           body: '',
@@ -118,6 +122,9 @@
           ],
         },
       }
+    },
+    components: {
+      SuspensionPanel
     },
     created() {
       this.initcategorydata();
@@ -175,13 +182,39 @@
                 }, 3000);
 
               }).catch(err => {
-                this.$Message.error(err.response.data.title[0]);
+                this.$Message.error('未知错误请检查');
+                console.log(err.response)
               })
             }
           } else {
             this.$Message.error('请检查文章字段验证！!！');
           }
         })
+      },
+      // 绑定@imgAdd event
+      $imgAdd(pos, $file) {
+        // 第一步.将图片上传到服务器.
+        // 缓存图片信息
+        this.img_file[pos] = $file;
+        var formdata = new FormData();
+        formdata.append('img', $file);
+        postimgupload(formdata).then((url) => {
+          // 第二步.将返回的url替换到文本原位置![...](0) -> ![...](url)
+          /**
+           * $vm 指为mavonEditor实例，可以通过如下两种方式获取
+           * 1. 通过引入对象获取: `import {mavonEditor} from ...` 等方式引入后，`$vm`为`mavonEditor`
+           * 2. 通过$refs获取: html声明ref : `<mavon-editor ref=md ></mavon-editor>，`$vm`为 `this.$refs.md`
+           */
+          //   alert(1)
+          // console.log(url)
+          this.$refs.md.$img2Url(pos, url.data.img);
+          // $vm.$img2Url(pos, url.data.img);
+        }).catch(err => {
+          alert(2)
+        })
+      },
+      $imgDel(pos) {
+        delete this.img_file[pos];
       },
       // 保存postvalue本地存储
       saveMavon(value, render) {
@@ -226,7 +259,7 @@
           },
           onOk: () => {
             if (this.tagvalue) {
-              alert(this.tagvalue);
+              // alert(this.tagvalue);
               createTag({
                 name: this.tagvalue
               }).then(res => {

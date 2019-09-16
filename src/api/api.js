@@ -58,3 +58,7 @@ export const gettaglist = params => {
 export const createTag = params => {
   return api.post(`/tag/`, params)
 };
+
+export const postimgupload = params =>{
+  return api.post('/postimg/',params,{ headers: {'Content-Type': 'multipart/form-data'},})
+}

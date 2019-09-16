@@ -118,7 +118,8 @@
         host: 'http://127.0.0.1:6655',
         backFlag: true,
         ifshow: true,
-        scrollB: 0
+        scrollB: 0,
+        scrollA: 0
       }
     },
     computed: {
@@ -155,7 +156,7 @@
           this.$router.push({name: 'index'})
         }
       },
-      showBtn() { // 计算距离顶部的高度，当高度大于40显示回顶部，小于40则隐藏（默认隐藏）
+      showBtn() { // 计算距离顶部的高度，当高度大于300隐藏，小于300显示（默认显示）
         /*获取当前页面滚动条纵坐标的位置
         IE9及以上：可以使用window.pageYOffset或者document.documentElement.scrollTop ，
         safari： window.pageYOffset 与document.body.scrollTop都可以
@@ -164,7 +165,15 @@
         let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
         that.scrollB = scrollTop
         if (that.scrollB > 300) {
-          that.backFlag = false
+          // that.backFlag = false
+          if (that.scrollA <= that.scrollB) {//下滚
+            that.backFlag = false
+          } else {//上滚
+            that.backFlag = true
+          }
+          setTimeout(function () {
+            that.scrollA = that.scrollB;
+          }, 0);
         } else {
           that.backFlag = true
         }
@@ -174,7 +183,6 @@
 </script>
 
 <style scoped lang="scss">
-  /*@import "../../assets/scss/base";*/
 
   .header {
     background: #FFF;

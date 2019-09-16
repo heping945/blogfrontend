@@ -1,5 +1,5 @@
 <template>
-    <div class="commonpositiontop">CategoryContent</div>
+    <div class="commonpositiontop" style="height: 8800px">CategoryContent</div>
 </template>
 
 <script>
