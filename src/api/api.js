@@ -7,7 +7,7 @@ export const login = params => {
 };
 //注册
 export const register = parmas => {
-  return api.post(`users/`, parmas)
+  return api.post(`user/`, parmas)
 };
 
 
@@ -59,6 +59,7 @@ export const createTag = params => {
   return api.post(`/tag/`, params)
 };
 
+// 图片上传  （单次图片）
 export const postimgupload = params =>{
   return api.post('/postimg/',params,{ headers: {'Content-Type': 'multipart/form-data'},})
 }

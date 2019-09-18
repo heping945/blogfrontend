@@ -12,13 +12,16 @@
     <hr>
     <br>
     <div><img :src="xi" alt="图"></div>
-    <div><img src="http://127.0.0.1:6655/media/postserver/img/20190916233953-650.png" alt=""></div>
+    <h1>测试get请求的query</h1>
+    <button @click="getpost">getpost</button>
+    <Table stripe :columns="columns1" :data="postlist"></Table>
   </div>
 </template>
 
 <script>
   import Axios from 'axios'
   import {postimgupload} from '../../api/api'
+  import {getIndexPost} from '../../api/api'
 
 
   export default {
@@ -27,7 +30,19 @@
       return {
         codestylelist: [],
         codestyle: '',
-        xi:''
+        xi: '',
+        postlist: [],
+        columns1: [
+          {
+            title: 'Title',
+            key: 'title'
+          },
+          {
+            title: 'Url',
+            key: 'url'
+          },
+
+        ],
       }
     },
     async created() {
@@ -45,12 +60,25 @@
         //   method: 'post',
         //   data: formdata,
         //   headers: {'Content-Type': 'multipart/form-data'},
-        postimgupload(formdata).then(res=>{
+        postimgupload(formdata).then(res => {
           alert('success')
           console.log(res.data)
           this.xi = res.data.img
-        }).catch(err=>{
+        }).catch(err => {
           console.log(err.response)
+        })
+      },
+      getpost() {
+        getIndexPost(
+          {
+            params: {
+              'page': 2
+            }
+          }
+        ).then(data => {
+          this.postlist = data.data.results
+        }).catch(err => {
+          console.log('err.response', err.response);
         })
       }
     }

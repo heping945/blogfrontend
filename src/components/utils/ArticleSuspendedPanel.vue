@@ -84,7 +84,5 @@
       display: none;
     }
   }
-  .shareicon{
-    font-family: iconfont;
-  }
+
 </style>

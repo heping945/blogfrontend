@@ -22,26 +22,41 @@
         </div>
       </Card>
     </div>
-    <!--    <div class="bottommore"></div>-->
-    <div class="clearfix"></div>
+    <LoadingSpain v-show="loadingspainflag"></LoadingSpain>
+    <NoContent v-if="!next"></NoContent>
   </div>
 </template>
 
 <script>
   import {getIndexPost} from '../../api/api'
   import {handleDate} from '../../assets/js/datetimeformat'
+  import LoadingSpain from '../utils/LoadingSpain'
+  import NoContent from '../utils/NoContent'
+  import Axios from 'axios'
 
   export default {
     name: "IndexPostList",
     data() {
       return {
-        postlist: []
+        postlist: [],
+        loadingspainflag: false,
+        tobottomonce: true,
+        next: ''
       }
+    },
+    components: {
+      LoadingSpain,
+      NoContent
     },
     created() {
       // 初始化postlist
       this.initIndexPost();
-      console.log(handleDate('2019-08-08T17:07:14.281579'))
+    },
+    mounted() {
+      window.addEventListener('scroll', this.scrollHander)
+    },
+    destroyed() {
+      window.removeEventListener('scroll', this.scrollHander)
     },
     computed: {},
     methods: {
@@ -49,15 +64,43 @@
         getIndexPost(
           {}
         ).then(data => {
-          this.postlist = data.data.results
-          console.log('this.postlist------->', this.postlist);
-          console.log(data)
+          this.postlist = data.data.results;
+          this.next = data.data.next
+          console.log(data.data, '1111')
+          console.log(this.postlist, '2222')
+          console.log(this.next, '3333')
         }).catch(err => {
           console.log('err.response', err.response);
-          console.log("xwxsssssssssssssssss");
-
         })
       },
+      //监视滚动条到底部的方法 ，
+      scrollHander() {
+        var scr = document.documentElement.scrollTop || document.body.scrollTop; // 向上滚动的那一部分高度
+        var clientHeight = document.documentElement.clientHeight; // 屏幕高度也就是当前设备静态下你所看到的视觉高度
+        var scrHeight = document.documentElement.scrollHeight || document.body.scrollHeight; // 整个网页的实际高度，兼容Pc端
+        if (scr + clientHeight + 10 >= scrHeight) {
+          //  滚到底部
+          if (this.next && this.tobottomonce) {
+            this.loadingspainflag = true
+            this.tobottomonce = false
+            setTimeout(() => {
+              this.getmorepost()
+            }, 1000)
+          }
+        } else {
+        }
+      },
+      async getmorepost() {
+        Axios.get(this.next).then(res => {
+          this.next = res.data.next
+          this.postlist = this.postlist.concat(res.data.results)
+          this.tobottomonce = true
+          this.loadingspainflag = false
+        }).catch(err => {
+          console.log(err)
+        })
+      }
+      ,
       handleDate
     }
   }
@@ -76,7 +119,5 @@
     line-height: 1.2;
   }
 
-  .bottommore {
-    height: 1020px;
-  }
+
 </style>

@@ -143,6 +143,9 @@
       console.log(this.$store.state.userinfo);
       window.addEventListener('scroll', this.showBtn) //scroll 滚动事件
     },
+    destroyed() { // 组件销毁取消监听
+      window.removeEventListener('scroll', this.showBtn)
+    },
     methods: {
       ...mapActions(['ClearToken']),
       // 切换dropmenu 选择dropitem进行路由切换

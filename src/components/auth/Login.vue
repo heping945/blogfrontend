@@ -8,20 +8,35 @@
               <h1>注册</h1>
               <div class="social-container">
                 <a href="">
-                  <Avatar icon="ios-person" size="large"/>
+                  <Icon custom="icofont icon-qq" class="shareicon" :size="20"/>
                 </a>
                 <a href="">
-                  <Avatar icon="ios-person" size="large"/>
+                  <Icon custom="icofont icon-weixin" class="shareicon" :size="20"/>
                 </a>
                 <a href="">
-                  <Avatar icon="ios-person" size="large"/>
+                  <Icon custom="icofont icon-weibo1" class="shareicon" :size="20"/>
                 </a>
               </div>
-              <span>第三方账号注册</span>
-              <input type="text" placeholder="名称"/>
-              <input type="email" placeholder="邮箱"/>
-              <input type="password" placeholder="密码"/>
-              <button>注册</button>
+              <Form ref="RegformInline" :model="reguserinfo" :rules="ruleInline">
+                <FormItem prop="username">
+                  <Input type="text" v-model="reguserinfo.username" placeholder="用户名">
+                    <Icon type="ios-person-outline" slot="prepend"></Icon>
+                  </Input>
+                </FormItem>
+                <FormItem prop="password">
+                  <Input type="password" v-model="reguserinfo.password" placeholder="输入密码">
+                    <Icon type="ios-lock-outline" slot="prepend"></Icon>
+                  </Input>
+                </FormItem>
+                <FormItem prop="re_password">
+                  <Input type="password" v-model="reguserinfo.re_password" placeholder="确认密码">
+                    <Icon type="ios-lock-outline" slot="prepend"></Icon>
+                  </Input>
+                </FormItem>
+                <FormItem>
+                  <Button type="primary" @click="Signin" :disabled="isDisable">注册</Button>
+                </FormItem>
+              </Form>
             </div>
           </div>
           <div class="form-container sign-in-container">
@@ -29,16 +44,16 @@
               <h1>登录</h1>
               <div class="social-container">
                 <a href="">
-                  <Avatar icon="ios-person" size="large"/>
+                  <Icon custom="icofont icon-qq" class="shareicon" :size="20"/>
                 </a>
                 <a href="">
-                  <Avatar icon="ios-person" size="large"/>
+                  <Icon custom="icofont icon-weixin" class="shareicon" :size="20"/>
                 </a>
                 <a href="">
-                  <Avatar icon="ios-person" size="large"/>
+                  <Icon custom="icofont icon-weibo1" class="shareicon" :size="20"/>
                 </a>
               </div>
-              <span style="margin-bottom: 20px">第三方账号注册</span>
+              <span style="margin-bottom: 20px">第三方账号登录</span>
               <Form ref="formInline" :model="userinfo" :rules="ruleInline">
                 <FormItem prop="username">
                   <Input type="text" v-model="userinfo.username" placeholder="Username">
@@ -51,7 +66,7 @@
                   </Input>
                 </FormItem>
                 <FormItem>
-                  <Button type="primary" @click="denglu('formInline')" :disabled="isDisable">登录</Button>
+                  <Button type="primary" @click="Login('formInline')" :disabled="isDisable">登录</Button>
                 </FormItem>
                 <a href="#">忘记密码？</a>
               </Form>
@@ -81,10 +96,21 @@
 
 <script>
   import {login} from "../../api/api";
+  import {register} from "../../api/api";
 
   export default {
     name: "Login",
     data() {
+      //验证密码是否一样的自定义验证
+      const validatePassCheck = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请确认密码'));
+        } else if (value !== this.reguserinfo.password) {
+          callback(new Error('输入不一致'));
+        } else {
+          callback();
+        }
+      };
       return {
         err: '',
         isDisable: false,
@@ -93,14 +119,23 @@
           username: 'heping',
           password: 'pp123456',
         },
+        reguserinfo: {
+          username: '',
+          password: '',
+          re_password: ''
+        },
+
         ruleInline: {
           username: [
             {required: true, message: '请输入用户名', trigger: 'blur'}
           ],
           password: [
             {required: true, message: '请输入密码', trigger: 'blur'},
-            {type: 'string', min: 6, message: 'The password length cannot be less than 6 bits', trigger: 'blur'}
-          ]
+            {type: 'string', min: 6, message: '密码至少6位', trigger: 'blur'}
+          ],
+          re_password: [
+            {validator: validatePassCheck, trigger: 'blur'}
+          ],
         }
       }
     }
@@ -120,7 +155,45 @@
         this.ifshow = !this.ifshow
       }
       ,
-      denglu() {
+      Signin() {
+        //防止重复提交
+        this.isDisable = true
+        setTimeout(() => {
+          this.isDisable = false
+        }, 1000);
+        this.$refs.RegformInline.validate((valid) => {
+          if (valid) {
+            // 验证成功,发送数据
+            {
+              register(
+                {
+                  username: this.reguserinfo.username,
+                  password: this.reguserinfo.re_password
+                }
+              ).then(data => {
+                this.$Message.info({
+                  content: '用户>'+this.reguserinfo.username+'<注册成功,将在1s返回登录页面',
+                  duration: 1,
+                  closable: true,
+                  top: 200
+                });
+                setTimeout(() => {
+                  //刷新页面直接重载，不用$router.push('/login')因为当前页不会重载会继续注册页面
+                  this.$router.go(0)
+                }, 800);
+              }).catch(err => {
+                // 无法确定返回的错误类型
+                var errmsg = err.response.data.username || err.response.data.password
+                this.$Message.error(errmsg[0]);
+                console.log(err.response);
+              })
+            }
+          } else {
+            this.$Message.error('请检查输入');
+          }
+        })
+      },
+      Login() {
         //防止重复提交
         this.isDisable = true
         setTimeout(() => {
@@ -156,9 +229,7 @@
                   this.$router.push({path: '/'})
                 }
               }).catch(err => {
-                this.$Message.error({
-                  content: '用户名或密码错误',
-                });
+                this.$Message.error('用户名或密码错误');
                 console.log(err.response);
                 this.error = '用户名或密码错误'
               })
@@ -407,5 +478,10 @@
 
   .ivu-input-icon-normal {
     padding-right: 32px;
+  }
+
+  .ivu-icon:hover {
+    color: #86ADD3;
+    cursor: pointer;
   }
 </style>
