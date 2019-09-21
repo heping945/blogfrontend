@@ -156,11 +156,11 @@
       }
       ,
       Signin() {
-        //防止重复提交
+        // 防止重复提交
         this.isDisable = true
         setTimeout(() => {
           this.isDisable = false
-        }, 1000);
+        }, 1500);
         this.$refs.RegformInline.validate((valid) => {
           if (valid) {
             // 验证成功,发送数据
@@ -177,6 +177,7 @@
                   closable: true,
                   top: 200
                 });
+                this.isDisable = true
                 setTimeout(() => {
                   //刷新页面直接重载，不用$router.push('/login')因为当前页不会重载会继续注册页面
                   this.$router.go(0)

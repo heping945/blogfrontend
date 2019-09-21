@@ -30,7 +30,7 @@
                   </Button>
                 </template>
                 <template v-else>
-                  <Button type="default" size="small">关注</Button>
+                  <Button type="default" size="small" ghost>关注</Button>
                 </template>
               </div>
 

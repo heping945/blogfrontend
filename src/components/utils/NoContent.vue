@@ -1,13 +1,18 @@
 <template>
   <div id="nocontent">
 <!--    <hr style="border: 1px solid #c0c0c0;margin-top: 30px">-->
-    <div class="hr-more">这里是一条底线</div>
+    <div class="hr-more">{{msg}}</div>
   </div>
 </template>
 
 <script>
   export default {
-    name: "NoContent"
+    name: "NoContent",
+    data(){
+      return{
+        msg:'>--这里是底线--<'
+      }
+    }
   }
 </script>
 

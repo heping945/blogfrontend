@@ -17,7 +17,7 @@
   #loadingspin {
     text-align: center;
     margin-top: 2rem;
-    margin-bottom: 3rem;
+    margin-bottom: 1rem;
   }
 
   .demo-spin-icon-load {

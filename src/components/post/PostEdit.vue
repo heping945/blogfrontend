@@ -187,7 +187,7 @@
       // 初始化 分类数据
       initcategorydata() {
         getcategorylist({}).then(res => {
-          this.categoryList = res.data.results
+          this.categoryList = res.data
           console.log('this.categoryList--->', this.categoryList);
         }).catch(err => {
           console.log(err)
@@ -196,7 +196,7 @@
       // 初始化 标签数据
       inittagdata() {
         gettaglist({}).then(res => {
-          this.tagList = res.data.results
+          this.tagList = res.data
           console.log(res);
         }).catch(err => {
           console.log(err)
@@ -229,7 +229,7 @@
           this.$refs.md.$img2Url(pos, url.data.img);
           // $vm.$img2Url(pos, url.data.img);
         }).catch(err => {
-          alert(2)
+          this.$Message.error('格式或类型错误，请重新上传')
         })
       },
       $imgDel(pos) {
@@ -255,9 +255,10 @@
                   this.$router.push({name: 'postdetail', params: {id: res.data.id}})
                 }, 3000);
               }).catch(err => {
-                console.log(err.response);
-                console.log(this.post);
-                alert('errors')
+                console.log(err.response)
+                var e = err.response.data
+                let errmsg = Object.values(e)[0][0]
+                this.$Message.error(errmsg);
               })
             }
           } else {

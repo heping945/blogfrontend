@@ -145,7 +145,8 @@
       // 初始化 分类数据
       initcategorydata() {
         getcategorylist({}).then(res => {
-          this.categoryList = res.data.results
+          this.categoryList = res.data
+          console.log(res.data, 'test1111111111111')
         }).catch(err => {
           console.log(err)
         })
@@ -153,7 +154,8 @@
       //初始化标签数据
       inittagdata() {
         gettaglist({}).then(res => {
-          this.tagList = res.data.results
+          this.tagList = res.data
+          console.log(this.tagList, 'test22222222222222222')
         }).catch(err => {
           console.log(err)
         })
@@ -173,17 +175,19 @@
                 this.post
               ).then(res => {
                 this.$Message.info({
-                  content: '文章添加成功,3s后返回文章页面',
-                  duration: 3
+                  content: '文章添加成功,1s后返回文章页面',
+                  duration: 1
                 });
                 this.isDisable = true;
                 setTimeout(() => {
                   this.$router.push({name: 'postdetail', params: {id: res.data.id}})
-                }, 3000);
+                }, 1000);
 
               }).catch(err => {
-                this.$Message.error('未知错误请检查');
                 console.log(err.response)
+                var e = err.response.data
+                let errmsg = Object.values(e)[0][0]
+                this.$Message.error(errmsg);
               })
             }
           } else {
@@ -210,7 +214,7 @@
           this.$refs.md.$img2Url(pos, url.data.img);
           // $vm.$img2Url(pos, url.data.img);
         }).catch(err => {
-          alert(2)
+          this.$Message.error('格式或类型错误，请重新上传')
         })
       },
       $imgDel(pos) {
@@ -220,8 +224,6 @@
       saveMavon(value, render) {
 
         storage.set('currentpost', value);
-        var v = storage.get('currentpost');
-        console.log(v)
         this.post.body = render;
         this.post.body_md = value;
       },

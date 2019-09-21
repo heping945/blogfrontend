@@ -14,6 +14,7 @@ const CategoryContent = () => import('@/components/category/CategoryContent');
 const UserContent = () => import('@/components/accounts/UserContent');
 const UserActivites = () => import('@/components/accounts/UserActivites');
 const UserPosts = () => import('@/components/accounts/UserPosts');
+const SearchContent = () => import('@/components/search/SearchContent');
 const Login = () => import('@/components/auth/Login');
 ;
 
@@ -101,6 +102,18 @@ export default new Router({
           },
           meta: {
             title: '分类'
+          }
+        },
+        {
+          path: '/search',
+          name: 'search',
+          components: {
+            header: Header,
+            content: SearchContent,
+            footer: Footer
+          },
+          meta: {
+            title: '搜索'
           }
         },
         {
