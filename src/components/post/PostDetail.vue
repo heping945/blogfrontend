@@ -49,8 +49,17 @@
       </Col>
       <!--右侧响应式面板区域-->
       <Col :xs="0" :sm="0" :md="0" :lg="6">
-<!--        <SideBarRight></SideBarRight>-->
+        <!--        <SideBarRight></SideBarRight>-->
         <compoent is="SideBarRight"></compoent>
+        <div style="position: fixed;top: 260px;width:240px ">
+          <Card :bordered="false">
+            <p v-for="item in catlog" style="margin-top: 1rem">
+              <a :href="'#'+item.id">{{item.title}}</a>
+            </p>
+          </Card>
+        </div>
+
+
       </Col>
     </Row>
     <SuspensionPanelBottom></SuspensionPanelBottom>
@@ -61,6 +70,7 @@
 <script>
   import {getPostDetail} from '../../api/api'
   import {dateFormat} from '../../assets/js/dateformat'
+  import {toToc} from '../../assets/js/transtoc'
   import SideBarRight from '../utils/SideBarRight'
   import ArticleSuspendedPanel from '../utils/ArticleSuspendedPanel'
   import SuspensionPanelBottom from '../utils/SuspensionPanelBottom'
@@ -78,8 +88,9 @@
         toolbars: {
           readmodel: true,
         },
+        catlog: [],
         ifauthor: false,
-        ifauth: false
+        ifauth: false,
       }
     },
     components: {
@@ -108,7 +119,6 @@
     },
     created() {
       this.initdata();
-
     },
     methods: {
       // 初始化post数据
@@ -119,8 +129,17 @@
           res => {
             this.postdatail = res.data;
             this.author = this.postdatail.author;
+            console.log(this.postdatail,'bodyaaaa')
+            // let Catl = this.toToc(this.postdatail.body)
+            // if (Catl) {
+            //   this.catlog = Catl
+            // }
+            this.catlog = this.toToc(this.postdatail.body)
+            console.log(this.catlog, 'this.catlog')
+
+            // 配置 postdetail 页的标题栏
             this.$store.dispatch('SetPostTitle', this.postdatail.title);
-            console.log(this.author, '22222222222222')
+
             if (this.$store.state.userinfo.username) {
               if (this.$store.state.userinfo.username == this.author.username) {
                 this.editauth = true
@@ -141,6 +160,7 @@
         )
       },
       dateFormat,
+      toToc,
       // 跳转到文章编辑页面
       toedit() {
         const postid = this.$route.params.id;
