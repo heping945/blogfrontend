@@ -6,22 +6,24 @@
           <Card :bordered="false">
             <p>
               <span>
-                <router-link :to="{name:'index',query:{sort:'latest'}}">最新</router-link>
+                <router-link :to="{name:'index',query:{sort:'latest'}}" @click.native="sort">最旧</router-link>
               </span>
-             &nbsp;| &nbsp;
-              <router-link :to="{name:'index',query:{sort:'popular'}}">热门</router-link>
+              &nbsp;| &nbsp;
+              <router-link :to="{name:'index',query:{sort:'mod'}}" @click.native="sort">更新</router-link>
+              &nbsp;| &nbsp;
+              <router-link :to="{name:'index',query:{sort:'popular'}}" @click.native="sort">热门</router-link>
             </p>
           </Card>
           <div id="postlist">
-            <IndexPostList></IndexPostList>
+            <IndexPostList ref="postList"></IndexPostList>
           </div>
 
         </div>
       </Col>
 
-        <Col :xs="0" :sm="0" :md="0" :lg="6">
-  <SideBarRight></SideBarRight>
-        </Col>
+      <Col :xs="0" :sm="0" :md="0" :lg="6">
+        <SideBarRight></SideBarRight>
+      </Col>
 
     </Row>
     <SuspensionPanel></SuspensionPanel>
@@ -48,7 +50,11 @@
       this.screenwidth = _screenwidth
       console.log(this.screenwidth)
     },
-    methods: {}
+    methods: {
+      sort() {
+        this.$refs.postList.initIndexPost()
+      },
+    }
   }
 </script>
 
@@ -62,6 +68,7 @@
 
   .indexcontent {
     height: 100%;
+
     .indexpost {
       span {
         font-size: 14px;

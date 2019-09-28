@@ -46,7 +46,6 @@
             <Button @click="addtag" long>没有标签？点击增加标签</Button>
           </p>
 
-
           <FormItem prop="can_comment" label="是否开启评论">
             <i-switch v-model="post.can_comment" size="large">
               <span slot="open">On</span>
@@ -266,7 +265,7 @@
                 name: this.tagvalue
               }).then(res => {
                 this.$Message.success("标签:" + res.data.name + "创建成功")
-                this.tagList.push(res.data)
+                this.tagList.unshift(res.data)
               }).catch(err => {
                 this.$Message.error(err.response.data.name[0])
               })

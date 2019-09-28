@@ -7,6 +7,8 @@
                 <Card :bordered="false">
               <div style="text-align:center">
                 <h3>A high quality UI Toolkit based on Vue.js</h3>
+                <h3><router-link :to="{name:'userposts'}">userposts</router-link></h3>
+                <h3><router-link :to="{name:'userindex'}">userindex</router-link></h3>
               </div>
           </Card>
           </div>

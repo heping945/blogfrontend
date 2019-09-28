@@ -43,15 +43,15 @@
           <Col :xs="0" :sm="0" :md="10" :lg="9">
             <div class="navlist">
               <ul>
-                <li v-for="(item,index) in droplist">
-                  <router-link :to="item.url"> {{item.title}}</router-link>
+                <li v-for="(item,index) in droplist" @click="changei(index)">
+                  <router-link :to="item.url" :class='cindex==index? "active" :""'> {{item.title}}</router-link>
                 </li>
               </ul>
             </div>
           </Col>
           <Col :xs="10" :sm="9" :md="6" :lg="8" :xl="7">
             <div class="header-search">
-              <Input search placeholder="搜索本站..." :maxlength="24" clearable/>
+              <Input search placeholder="搜索本站..." :maxlength="24" @on-search="search" v-model="search_arg"/>
             </div>
           </Col>
           <Col :xs="0" :sm="0" :md="0" :lg="2" :xl="2">
@@ -72,6 +72,9 @@
                     </DropdownItem>
                     <DropdownItem>
                       <router-link :to="{name:'userindex'}">主页</router-link>
+                    </DropdownItem>
+                      <DropdownItem>
+                      <router-link to="/settings">管理</router-link>
                     </DropdownItem>
                     <DropdownItem>
                       <router-link :to="{name:'postadd'}">写文章</router-link>
@@ -114,10 +117,12 @@
           {title: '专题', url: '/subject', divided: false},
           {title: '系统设计', url: '/design', divided: true},
         ],
+        search_arg: '',
         indexshow: '首页',
         host: 'http://127.0.0.1:6655',
         backFlag: true,
         ifshow: true,
+        cindex: 0,
         scrollB: 0,
         scrollA: 0
       }
@@ -139,12 +144,21 @@
       }
     },
     mounted() {
-      console.log(this.$route, '123');
-      console.log(this.$store.state.userinfo);
       window.addEventListener('scroll', this.showBtn) //scroll 滚动事件
+      console.log(this.$route)
     },
     destroyed() { // 组件销毁取消监听
       window.removeEventListener('scroll', this.showBtn)
+    },
+    created() {
+      for (var i = 0; i < this.droplist.length; i++) {
+        if (this.droplist[i].url == this.$route.path) {
+          this.cindex = i;
+          return
+        }else {
+          this.cindex=null
+        }
+      }
     },
     methods: {
       ...mapActions(['ClearToken']),
@@ -157,6 +171,15 @@
         this.ClearToken()
         if (this.$route.meta.requireAuth) {
           this.$router.push({name: 'index'})
+        }
+      },
+      changei(index) {
+        this.cindex = index;
+        console.log(this.$route)
+      },
+      search() {
+        if (this.search_arg) {
+          this.$router.push({name: 'search', query: {q: this.search_arg, type: 'post'}})
         }
       },
       showBtn() { // 计算距离顶部的高度，当高度大于300隐藏，小于300显示（默认显示）

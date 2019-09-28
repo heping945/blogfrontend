@@ -12,9 +12,9 @@
 
 <style scoped lang="scss">
   #footer {
-    min-height: 4rem;
-    position: relative;
-    top:90px;
+    /*min-height: 4rem;*/
+    /*position: relative;*/
+    /*top:90px;*/
     /*hr {*/
     /*  background: #B3B7B3;*/
     /*  border: none;*/

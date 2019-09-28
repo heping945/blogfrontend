@@ -14,11 +14,20 @@ const CategoryContent = () => import('@/components/category/CategoryContent');
 const UserContent = () => import('@/components/accounts/UserContent');
 const UserActivites = () => import('@/components/accounts/UserActivites');
 const UserPosts = () => import('@/components/accounts/UserPosts');
+const SettingsContent = () => import('@/components/settings/SettingsContent');
+const Profile = () => import('@/components/settings/Profile');
+const Post = () => import('@/components/settings/Post');
 const SearchContent = () => import('@/components/search/SearchContent');
 const Login = () => import('@/components/auth/Login');
 ;
 
 Vue.use(Router)
+
+// 解决重复点击出错的NavigationDuplicated的解决方案，原理未知
+const originalPush = Router.prototype.push
+Router.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch(err => err)
+};
 
 export default new Router({
   mode: 'history',
@@ -142,6 +151,41 @@ export default new Router({
               },
               meta: {
                 title: '用户文章',
+              }
+            },
+          ]
+        },
+        {
+          path: '/settings',
+          components: {
+            header: Header,
+            content: SettingsContent,
+            footer: Footer
+          },
+          redirect: {name: 'settprofile'},
+          meta: {
+            requireAuth: true,
+          },
+          children: [
+            {
+              path: 'profile',
+              name: 'settprofile',
+              components: {
+                settingtab: Profile,
+              },
+              meta: {
+                title: '用户信息',
+                requireAuth: true,
+              }
+            },
+            {
+              path: 'posts',
+              name: 'settposts',
+              components: {
+                settingtab: Post,
+              },
+              meta: {
+                title: '文章管理',
               }
             },
           ]

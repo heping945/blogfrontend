@@ -5,7 +5,8 @@
         <!--信息-->
         <div class="media-list">
           {{item.author}}·
-          {{handleDate(item.create_date)}}
+          <span v-if="$route.query.sort!='mod'">{{handleDate(item.create_date)}}</span>
+          <span v-else>{{handleDate(item.mod_date)}}</span>
           ·{{item.category}}
         </div>
         <!--标题-->
@@ -41,7 +42,8 @@
         postlist: [],
         loadingspainflag: false,
         tobottomonce: true,
-        next: ''
+        next: '',
+        orderparams: {},
       }
     },
     components: {
@@ -58,11 +60,29 @@
     destroyed() {
       window.removeEventListener('scroll', this.scrollHander)
     },
-    computed: {},
+    computed: {
+      sortquery() {
+        let query_param = this.$route.query.sort;
+        switch (query_param) {
+          case "latest":
+            this.orderparams = {ordering: 'create_date'};
+            break;
+          case "popular":
+            this.orderparams = {ordering: '-views_count'};
+            break;
+          case "mod":
+            this.orderparams = {ordering: '-mod_date'};
+            break;
+        }
+        return this.orderparams
+      }
+    },
     methods: {
       initIndexPost() {
         getIndexPost(
-          {}
+          {
+            params: this.sortquery
+          }
         ).then(data => {
           this.postlist = data.data.results;
           this.next = data.data.next

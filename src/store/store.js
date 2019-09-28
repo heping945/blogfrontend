@@ -12,7 +12,8 @@ export default new Vuex.Store({
       token: Cookie.get('token'),
       avatar: Cookie.get('avatar'),
     },
-    post_title: 'hello world'
+    post_title: 'hello world',
+    search_arg: ''
   },
   mutations: {
     SaveToken(state, usertoken) {
@@ -36,6 +37,9 @@ export default new Vuex.Store({
     SetPostTitle(state, title) {
       state.post_title = title
     },
+    PostSearchArg(state, arg) {
+      state.search_arg = arg
+    },
   },
   actions: {
     SaveToken({commit}, usertoken) {
@@ -46,6 +50,9 @@ export default new Vuex.Store({
     },
     SetPostTitle(context, title) {
       context.commit('SetPostTitle', title)
+    },
+    PostSearchArg(context, arg) {
+      context.commit('PostSearchArg', arg)
     },
   },
   getters: {},

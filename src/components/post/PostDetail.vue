@@ -33,11 +33,9 @@
                   <Button type="default" size="small" ghost>关注</Button>
                 </template>
               </div>
-
-
             </div>
             <!--标题-->
-            <h3>{{postdatail.title}}</h3>
+            <h3 style="text-align: center">{{postdatail.title}}</h3>
             <!--主体文章body区-->
             <main>
               <mavon-editor v-model="value" :codeStyle="postdatail.codestyle" :boxShadow="false"
@@ -50,15 +48,15 @@
       <!--右侧响应式面板区域-->
       <Col :xs="0" :sm="0" :md="0" :lg="6">
         <!--        <SideBarRight></SideBarRight>-->
-        <compoent is="SideBarRight"></compoent>
-        <div style="position: fixed;top: 260px;width:240px ">
-          <Card :bordered="false">
-            <p v-for="item in catlog" style="margin-top: 1rem">
-              <a :href="'#'+item.id">{{item.title}}</a>
-            </p>
-          </Card>
-        </div>
-
+<!--        <compoent is="SideBarRight"></compoent>-->
+<!--        <div style="position: fixed;top: 100px;width:240px;padding: 14px 16px;font-size: 1.2rem" v-if="catlog.length">-->
+<!--          <Anchor show-ink >-->
+<!--            <div v-for="item in catlog">-->
+<!--              <AnchorLink :href="'#'+item.id" :title="item.title"/>-->
+<!--            </div>-->
+<!--          </Anchor>-->
+<!--        </div>-->
+        <CatLog :catlog="catlog"></CatLog>
 
       </Col>
     </Row>
@@ -75,6 +73,7 @@
   import ArticleSuspendedPanel from '../utils/ArticleSuspendedPanel'
   import SuspensionPanelBottom from '../utils/SuspensionPanelBottom'
   import SuspensionPanel from '../utils/SuspensionPanel'
+  import CatLog from '../utils/CatLog'
   import authenticate from '../../assets/js/authenticate'
 
 
@@ -98,6 +97,7 @@
       ArticleSuspendedPanel,
       SuspensionPanelBottom,
       SuspensionPanel,
+      CatLog
     },
     computed: {
       fomatdate() {
@@ -129,13 +129,8 @@
           res => {
             this.postdatail = res.data;
             this.author = this.postdatail.author;
-            console.log(this.postdatail,'bodyaaaa')
-            // let Catl = this.toToc(this.postdatail.body)
-            // if (Catl) {
-            //   this.catlog = Catl
-            // }
             this.catlog = this.toToc(this.postdatail.body)
-            console.log(this.catlog, 'this.catlog')
+            console.log(this.catlog,'1111')
 
             // 配置 postdetail 页的标题栏
             this.$store.dispatch('SetPostTitle', this.postdatail.title);

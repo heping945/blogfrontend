@@ -247,13 +247,13 @@
               ).then(res => {
                 console.log('res----------------', res);
                 this.$Message.info({
-                  content: '文章更新成功,3s后返回文章页面',
-                  duration: 3
+                  content: '文章更新成功,1s后返回文章页面',
+                  duration: 1
                 });
                 this.isDisable = true;
                 setTimeout(() => {
                   this.$router.push({name: 'postdetail', params: {id: res.data.id}})
-                }, 3000);
+                }, 1000);
               }).catch(err => {
                 console.log(err.response)
                 var e = err.response.data
@@ -312,13 +312,11 @@
           },
           onOk: () => {
             if (this.tagvalue) {
-              this.$Message.info('Clicked ok');
-              alert(this.tagvalue);
               createTag({
                 name: this.tagvalue
               }).then(res => {
                 this.$Message.success("标签:" + res.data.name + "创建成功")
-                this.tagList.push(res.data)
+                this.tagList.unshift(res.data)
               }).catch(err => {
                 this.$Message.error(err.response.data.name[0])
               })
