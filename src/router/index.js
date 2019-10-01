@@ -126,7 +126,7 @@ export default new Router({
           }
         },
         {
-          path: '/user',
+          path: '/user/:id',
           components: {
             header: Header,
             content: UserContent,

@@ -71,7 +71,7 @@
                       <div @click="logout">注销</div>
                     </DropdownItem>
                     <DropdownItem>
-                      <router-link :to="{name:'userindex'}">主页</router-link>
+                      <router-link :to="{name:'userindex',params:{id:$store.state.userinfo.username}}">主页</router-link>
                     </DropdownItem>
                       <DropdownItem>
                       <router-link to="/settings">管理</router-link>
@@ -145,7 +145,7 @@
     },
     mounted() {
       window.addEventListener('scroll', this.showBtn) //scroll 滚动事件
-      console.log(this.$route)
+      console.log(this.$store.state)
     },
     destroyed() { // 组件销毁取消监听
       window.removeEventListener('scroll', this.showBtn)

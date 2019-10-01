@@ -219,7 +219,8 @@
                 this.$store.dispatch('SaveToken', {
                   token: data.data.token,
                   username: data.data.username,
-                  avatar: data.data.avatar
+                  avatar: data.data.avatar,
+                  id: data.data.user_id
                 });
                 //  如果登录成功,且有参数
                 var backurl = this.$route.query.backurl;
