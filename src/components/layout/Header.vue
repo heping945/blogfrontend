@@ -49,6 +49,7 @@
               </ul>
             </div>
           </Col>
+          <!--   搜索-->
           <Col :xs="10" :sm="9" :md="6" :lg="8" :xl="7">
             <div class="header-search">
               <Input search placeholder="搜索本站..." :maxlength="24" @on-search="search" v-model="search_arg"/>
@@ -71,9 +72,10 @@
                       <div @click="logout">注销</div>
                     </DropdownItem>
                     <DropdownItem>
-                      <router-link :to="{name:'userindex',params:{id:$store.state.userinfo.username}}">主页</router-link>
+                      <router-link :to="{name:'userindex',params:{username:$store.state.userinfo.username}}">主页
+                      </router-link>
                     </DropdownItem>
-                      <DropdownItem>
+                    <DropdownItem>
                       <router-link to="/settings">管理</router-link>
                     </DropdownItem>
                     <DropdownItem>
@@ -105,9 +107,11 @@
 
 <script>
   import {mapActions} from 'vuex'
+  import storage from '../../assets/js/storage'
 
   export default {
     name: "Header",
+    inject:['reload'],
     data() {
       return {
         droplist: [
@@ -146,17 +150,21 @@
     mounted() {
       window.addEventListener('scroll', this.showBtn) //scroll 滚动事件
       console.log(this.$store.state)
+      this.setsearchkey();
     },
     destroyed() { // 组件销毁取消监听
       window.removeEventListener('scroll', this.showBtn)
     },
     created() {
+      // if (this.$route.query.q){
+      //   this.search_arg = this.$route.query.q
+      // };
       for (var i = 0; i < this.droplist.length; i++) {
         if (this.droplist[i].url == this.$route.path) {
           this.cindex = i;
           return
-        }else {
-          this.cindex=null
+        } else {
+          this.cindex = null
         }
       }
     },
@@ -178,8 +186,18 @@
         console.log(this.$route)
       },
       search() {
+        // 如果输入搜索参数，本地保存参数（用作组件刷新后取值）,store(用去组件传参)
         if (this.search_arg) {
-          this.$router.push({name: 'search', query: {q: this.search_arg, type: 'post'}})
+          storage.set('searcharg', this.search_arg);
+          if (this.$route.name == 'search') {
+            this.$router.push({name: 'search', query: {q: this.search_arg, type: 'post'}})
+            // this.$router.go(0)
+            this.reload()
+          } else {
+            this.$router.push({name: 'search', query: {q: this.search_arg, type: 'post'}})
+          }
+        } else {
+          storage.remove('searcharg')
         }
       },
       showBtn() { // 计算距离顶部的高度，当高度大于300隐藏，小于300显示（默认显示）
@@ -203,8 +221,18 @@
         } else {
           that.backFlag = true
         }
+      },
+      //
+      setsearchkey() {
+        let res = storage.get('searcharg')
+        if (res) {
+          if (this.$route.name == 'search') {
+            this.search_arg = res;
+          }
+        }
+        return this.search_arg
       }
-    }
+    },
   }
 </script>
 

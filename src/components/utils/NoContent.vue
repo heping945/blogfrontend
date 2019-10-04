@@ -27,6 +27,6 @@
     border-radius: 4px;
     /*background-color: chartreuse;*/
     opacity: 0.3;
-    margin-bottom: 0.2rem;
+    margin-bottom: 1rem;
   }
 </style>

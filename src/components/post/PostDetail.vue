@@ -26,7 +26,7 @@
               <div style="float:right;">
                 <template v-if="ifAuthor">
                   <Button type="default" icon="ios-create-outline" size="small"
-                          class="xs-sm-hidden" @click="toedit">编辑
+                          class="xs-sm-hidden" @click="toedit" ghost>编辑
                   </Button>
                 </template>
                 <template v-else>
@@ -67,6 +67,7 @@
 
 <script>
   import {getPostDetail} from '../../api/api'
+  import {getFav} from '../../api/api'
   import {dateFormat} from '../../assets/js/dateformat'
   import {toToc} from '../../assets/js/transtoc'
   import SideBarRight from '../utils/SideBarRight'
@@ -84,6 +85,7 @@
         value: `<code>hello world</code>`,
         author: {},
         postdatail: {},
+        hasFav:false,
         toolbars: {
           readmodel: true,
         },
@@ -117,8 +119,9 @@
         }
       }
     },
-    created() {
+    mounted() {
       this.initdata();
+      this.initfavdata()
     },
     methods: {
       // 初始化post数据
@@ -130,8 +133,6 @@
             this.postdatail = res.data;
             this.author = this.postdatail.author;
             this.catlog = this.toToc(this.postdatail.body)
-            console.log(this.catlog,'1111')
-
             // 配置 postdetail 页的标题栏
             this.$store.dispatch('SetPostTitle', this.postdatail.title);
 
@@ -153,6 +154,14 @@
             this.$router.push('/')
           }
         )
+      },
+      initfavdata(){
+        getFav(this.$route.params.id).then(res=>{
+          console.log(res,'res')
+          this.hasFav =true
+        }).catch(err=>{
+          console.log(err)
+        })
       },
       dateFormat,
       toToc,
@@ -180,7 +189,7 @@
 
   .postdetail {
     z-index: 240;
-
+    margin-bottom: 2rem;
     .v-show-content {
       padding: 0 0;
     }

@@ -123,10 +123,10 @@ export default new Router({
           },
           meta: {
             title: '搜索'
-          }
+          },
         },
         {
-          path: '/user/:id',
+          path: '/user/:username',
           components: {
             header: Header,
             content: UserContent,
@@ -186,6 +186,7 @@ export default new Router({
               },
               meta: {
                 title: '文章管理',
+                requireAuth: true,
               }
             },
           ]

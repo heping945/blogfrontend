@@ -4,10 +4,10 @@ const storage ={
         localStorage.setItem(key,JSON.stringify(value))
     },
     get(key){
-      console.log(typeof key);
-      console.log('上面打印了key类型');
-      console.log(key);
-      console.log('上面打印了key内容');
+      // console.log(typeof key);
+      // console.log('上面打印了key类型');
+      // console.log(key);
+      // console.log('上面打印了key内容');
         return JSON.parse(localStorage.getItem(key))
     },
     remove(key){

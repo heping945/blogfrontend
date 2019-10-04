@@ -6,7 +6,7 @@
           <Card :bordered="false">
             <p>
               <span>
-                <router-link :to="{name:'index',query:{sort:'latest'}}" @click.native="sort">最旧</router-link>
+                <router-link :to="{name:'index',query:{sort:'oldest'}}" @click.native="sort">最旧</router-link>
               </span>
               &nbsp;| &nbsp;
               <router-link :to="{name:'index',query:{sort:'mod'}}" @click.native="sort">更新</router-link>

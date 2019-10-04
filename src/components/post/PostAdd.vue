@@ -144,7 +144,7 @@
       // 初始化 分类数据
       initcategorydata() {
         getcategorylist({}).then(res => {
-          this.categoryList = res.data
+          this.categoryList = res.data.results
           console.log(res.data, 'test1111111111111')
         }).catch(err => {
           console.log(err)
@@ -153,8 +153,8 @@
       //初始化标签数据
       inittagdata() {
         gettaglist({}).then(res => {
-          this.tagList = res.data
-          console.log(this.tagList, 'test22222222222222222')
+          this.tagList = res.data.results
+          console.log(res.data, 'test22222222222222222')
         }).catch(err => {
           console.log(err)
         })

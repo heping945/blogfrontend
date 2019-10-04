@@ -64,7 +64,7 @@
       sortquery() {
         let query_param = this.$route.query.sort;
         switch (query_param) {
-          case "latest":
+          case "oldest":
             this.orderparams = {ordering: 'create_date'};
             break;
           case "popular":
@@ -80,9 +80,7 @@
     methods: {
       initIndexPost() {
         getIndexPost(
-          {
-            params: this.sortquery
-          }
+           this.sortquery
         ).then(data => {
           this.postlist = data.data.results;
           this.next = data.data.next
