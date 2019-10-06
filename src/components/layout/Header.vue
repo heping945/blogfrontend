@@ -149,7 +149,6 @@
     },
     mounted() {
       window.addEventListener('scroll', this.showBtn) //scroll 滚动事件
-      console.log(this.$store.state)
       this.setsearchkey();
     },
     destroyed() { // 组件销毁取消监听
@@ -191,7 +190,6 @@
           storage.set('searcharg', this.search_arg);
           if (this.$route.name == 'search') {
             this.$router.push({name: 'search', query: {q: this.search_arg, type: 'post'}})
-            // this.$router.go(0)
             this.reload()
           } else {
             this.$router.push({name: 'search', query: {q: this.search_arg, type: 'post'}})

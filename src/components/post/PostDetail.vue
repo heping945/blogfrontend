@@ -1,6 +1,6 @@
 <template>
   <div id="postdetail" class="postdetail p-container commonpositiontop">
-    <ArticleSuspendedPanel></ArticleSuspendedPanel>
+    <ArticleSuspendedPanel :hasFav="hasFav"></ArticleSuspendedPanel>
     <Row>
       <Col :xs="24" :sm="24" :md="24" :lg="18">
         <!--左侧文章区域-->
@@ -8,7 +8,7 @@
           <Card :bordered="true" style="background: #fbfbfb">
             <!--头侧作者信息区-->
             <div class="author-info-box" style="width: 100%;min-height: 40px">
-              <div style="float: left">
+              <div style="float: left;margin-top: 5px">
                 <Avatar icon="ios-person" :src="author.avatar"/>
               </div>
               <div style="float: left">
@@ -68,6 +68,7 @@
 <script>
   import {getPostDetail} from '../../api/api'
   import {getFav} from '../../api/api'
+  import {getAllFavs} from '../../api/api'
   import {dateFormat} from '../../assets/js/dateformat'
   import {toToc} from '../../assets/js/transtoc'
   import SideBarRight from '../utils/SideBarRight'
@@ -156,9 +157,22 @@
         )
       },
       initfavdata(){
-        getFav(this.$route.params.id).then(res=>{
-          console.log(res,'res')
-          this.hasFav =true
+        //不存在会产生404错误暂时不使用
+        // getFav(this.$route.params.id).then(res=>{
+        //   console.log(res,'res')
+        //   this.hasFav =true
+        // }).catch(err=>{
+        //   console.log(err)
+        // })
+        getAllFavs().then(res=>{
+          console.log(res,'fav')
+          let favlist = res.data.results
+          let f = favlist.filter(item=>{
+            return item.post == this.$route.params.id
+          });
+          if (f.length){
+            this.hasFav = true
+          }
         }).catch(err=>{
           console.log(err)
         })

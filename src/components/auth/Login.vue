@@ -100,6 +100,7 @@
 
   export default {
     name: "Login",
+    inject: ['reload'],
     data() {
       //验证密码是否一样的自定义验证
       const validatePassCheck = (rule, value, callback) => {
@@ -172,7 +173,7 @@
                 }
               ).then(data => {
                 this.$Message.info({
-                  content: '用户>'+this.reguserinfo.username+'<注册成功,将在1s返回登录页面',
+                  content: '用户>' + this.reguserinfo.username + '<注册成功,将在1s返回登录页面',
                   duration: 1,
                   closable: true,
                   top: 200
@@ -180,7 +181,7 @@
                 this.isDisable = true
                 setTimeout(() => {
                   //刷新页面直接重载，不用$router.push('/login')因为当前页不会重载会继续注册页面
-                  this.$router.go(0)
+                  this.reload()
                 }, 800);
               }).catch(err => {
                 // 无法确定返回的错误类型

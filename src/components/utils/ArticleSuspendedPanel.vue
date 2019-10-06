@@ -2,14 +2,12 @@
   <div class="article-suspended-panel">
     <ul>
       <li>
-        <!--<Badge :count="100">-->
         <Icon type="md-thumbs-up"/>
-        <!--</Badge>-->
       </li>
       <li>
         <Icon type="ios-chatbubbles"/>
       </li>
-      <li>
+      <li :class='hasFav? "fav" :""'>
         <Icon type="md-star"/>
       </li>
       <div>
@@ -30,7 +28,8 @@
 
 <script>
   export default {
-    name: "ArticleSuspendedPanel"
+    name: "ArticleSuspendedPanel",
+    props: ['hasFav',]
   }
 </script>
 
@@ -39,6 +38,7 @@
     position: fixed;
     top: 16rem;
     margin-left: -7rem;
+
     div {
       height: 36px;
       width: 36px;
@@ -51,6 +51,7 @@
       user-select: none;
     }
   ;
+
     li {
       margin: 0 0 9px 5px;
       width: 36px;
@@ -60,6 +61,7 @@
       padding: 3px;
       border: 1px solid #f1f1f1;
       box-shadow: 0 1px 2px 0;
+
       .ivu-icon {
         font-size: 20px;
         color: #B2BAC2;
@@ -68,21 +70,26 @@
         left: 4px;
       }
     ;
+
       .ivu-icon:hover {
         color: #86ADD3;
         cursor: pointer;
       }
     }
   ;
+
     li:last-child {
       margin: 0 0 0 5px;
     }
   }
 
-    @media (max-width: 992px) {
+  @media (max-width: 992px) {
     .article-suspended-panel {
       display: none;
     }
   }
 
+  .fav {
+    background: gold !important;
+  }
 </style>

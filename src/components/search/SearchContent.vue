@@ -16,9 +16,17 @@
               条数据</span>
           </Card>
         </div>
-        <main class="searchres" v-for='r,i in searchres' v-show='cindex==i ? true : false'>
-          <Card :name="r.type">
-            {{r.res}}
+        <main class="searchres">
+          <Card v-show="cindex==0">
+            <Table :columns="postcolumn" :data="p" border
+                   no-data-text="没有查询到数据啊"
+                  ></Table>
+          </Card>
+          <Card v-show="cindex==1">
+            <Table :columns="tagcolumn" :data="t"></Table>
+          </Card>
+          <Card v-show="cindex==2">
+            <Table :columns="categorycolumn" :data="c"></Table>
           </Card>
         </main>
       </Col>
@@ -29,12 +37,17 @@
 <script>
   import storage from '../../assets/js/storage'
   import {search} from '@/api/api'
+  import Searchres from './Searchres'
 
   export default {
     name: "SearchContent",
+    components: {
+      Searchres
+    },
     data() {
       return {
         arg: '',
+        nodata: '没有数据',
         type: '',
         rescount: 1000,
         searcharg: [
@@ -43,25 +56,90 @@
           {title: '分类', type: 'category'},
         ],
         searchres: [
-           {id:0,res: [1212], type: 'post'},
-          {id:1,res: [31313], type: 'tag'},
-          {id:2,res: [12121], type: 'category'},
+          {id: 0, res: [], type: 'post'},
+          {id: 1, res: [], type: 'tag'},
+          {id: 2, res: [], type: 'category'},
         ],
         cindex: 0,
+        postcolumn: [
+          {
+            type: 'index',
+            width: 60,
+            align: 'center'
+          },
+          {
+            title: '标题',
+            key: 'title',
+            ellipsis: true
+          },
+          {
+            title: '作者',
+            key: 'author',
+          },
+          {
+            title: '分类',
+            key: 'category'
+          },
+          {
+            title: '创建时间',
+            key: 'create_date',
+            sortable: true
+          },
+        ],
+        tagcolumn: [
+          {
+            title: '名称',
+            key: 'name'
+          },
+          {
+            title: '文章数量',
+            key: 'get_post_count'
+          },
+        ],
+        categorycolumn: [
+          {
+            title: '名称',
+            key: 'name'
+          },
+          {
+            title: '文章数量',
+            key: 'get_post_count'
+          },
+        ],
       }
     },
     mounted() {
       let res = storage.get('searcharg', '')
+      // let res = this.$route.query.q
       if (res) {
         this.arg = res;
         this.initsearch()
       }
       ;
     },
+    created() {
+      //刷新页面切换保留选项卡状态
+      for (var i = 0; i < this.searcharg.length; i++) {
+        if (this.searcharg[i].type == this.$route.query.type) {
+          this.cindex = i;
+          return
+        }
+      }
+    },
+    computed: {
+      p() {
+        return this.searchres[0].res
+      },
+      t() {
+        return this.searchres[1].res
+      },
+      c() {
+        return this.searchres[2].res
+      }
+    },
     methods: {
       changei_search(index, item) {
         this.cindex = index;
-        // console.log(this.$route.query)
         this.initsearch()
       },
       initsearch() {
@@ -98,6 +176,9 @@
   .serachquery {
     span {
       cursor: pointer;
+      /*a.active{*/
+      /*  background: yellow;*/
+      /*}*/
     }
   }
 
