@@ -14,48 +14,48 @@ export const register = parmas => {
 //获取分类信息
 export const getCategory = params => {
   if ('slug' in params) {
-    return api.get(`/category/` + params.slug + '/');
+    return api.get(`/categories/` + params.slug + '/');
   } else {
-    return api.get(`/category/`, params);
+    return api.get(`/categories/`, params);
   }
 };
 
 //获取首页文章信息
 export const getIndexPost = params => {
-  return api.get(`/post/`, {params: params})
+  return api.get(`/posts/`, {params: params})
 };
 
 
 //获取文章详情
 export const getPostDetail = params => {
-  return api.get(`/post/` + params.id, {params: params})
+  return api.get(`/posts/` + params.id, {params: params})
 };
 //创建文章
 export const createPost = params => {
-  return api.post('/post/', params)
+  return api.post('/posts/', params)
 };
 //更新文章
 export const updatePost = params => {
-  return api.put('/post/' + params.id + '/', params)
+  return api.put('/posts/' + params.id + '/', params)
 };
 //删除文章
 export const deletePost = params => {
-  return api.delete('/post/' + params.id + '/', params)
+  return api.delete('/posts/' + params.id + '/', params)
 };
 
 
 // 获取 分类列表
 export const getcategorylist = params => {
-  return api.get('/category/', params)
+  return api.get('/categories/', params)
 };
 // 获取 标签列表
 export const gettaglist = params => {
-  return api.get('/tag/', params)
+  return api.get('/tags/', params)
 };
 
 // 创建 新标签
 export const createTag = params => {
-  return api.post(`/tag/`, params)
+  return api.post(`/tags/`, params)
 };
 
 // 图片上传  （单次图片）

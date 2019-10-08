@@ -7,7 +7,7 @@
       <li>
         <Icon type="ios-chatbubbles"/>
       </li>
-      <li :class='hasFav? "fav" :""'>
+      <li :class='favstate? "fav" :""' @click="favOrdisfav">
         <Icon type="md-star"/>
       </li>
       <div>
@@ -27,9 +27,80 @@
 </template>
 
 <script>
+  import {delFav} from '@/api/api'
+  import {addFav} from '@/api/api'
+  import {mapActions, mapGetters, mapState} from 'vuex'
+
+
   export default {
     name: "ArticleSuspendedPanel",
-    props: ['hasFav',]
+    props: ['hasFav',],
+    data() {
+      return {
+        curhasfav: this.$store.state.favstate
+      }
+    },
+    computed: {
+      ...mapGetters({
+        favstate: 'favstate'
+      }),
+      ...mapState({
+        post_title: 'post_title'
+      })
+    },
+    methods: {
+      ...mapActions(['PostFavstate']),
+      favOrdisfav() {
+        let postid = this.$route.params.id
+        //已收藏
+        let log = this.$store.state.userinfo.token;
+        if (!log){
+          this.needlog()
+          return
+        }
+        if (this.favstate) {
+          delFav(postid).then(res => {
+            console.log(res);
+            this.$Notice.open({
+              title: '取消收藏成功',
+              duration: 1
+            });
+            this.PostFavstate(false)
+            console.log(this.$store.state.favstate, '之前是yes，现在该变成false了')
+          }).catch(err => {
+            console.log(err.response, 'hasfav')
+          })
+        } else {
+          //未收藏
+          addFav(
+            {post: postid}
+          ).then(res => {
+            console.log(res);
+            this.$Notice.open({
+              title: '文章“' + this.post_title + '”收藏成功',
+              duration: 1
+            });
+            this.PostFavstate(true)
+          }).catch(err => {
+            console.log(err.response, 'nohasfav')
+          })
+        }
+      },
+      needlog() {
+        if (!this.$store.state.userinfo.token) {
+          // 未登录
+          this.$Message.error({
+            content: "您尚未登录,将返回登录页面",
+            duration: 1,
+          });
+          setTimeout(
+            ()=>{
+              this.$router.push({name: 'Login', query: {backurl: 'post/' + this.$route.params.id}})
+            }, 600
+          );
+        }
+      },
+    }
   }
 </script>
 
@@ -89,7 +160,7 @@
     }
   }
 
-  .fav {
-    background: gold !important;
+  .fav .ivu-icon {
+    color: gold !important;
   }
 </style>

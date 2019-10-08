@@ -36,14 +36,10 @@
 
 <script>
   import storage from '../../assets/js/storage'
-  import {search} from '@/api/api'
-  import Searchres from './Searchres'
+  import {search} from '../../api/api'
 
   export default {
     name: "SearchContent",
-    components: {
-      Searchres
-    },
     data() {
       return {
         arg: '',
@@ -51,14 +47,14 @@
         type: '',
         rescount: 1000,
         searcharg: [
-          {title: '文章', type: 'post'},
-          {title: '标签', type: 'tag'},
-          {title: '分类', type: 'category'},
+          {title: '文章', type: 'posts'},
+          {title: '标签', type: 'tags'},
+          {title: '分类', type: 'categories'},
         ],
         searchres: [
-          {id: 0, res: [], type: 'post'},
-          {id: 1, res: [], type: 'tag'},
-          {id: 2, res: [], type: 'category'},
+          {id: 0, res: [], type: 'posts'},
+          {id: 1, res: [], type: 'tags'},
+          {id: 2, res: [], type: 'categories'},
         ],
         cindex: 0,
         postcolumn: [

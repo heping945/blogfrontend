@@ -14,7 +14,8 @@ export default new Vuex.Store({
       id: Cookie.get('id'),
     },
     post_title: 'hello world',
-    search_arg: ''
+    search_arg: '',
+    favstate: false,
   },
   mutations: {
     SaveToken(state, usertoken) {
@@ -45,6 +46,9 @@ export default new Vuex.Store({
     PostSearchArg(state, arg) {
       state.search_arg = arg
     },
+    PostFavstate(state, fav) {
+      state.favstate = fav
+    },
   },
   actions: {
     SaveToken({commit}, usertoken) {
@@ -59,8 +63,20 @@ export default new Vuex.Store({
     PostSearchArg(context, arg) {
       context.commit('PostSearchArg', arg)
     },
+    PostFavstate(context, fav) {
+      context.commit('PostFavstate', fav)
+    },
   },
-  getters: {},
+  getters: {
+    favstate(state) {
+      if (state.userinfo.token) {
+        return state.favstate
+      }else {
+        return false
+      }
+
+    }
+  },
 
 
 })

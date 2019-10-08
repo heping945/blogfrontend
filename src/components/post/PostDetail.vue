@@ -1,6 +1,6 @@
 <template>
   <div id="postdetail" class="postdetail p-container commonpositiontop">
-    <ArticleSuspendedPanel :hasFav="hasFav"></ArticleSuspendedPanel>
+    <ArticleSuspendedPanel :hasFav="hasFav" ></ArticleSuspendedPanel>
     <Row>
       <Col :xs="24" :sm="24" :md="24" :lg="18">
         <!--左侧文章区域-->
@@ -48,14 +48,14 @@
       <!--右侧响应式面板区域-->
       <Col :xs="0" :sm="0" :md="0" :lg="6">
         <!--        <SideBarRight></SideBarRight>-->
-<!--        <compoent is="SideBarRight"></compoent>-->
-<!--        <div style="position: fixed;top: 100px;width:240px;padding: 14px 16px;font-size: 1.2rem" v-if="catlog.length">-->
-<!--          <Anchor show-ink >-->
-<!--            <div v-for="item in catlog">-->
-<!--              <AnchorLink :href="'#'+item.id" :title="item.title"/>-->
-<!--            </div>-->
-<!--          </Anchor>-->
-<!--        </div>-->
+        <!--        <compoent is="SideBarRight"></compoent>-->
+        <!--        <div style="position: fixed;top: 100px;width:240px;padding: 14px 16px;font-size: 1.2rem" v-if="catlog.length">-->
+        <!--          <Anchor show-ink >-->
+        <!--            <div v-for="item in catlog">-->
+        <!--              <AnchorLink :href="'#'+item.id" :title="item.title"/>-->
+        <!--            </div>-->
+        <!--          </Anchor>-->
+        <!--        </div>-->
         <CatLog :catlog="catlog"></CatLog>
 
       </Col>
@@ -78,6 +78,8 @@
   import CatLog from '../utils/CatLog'
   import authenticate from '../../assets/js/authenticate'
 
+  import {mapActions} from 'vuex'
+
 
   export default {
     name: "PostDetail",
@@ -86,7 +88,7 @@
         value: `<code>hello world</code>`,
         author: {},
         postdatail: {},
-        hasFav:false,
+        hasFav: false,
         toolbars: {
           readmodel: true,
         },
@@ -120,11 +122,14 @@
         }
       }
     },
-    mounted() {
+    created() {
       this.initdata();
-      this.initfavdata()
+      if (this.$store.state.userinfo.token) {
+        this.initfavdata();
+      }
     },
     methods: {
+      ...mapActions(['PostFavstate']),
       // 初始化post数据
       initdata() {
         getPostDetail(
@@ -156,7 +161,7 @@
           }
         )
       },
-      initfavdata(){
+      initfavdata() {
         //不存在会产生404错误暂时不使用
         // getFav(this.$route.params.id).then(res=>{
         //   console.log(res,'res')
@@ -164,16 +169,17 @@
         // }).catch(err=>{
         //   console.log(err)
         // })
-        getAllFavs().then(res=>{
-          console.log(res,'fav')
-          let favlist = res.data.results
-          let f = favlist.filter(item=>{
+        getAllFavs().then(res => {
+          let favlist = res.data.results;
+          let f = favlist.filter(item => {
             return item.post == this.$route.params.id
           });
-          if (f.length){
-            this.hasFav = true
+          if (f.length) {
+            // this.hasFav = true
+            this.PostFavstate(true)
+            // alert(this.$store.state.favstate)
           }
-        }).catch(err=>{
+        }).catch(err => {
           console.log(err)
         })
       },
@@ -204,6 +210,7 @@
   .postdetail {
     z-index: 240;
     margin-bottom: 2rem;
+
     .v-show-content {
       padding: 0 0;
     }

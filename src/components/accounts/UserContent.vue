@@ -14,7 +14,7 @@
                 <Col :xs="24" :sm="12" :md="12" :lg="12">
                   <Row>
                     <Col span="24">
-                      <div class="nickname">{{userinfo.nickname}}</div>
+                      <div class="nickname">{{name}}</div>
                     </Col>
                     <Col span="24">
                       <div class="desc" v-if="userinfo.desc">{{userinfo.desc}}</div>
@@ -62,6 +62,15 @@
       return {
         userinfo: {},
         nodesc: '这个人很懒,什么都没有留下'
+      }
+    },
+    computed:{
+      name(){
+        if (this.userinfo.nickname){
+          return this.userinfo.nickname
+        }else {
+          return this.userinfo.username
+        }
       }
     },
     mounted() {

@@ -175,7 +175,7 @@
       },
       //注销
       logout() {
-        this.ClearToken()
+        this.ClearToken();
         if (this.$route.meta.requireAuth) {
           this.$router.push({name: 'index'})
         }
@@ -189,10 +189,10 @@
         if (this.search_arg) {
           storage.set('searcharg', this.search_arg);
           if (this.$route.name == 'search') {
-            this.$router.push({name: 'search', query: {q: this.search_arg, type: 'post'}})
+            this.$router.push({name: 'search', query: {q: this.search_arg, type: 'posts'}})
             this.reload()
           } else {
-            this.$router.push({name: 'search', query: {q: this.search_arg, type: 'post'}})
+            this.$router.push({name: 'search', query: {q: this.search_arg, type: 'posts'}})
           }
         } else {
           storage.remove('searcharg')
