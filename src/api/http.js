@@ -10,7 +10,7 @@ const api = axios.create({
 
 //axios.request.interceptors
 api.interceptors.request.use((config) => {
-  console.log(config);
+  // console.log(config);
   // 如果登录了  api请求携带请求头
   let token = vue.$store.state.userinfo.token
   if (token) {

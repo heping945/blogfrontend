@@ -96,3 +96,17 @@ export const getFav = postId => {
 export const search = params=>{
   return api.get('/'+params.type+'/',{params:params.keyword})
 }
+
+// 投票
+export const addVote = params => {
+  return api.post('/uservote/', params)
+};
+
+export const getAllVote = () => {
+  return api.get(`/uservote/`)
+};
+
+//更新
+export const updateVote = params => {
+  return api.put('/uservote/' + params.id + '/', params)
+};

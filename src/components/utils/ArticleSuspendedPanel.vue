@@ -1,13 +1,15 @@
 <template>
   <div class="article-suspended-panel">
     <ul>
-      <li>
-        <Icon type="md-thumbs-up"/>
+      <li :class='votestate==1? "vote" :(votestate==2?"dislike":"")' @dblclick="fn2" title="双击反对">
+<!--        <Badge :count="10" :offset="[0,0]">-->
+          <Icon :type='votestate==2?"md-thumbs-down":"md-thumbs-up"' @click="fn1"/>
+<!--        </Badge>-->
       </li>
-      <li>
+      <li title="评论一下吧">
         <Icon type="ios-chatbubbles"/>
       </li>
-      <li :class='favstate? "fav" :""' @click="favOrdisfav">
+      <li :class='favstate? "fav" :""' @click="favOrdisfav" title="收藏">
         <Icon type="md-star"/>
       </li>
       <div>
@@ -27,8 +29,8 @@
 </template>
 
 <script>
-  import {delFav} from '@/api/api'
-  import {addFav} from '@/api/api'
+  import {delFav, addFav} from '@/api/api'
+  import {addVote, updateVote, getAllVote} from '@/api/api'
   import {mapActions, mapGetters, mapState} from 'vuex'
 
 
@@ -37,31 +39,34 @@
     props: ['hasFav',],
     data() {
       return {
-        curhasfav: this.$store.state.favstate
+        // curhasfav: this.$store.state.favstate
+        clicktime: null,
+        vo: 0
       }
     },
     computed: {
       ...mapGetters({
-        favstate: 'favstate'
+        favstate: 'favstate',
+        votestate: 'votestate'
       }),
       ...mapState({
         post_title: 'post_title'
       })
     },
     methods: {
-      ...mapActions(['PostFavstate']),
+      ...mapActions(['PostFavstate', 'PostVotestate']),
       favOrdisfav() {
         let postid = this.$route.params.id
         //已收藏
         let log = this.$store.state.userinfo.token;
-        if (!log){
+        if (!log) {
           this.needlog()
           return
         }
         if (this.favstate) {
           delFav(postid).then(res => {
             console.log(res);
-            this.$Notice.open({
+            this.$Notice.success({
               title: '取消收藏成功',
               duration: 1
             });
@@ -76,7 +81,7 @@
             {post: postid}
           ).then(res => {
             console.log(res);
-            this.$Notice.open({
+            this.$Notice.success({
               title: '文章“' + this.post_title + '”收藏成功',
               duration: 1
             });
@@ -86,25 +91,103 @@
           })
         }
       },
-      needlog() {
-        if (!this.$store.state.userinfo.token) {
-          // 未登录
-          this.$Message.error({
-            content: "您尚未登录,将返回登录页面",
-            duration: 1,
-          });
-          setTimeout(
-            ()=>{
-              this.$router.push({name: 'Login', query: {backurl: 'post/' + this.$route.params.id}})
-            }, 600
-          );
+      fn1() {
+        let postid = this.$route.params.id;
+        let log = this.$store.state.userinfo.token;
+        if (this.clicktime) {
+          clearTimeout(this.clicktime);
+          this.clicktime = null
         }
+        ;
+        this.clicktime = setTimeout(() => {
+          //单击操作
+          if (!log) {
+            this.needlog()
+            return
+          }
+          if (this.votestate == null) {
+            //  未执行过操作
+            addVote({post: postid, vote: 1}).then(res => {
+              this.PostVotestate(1)
+            }).catch(err => {
+            })
+          } else {
+            //如果是有状态的反对或支持改成无状态
+            if (this.votestate == 1 || this.votestate == 2) {
+              updateVote({
+                id: postid,
+                vote: 0,
+              }).then(res => {
+                this.PostVotestate(0)
+              }).catch(err => {
+                console.log(err.response)
+              })
+            } else {
+              //改成有状态的支持
+              updateVote({
+                id: postid,
+                vote: 1,
+              }).then(res => {
+                this.PostVotestate(1)
+              }).catch(err => {
+                console.log(err.response)
+              })
+            }
+          }
+        }, 400)
+      },
+      fn2() {
+        if (this.clicktime) {
+          clearTimeout(this.clicktime);
+          this.clicktime = null
+        }
+        //双击操作
+        let postid = this.$route.params.id
+        let log = this.$store.state.userinfo.token;
+        if (!log) {
+          this.needlog()
+          return
+        }
+        if (this.votestate == null) {
+          //  未执行过操作
+          addVote({post: postid, vote: 2}).then(res => {
+            this.PostVotestate(2)
+          }).catch(err => {
+          })
+        } else {
+          //如果是未操作或者支持
+          if (this.votestate == 1 || this.votestate == 0) {
+            updateVote({
+              id: postid,
+              vote: 2,
+            }).then(res => {
+              this.PostVotestate(2)
+            }).catch(err => {
+            })
+          } else {
+            //不操作
+          }
+        }
+      },
+      needlog() {
+        // if (!this.$store.state.userinfo.token) {
+        // 未登录
+        this.$Message.error({
+          content: "您尚未登录,将返回登录页面",
+          duration: 1,
+        });
+        setTimeout(
+          () => {
+            this.$router.push({name: 'Login', query: {backurl: 'post/' + this.$route.params.id}})
+          }, 300
+        );
       },
     }
   }
 </script>
 
 <style scoped lang="scss">
+
   .article-suspended-panel {
     position: fixed;
     top: 16rem;
@@ -162,5 +245,21 @@
 
   .fav .ivu-icon {
     color: gold !important;
+  }
+
+  .vote .ivu-icon {
+    color: red !important;
+  }
+
+  .dislike .ivu-icon {
+    color: #007fff !important;
+    top: 6px !important;
+  }
+
+  /*  徽标*/
+  /deep/ .ivu-badge-count {
+    height: 15px !important;
+    line-height: 13px;
+    min-width: 18px;
   }
 </style>

@@ -20,7 +20,7 @@
           <Card v-show="cindex==0">
             <Table :columns="postcolumn" :data="p" border
                    no-data-text="没有查询到数据啊"
-                  ></Table>
+            ></Table>
           </Card>
           <Card v-show="cindex==1">
             <Table :columns="tagcolumn" :data="t"></Table>
@@ -59,9 +59,11 @@
         cindex: 0,
         postcolumn: [
           {
-            type: 'index',
-            width: 60,
-            align: 'center'
+            title: 'id',
+            key: 'id',
+            align: 'center',
+            width: 80,
+            sortable: true
           },
           {
             title: '标题',

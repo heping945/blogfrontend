@@ -1,6 +1,6 @@
 <template>
   <div id="postdetail" class="postdetail p-container commonpositiontop">
-    <ArticleSuspendedPanel :hasFav="hasFav" ></ArticleSuspendedPanel>
+    <ArticleSuspendedPanel></ArticleSuspendedPanel>
     <Row>
       <Col :xs="24" :sm="24" :md="24" :lg="18">
         <!--左侧文章区域-->
@@ -68,7 +68,7 @@
 <script>
   import {getPostDetail} from '../../api/api'
   import {getFav} from '../../api/api'
-  import {getAllFavs} from '../../api/api'
+  import {getAllFavs, getAllVote} from '../../api/api'
   import {dateFormat} from '../../assets/js/dateformat'
   import {toToc} from '../../assets/js/transtoc'
   import SideBarRight from '../utils/SideBarRight'
@@ -79,6 +79,7 @@
   import authenticate from '../../assets/js/authenticate'
 
   import {mapActions} from 'vuex'
+  import Axios from 'axios'
 
 
   export default {
@@ -88,7 +89,6 @@
         value: `<code>hello world</code>`,
         author: {},
         postdatail: {},
-        hasFav: false,
         toolbars: {
           readmodel: true,
         },
@@ -125,11 +125,11 @@
     created() {
       this.initdata();
       if (this.$store.state.userinfo.token) {
-        this.initfavdata();
+        this.initFavsVote();
       }
     },
     methods: {
-      ...mapActions(['PostFavstate']),
+      ...mapActions(['PostFavstate','PostVotestate']),
       // 初始化post数据
       initdata() {
         getPostDetail(
@@ -161,27 +161,30 @@
           }
         )
       },
-      initfavdata() {
-        //不存在会产生404错误暂时不使用
-        // getFav(this.$route.params.id).then(res=>{
-        //   console.log(res,'res')
-        //   this.hasFav =true
-        // }).catch(err=>{
-        //   console.log(err)
-        // })
-        getAllFavs().then(res => {
-          let favlist = res.data.results;
+      initFavsVote() {
+        Axios.all([getAllFavs(), getAllVote()]).then(Axios.spread((favres, voteres) => {
+          //处理fav数据
+          let favlist = favres.data.results;
           let f = favlist.filter(item => {
             return item.post == this.$route.params.id
           });
           if (f.length) {
-            // this.hasFav = true
             this.PostFavstate(true)
-            // alert(this.$store.state.favstate)
           }
-        }).catch(err => {
-          console.log(err)
-        })
+          //处理vote数据
+          let votelist = voteres.data.results;
+          let v = votelist.filter(item => {
+            return item.post == this.$route.params.id
+          });
+          console.log(v)
+          if(v.length){
+            console.log(v[0].vote,'vvvvvvvvvvvvvvvvvvvvvvvvvv')
+            this.PostVotestate(v[0].vote)
+          }
+        })).catch(Axios.spread((faverr, voteerr) => {
+          console.log(faverr, 'faverr');
+          console.log(voteerr, 'voteerr');
+        }));
       },
       dateFormat,
       toToc,

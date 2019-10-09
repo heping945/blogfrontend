@@ -16,6 +16,7 @@ export default new Vuex.Store({
     post_title: 'hello world',
     search_arg: '',
     favstate: false,
+    votestate: null
   },
   mutations: {
     SaveToken(state, usertoken) {
@@ -49,6 +50,9 @@ export default new Vuex.Store({
     PostFavstate(state, fav) {
       state.favstate = fav
     },
+    PostVotestate(state, vote) {
+      state.votestate = vote
+    },
   },
   actions: {
     SaveToken({commit}, usertoken) {
@@ -66,17 +70,24 @@ export default new Vuex.Store({
     PostFavstate(context, fav) {
       context.commit('PostFavstate', fav)
     },
+    PostVotestate(context, vote) {
+      context.commit('PostVotestate', vote)
+    },
   },
   getters: {
     favstate(state) {
       if (state.userinfo.token) {
         return state.favstate
-      }else {
+      } else {
         return false
       }
-
+    },
+    votestate(state) {
+      if (state.userinfo.token) {
+        return state.votestate
+      } else {
+        return null
+      }
     }
   },
-
-
 })
