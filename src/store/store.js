@@ -16,7 +16,8 @@ export default new Vuex.Store({
     post_title: 'hello world',
     search_arg: '',
     favstate: false,
-    votestate: null
+    votestate: null,
+    postuc: null,
   },
   mutations: {
     SaveToken(state, usertoken) {
@@ -53,6 +54,12 @@ export default new Vuex.Store({
     PostVotestate(state, vote) {
       state.votestate = vote
     },
+    PostUpvoteCount(state, uc) {
+      state.postuc = uc
+    },
+    PostUpvoteCountOperation(state, num) {
+      state.postuc +=num
+    },
   },
   actions: {
     SaveToken({commit}, usertoken) {
@@ -72,6 +79,12 @@ export default new Vuex.Store({
     },
     PostVotestate(context, vote) {
       context.commit('PostVotestate', vote)
+    },
+    PostUpvoteCount(context, uc) {
+      context.commit('PostUpvoteCount', uc)
+    },
+    PostUpvoteCountOperation(context, num) {
+      context.commit('PostUpvoteCountOperation', num)
     },
   },
   getters: {

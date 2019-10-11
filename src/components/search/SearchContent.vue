@@ -62,7 +62,7 @@
             title: 'id',
             key: 'id',
             align: 'center',
-            width: 80,
+            width: 50,
             sortable: true
           },
           {
@@ -73,15 +73,18 @@
           {
             title: '作者',
             key: 'author',
+            align: 'center',
           },
           {
             title: '分类',
-            key: 'category'
+            key: 'category',
+            align: 'center',
           },
           {
             title: '创建时间',
             key: 'create_date',
-            sortable: true
+            sortable: true,
+            align: 'center',
           },
         ],
         tagcolumn: [
@@ -187,5 +190,10 @@
 
   .active {
     color: red;
+  }
+
+  /*table cell padding*/
+  /deep/ .ivu-table-cell {
+    padding: 0 0;
   }
 </style>

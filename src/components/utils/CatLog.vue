@@ -74,11 +74,11 @@
       }
     },
     mounted() {
-      console.log(this.findallitem([1, 2, 3, 1, 4, 1, 4, 1], 1))
-      console.log(this.getnewlist([{'id': 1, 'name': 'jack'}, {'id': 2, 'name': 'rose'}, {
-        'id': 2,
-        'name': 'jack'
-      },], 'id'))
+      // console.log(this.findallitem([1, 2, 3, 1, 4, 1, 4, 1], 1))
+      // console.log(this.getnewlist([{'id': 1, 'name': 'jack'}, {'id': 2, 'name': 'rose'}, {
+      //   'id': 2,
+      //   'name': 'jack'
+      // },], 'id'))
     },
     methods: {
       getnewlist,

@@ -2,12 +2,12 @@
   <div class="article-suspended-panel">
     <ul>
       <li :class='votestate==1? "vote" :(votestate==2?"dislike":"")' @dblclick="fn2" title="双击反对">
-<!--        <Badge :count="10" :offset="[0,0]">-->
+        <Badge :count="postuc" :offset="[0,0]" :type='postuc>0?"success":"normal"'>
           <Icon :type='votestate==2?"md-thumbs-down":"md-thumbs-up"' @click="fn1"/>
-<!--        </Badge>-->
+        </Badge>
       </li>
-      <li title="评论一下吧">
-        <Icon type="ios-chatbubbles"/>
+      <li title="评论一下吧" @click="tocomment">
+        <a href="#hpcomment"><Icon type="ios-chatbubbles"/></a>
       </li>
       <li :class='favstate? "fav" :""' @click="favOrdisfav" title="收藏">
         <Icon type="md-star"/>
@@ -30,18 +30,17 @@
 
 <script>
   import {delFav, addFav} from '@/api/api'
-  import {addVote, updateVote, getAllVote} from '@/api/api'
+  import {addVote, updateVote} from '@/api/api'
   import {mapActions, mapGetters, mapState} from 'vuex'
 
 
   export default {
     name: "ArticleSuspendedPanel",
-    props: ['hasFav',],
     data() {
       return {
         // curhasfav: this.$store.state.favstate
         clicktime: null,
-        vo: 0
+        vo: 0,
       }
     },
     computed: {
@@ -50,11 +49,12 @@
         votestate: 'votestate'
       }),
       ...mapState({
-        post_title: 'post_title'
+        post_title: 'post_title',
+        postuc: 'postuc'
       })
     },
     methods: {
-      ...mapActions(['PostFavstate', 'PostVotestate']),
+      ...mapActions(['PostFavstate', 'PostVotestate', 'PostUpvoteCountOperation']),
       favOrdisfav() {
         let postid = this.$route.params.id
         //已收藏
@@ -108,7 +108,8 @@
           if (this.votestate == null) {
             //  未执行过操作
             addVote({post: postid, vote: 1}).then(res => {
-              this.PostVotestate(1)
+              this.PostVotestate(1);
+              this.PostUpvoteCountOperation(1)
             }).catch(err => {
             })
           } else {
@@ -118,7 +119,13 @@
                 id: postid,
                 vote: 0,
               }).then(res => {
+                if (this.votestate == 1) {
+                  this.PostUpvoteCountOperation(-1)
+                } else {
+                  this.PostUpvoteCountOperation(1)
+                }
                 this.PostVotestate(0)
+
               }).catch(err => {
                 console.log(err.response)
               })
@@ -128,6 +135,7 @@
                 id: postid,
                 vote: 1,
               }).then(res => {
+                this.PostUpvoteCountOperation(1)
                 this.PostVotestate(1)
               }).catch(err => {
                 console.log(err.response)
@@ -151,6 +159,7 @@
         if (this.votestate == null) {
           //  未执行过操作
           addVote({post: postid, vote: 2}).then(res => {
+            this.PostUpvoteCountOperation(-1)
             this.PostVotestate(2)
           }).catch(err => {
           })
@@ -161,6 +170,11 @@
               id: postid,
               vote: 2,
             }).then(res => {
+              if (this.votestate == 1) {
+                this.PostUpvoteCountOperation(-2)
+              } else {
+                this.PostUpvoteCountOperation(-1)
+              }
               this.PostVotestate(2)
             }).catch(err => {
             })
@@ -182,6 +196,9 @@
           }, 300
         );
       },
+      tocomment(){
+        // this.$router.push('')
+      }
     }
   }
 </script>

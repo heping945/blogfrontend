@@ -41,9 +41,13 @@
               <mavon-editor v-model="value" :codeStyle="postdatail.codestyle" :boxShadow="false"
                             :toolbarsFlag="false" ref="md" :subfield="false" defaultOpen="preview"/>
             </main>
-
           </Card>
         </article>
+        <!--        评论区-->
+        <div id="hpcomment">
+          <CommentList></CommentList>
+        </div>
+
       </Col>
       <!--右侧响应式面板区域-->
       <Col :xs="0" :sm="0" :md="0" :lg="6">
@@ -60,7 +64,7 @@
 
       </Col>
     </Row>
-    <SuspensionPanelBottom></SuspensionPanelBottom>
+    <SuspensionPanelBottom v-if="bottom"></SuspensionPanelBottom>
     <SuspensionPanel></SuspensionPanel>
   </div>
 </template>
@@ -76,6 +80,7 @@
   import SuspensionPanelBottom from '../utils/SuspensionPanelBottom'
   import SuspensionPanel from '../utils/SuspensionPanel'
   import CatLog from '../utils/CatLog'
+  import CommentList from '../comment/CommentList'
   import authenticate from '../../assets/js/authenticate'
 
   import {mapActions} from 'vuex'
@@ -95,6 +100,7 @@
         catlog: [],
         ifauthor: false,
         ifauth: false,
+        bottom: false
       }
     },
     components: {
@@ -102,7 +108,8 @@
       ArticleSuspendedPanel,
       SuspensionPanelBottom,
       SuspensionPanel,
-      CatLog
+      CatLog,
+      CommentList
     },
     computed: {
       fomatdate() {
@@ -129,7 +136,7 @@
       }
     },
     methods: {
-      ...mapActions(['PostFavstate','PostVotestate']),
+      ...mapActions(['PostFavstate', 'PostVotestate', 'PostUpvoteCount']),
       // 初始化post数据
       initdata() {
         getPostDetail(
@@ -137,6 +144,7 @@
         ).then(
           res => {
             this.postdatail = res.data;
+            this.PostUpvoteCount(this.postdatail.upvote_count);
             this.author = this.postdatail.author;
             this.catlog = this.toToc(this.postdatail.body)
             // 配置 postdetail 页的标题栏
@@ -170,6 +178,8 @@
           });
           if (f.length) {
             this.PostFavstate(true)
+          } else {
+            this.PostFavstate(false)
           }
           //处理vote数据
           let votelist = voteres.data.results;
@@ -177,9 +187,11 @@
             return item.post == this.$route.params.id
           });
           console.log(v)
-          if(v.length){
-            console.log(v[0].vote,'vvvvvvvvvvvvvvvvvvvvvvvvvv')
+          if (v.length) {
+            console.log(v[0].vote, 'vvvvvvvvvvvvvvvvvvvvvvvvvv')
             this.PostVotestate(v[0].vote)
+          } else {
+            this.PostVotestate(null)
           }
         })).catch(Axios.spread((faverr, voteerr) => {
           console.log(faverr, 'faverr');
@@ -198,8 +210,13 @@
 </script>
 
 <style scoped lang="scss">
+
   @media (min-width: 992px) {
+    /*宽度大于992px时，main区增加右内边距20px*/
     .lg-left-main {
+      padding-right: 20px;
+    }
+    #hpcomment {
       padding-right: 20px;
     }
   }
@@ -242,4 +259,7 @@
     }
   }
 
+  #hpcomment{
+    margin-top: 2rem;
+  }
 </style>
