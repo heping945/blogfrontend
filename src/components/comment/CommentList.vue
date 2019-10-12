@@ -3,65 +3,109 @@
     <Card :bordered="true" style="background: #fbfbfb">
       <div class="commentlist">
         <List item-layout="vertical">
-          <ListItem>
-            <ListItemMeta avatar="https://dev-file.iviewui.com/userinfoPDvn9gKWYihR24SpgC319vXY8qniCqj4/avatar"
-                          title="This is title"
-                          description="This is description, This is description, This is description, This is description, This is description, This is description, this is description."/>
-            <div>
-              xssssssssssssss
+
+          <ListItem v-for="item,index in comment" :key="item.id">
+            <div class="maincomment">
+              <ListItemMeta
+                :avatar="item.avatar"
+                :title="item.username+' : '+item.content"/>
+              <CommentAction :item="item"></CommentAction>
             </div>
+
+            <div class="extracomment" v-if="item.sub_comment">
+
+              <List item-layout="vertical" v-for="i in item.sub_comment" :key="i.id">
+                <ListItemMeta
+                  :avatar="i.avatar"
+                  :title="i.content"/>
+                <CommentAction :i="i"></CommentAction>
+
+              </List>
+            </div>
+
           </ListItem>
-          <ListItem>
-            <ListItemMeta avatar="https://dev-file.iviewui.com/userinfoPDvn9gKWYihR24SpgC319vXY8qniCqj4/avatar"
-                          title="This is title" description="This is description, this is description."/>
-          </ListItem>
-          <ListItem>
-            <ListItemMeta avatar="https://dev-file.iviewui.com/userinfoPDvn9gKWYihR24SpgC319vXY8qniCqj4/avatar"
-                          title="This is title" description="This is description, this is description."/>
-            <template slot="action">
-              <li>
-                <a href="">Edit</a>
-              </li>
-              <li>
-                <a href="">More</a>
-              </li>
-            </template>
-          </ListItem>
-          <ListItem>
-            <ListItemMeta avatar="https://dev-file.iviewui.com/userinfoPDvn9gKWYihR24SpgC319vXY8qniCqj4/avatar"
-                          title="This is title" description="This is description, this is description."/>
-            <template slot="action">
-              <li>
-                <a href="">Edit</a>
-              </li>
-              <li>
-                <a href="">More</a>
-              </li>
-            </template>
-            <template slot="extra">
-              <li>
-                <a href="">删除</a>
-              </li>
-              <li>
-                <a href="">回复</a>
-              </li>
-            </template>
-          </ListItem>
+
         </List>
       </div>
       <div class="addcomment" :autosize="true">
-        <Input v-model="newcom" type="textarea" :autosize="true" :maxlength="240" placeholder=">__<..."/>
+        <Input v-model="newcom" type="textarea" :autosize="true" :maxlength="240" clearable placeholder=">__<..."/>
       </div>
     </Card>
   </div>
 </template>
 
 <script>
+  import CommentAction from './CommentAction'
+
   export default {
     name: "CommentList",
+    components: {
+      CommentAction
+    },
     data() {
       return {
-        newcom: 'hello world'
+        newcom: 'hello world',
+        comment: [
+          {
+            username: 'heping',
+            avatar: 'http://127.0.0.1:6655/media/avatars/heping--7132df/avatar/521eb36d.gif',
+            content: 'hp太帅了爱了',
+            time: '2019-8-8',
+            id: 1,
+            sub_comment: null
+          },
+          {
+            username: 'jack',
+            avatar: 'http://127.0.0.1:6655/media/avatars/default.png',
+            content: 'dsdwsdwdwd',
+            time: '2019-8-3',
+            id: 5,
+            parent:null,
+            sub_comment: [
+              {
+                username: 'heping',
+                id: 3,
+                avatar: 'http://127.0.0.1:6655/media/avatars/heping--7132df/avatar/521eb36d.gif',
+                content: 'dwdwdwdwdwdwd',
+                time: '2019-4-8',
+                reply_to: null
+              },
+              {
+                username: 'jack',
+                avatar: 'http://127.0.0.1:6655/media/avatars/default.png',
+                content: '哈哈水中贵族xxxxxxxxxx',
+                id: 4,
+                time: '3232-9-8',
+                reply_to: 3
+              },
+            ]
+          },
+          {
+            username: 'jack',
+            avatar: 'http://127.0.0.1:6655/media/avatars/default.png',
+            content: '你好啊哥哥',
+            time: '2019-8-3',
+            id: 6,
+            sub_comment: [
+              {
+                username: 'heping',
+                id: 3,
+                avatar: 'http://127.0.0.1:6655/media/avatars/heping--7132df/avatar/521eb36d.gif',
+                content: '没有啊嘻嘻',
+                time: '2019-4-8',
+                reply_to: null
+              },
+              {
+                username: 'jack',
+                avatar: 'http://127.0.0.1:6655/media/avatars/default.png',
+                content: '哈哈哈哈哈埃斯你了',
+                id: 4,
+                time: '3232-9-8',
+                reply_to: 3
+              },
+            ]
+          },
+        ]
       }
     }
   }
@@ -69,13 +113,60 @@
 
 <style scoped lang="scss">
   #commentlist {
-    height: 1660px;
-    /*background: #007fff;*/
-    /*padding: 10px 10px;*/
   }
-.ivu-list-vertical .ivu-list-item-extra li{
-  display: inline-block;
-  margin-top: 20px;
-  margin-right: 20px;
-}
+
+  /*以下是恢复列表框内容的定制*/
+  /*额外操作行（extra）*/
+  .ivu-list-vertical .ivu-list-item-extra li {
+    display: inline-block;
+    margin-top: 20px;
+    margin-right: 20px;
+  }
+
+  /*头像*/
+  /deep/ .ivu-avatar {
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    border-radius: 20px;
+  }
+
+  /deep/ .extracomment .ivu-avatar {
+    width: 32px;
+    height: 32px;
+    line-height: 32px;
+    border-radius: 16px;
+  }
+
+  /deep/ .ivu-list-vertical .ivu-list-item-meta-title {
+    /*padding-right: 100px;*/
+  }
+
+  /* 主回复操作行*/
+  .maincomment .ivu-list-item-action {
+    margin-top: 0;
+    margin-left: 56px;
+  }
+
+  /*item-meta外边距*/
+  .ivu-list-vertical .ivu-list-item-meta {
+    margin-bottom: 0;
+  }
+
+  /deep/ .ivu-list-item-action > li .ivu-icon {
+    /*margin-right: 3px;*/
+  }
+
+  /*  子评论*/
+  .extracomment {
+    margin-left: 15px;
+    padding-left: 25px;
+    border-left: 2px solid #8a8a8a;
+
+    /deep/ .ivu-list-item-meta-title {
+      font-weight: 300;
+    }
+  }
+
+
 </style>

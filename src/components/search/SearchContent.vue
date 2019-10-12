@@ -129,7 +129,11 @@
     },
     computed: {
       p() {
-        return this.searchres[0].res
+        // return this.searchres[0].res
+      //  post数据
+        let _p = this.searchres[0].res
+        _p.map(item=>{return item['author']=item['author']['username']})
+        return _p
       },
       t() {
         return this.searchres[1].res
@@ -162,7 +166,7 @@
           // r.res = res.data
           console.log(r, '<-----r的值是')
           // console.log(res.data.results)
-          r.res = res.data.results
+          r.res = res.data.results;
           this.rescount = res.data.count
           console.log(r, '<-----r的值是')
         }).catch(err => {

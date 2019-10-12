@@ -21,37 +21,72 @@
       <!--                <Button icon="md-eye" disabled>{{item.views_count}}</Button>-->
       <!--              </ButtonGroup>-->
       <!--            </div>-->
-      <List item-layout="vertical">
-        <ListItem v-for="item in postlist" :key="item.id" @click.native="todetail(item)">
-          <ListItemMeta :avatar="item.author.avatar" :title="item.title" :description="item.excerpt|excerptshort"/>
-          <template slot="action">
-            <li>
-              <Icon type="ios-thumbs-up"/>
-              {{item.upvote_count}}
-            </li>
-            <li>
-              <Icon type="md-chatbubbles"/>
-              {{item.comment_count}}
-            </li>
-            <li>
-              <Icon type="md-eye"/>
-              {{item.views_count}}
-            </li>
-            <li v-if="$route.query.sort!='mod'">
-              <Icon type="md-calendar"/>
-              {{handleDate(item.create_date)}}
+      <Row>
+        <Col :xs="0" :sm="0" :md="24" :lg="24">
+          <List item-layout="vertical">
+            <ListItem v-for="item in postlist" :key="item.id" @click.native="todetail(item)">
+              <ListItemMeta :avatar="item.author.avatar" :title="item.title" :description="item.excerpt|excerptshort"/>
+              <template slot="action">
+                <li>
+                  <Icon type="ios-thumbs-up"/>
+                  {{item.upvote_count}}
+                </li>
+                <li>
+                  <Icon type="md-chatbubbles"/>
+                  {{item.comment_count}}
+                </li>
+                <li>
+                  <Icon type="md-eye"/>
+                  {{item.views_count}}
+                </li>
+                <li v-if="$route.query.sort!='mod'">
+                  <Icon type="md-calendar"/>
+                  {{handleDate(item.create_date)}}
 
-            </li>
-            <li v-else>
-              <Icon type="md-calendar"/>
-              {{handleDate(item.mod_date)}}
-            </li>
-          </template>
-          <template slot="extra">
-            <img src="https://dev-file.iviewui.com/5wxHCQMUyrauMCGSVEYVxHR5JmvS7DpH/large" style="width: 280px">
-          </template>
-        </ListItem>
-      </List>
+                </li>
+                <li v-else>
+                  <Icon type="md-calendar"/>
+                  {{handleDate(item.mod_date)}}
+                </li>
+              </template>
+              <template slot="extra">
+                <img src="http://imgsrc.baidu.com/forum/w=580/sign=aa2ad7a6b1b7d0a27bc90495fbef760d/324b5b540923dd5451501c7cd209b3de9c82485f.jpg" style="width: 280px;height: 140px">
+              </template>
+            </ListItem>
+          </List>
+        </Col>
+        <Col :xs="24" :sm="24" :md="0" :lg="0">
+          <List item-layout="vertical">
+            <ListItem v-for="item in postlist" :key="item.id" @click.native="todetail(item)">
+              <ListItemMeta :avatar="item.author.avatar" :title="item.title"/>
+              <template slot="action">
+                <li>
+                  <Icon type="ios-thumbs-up"/>
+                  {{item.upvote_count}}
+                </li>
+                <li>
+                  <Icon type="md-chatbubbles"/>
+                  {{item.comment_count}}
+                </li>
+                <li>
+                  <Icon type="md-eye"/>
+                  {{item.views_count}}
+                </li>
+                <li v-if="$route.query.sort!='mod'">
+                  <Icon type="md-calendar"/>
+                  {{handleDate(item.create_date)}}
+
+                </li>
+                <li v-else>
+                  <Icon type="md-calendar"/>
+                  {{handleDate(item.mod_date)}}
+                </li>
+              </template>
+            </ListItem>
+          </List>
+        </Col>
+      </Row>
+
     </Card>
     <!--        </div>-->
 
@@ -137,7 +172,9 @@
         if (scr + clientHeight + 10 >= scrHeight) {
           //  滚到底部
           if (this.next && this.tobottomonce) {
+            //   到底部的时候，如果有next，loading出现，1s后开始发送请求，请求成功设置为false
             this.loadingspainflag = true
+            this.$Loading.start();
             this.tobottomonce = false
             setTimeout(() => {
               this.getmorepost()
@@ -146,14 +183,16 @@
         } else {
         }
       },
-      async getmorepost() {
+      getmorepost() {
         Axios.get(this.next).then(res => {
           this.next = res.data.next
           this.postlist = this.postlist.concat(res.data.results)
           this.tobottomonce = true
+          this.$Loading.finish();
           this.loadingspainflag = false
         }).catch(err => {
-          console.log(err)
+          console.log(err);
+          this.$Loading.error();
         })
       }
       ,
@@ -188,4 +227,11 @@
   .ivu-list-item {
     cursor: pointer;
   }
+
+  @media (max-width: 576px) {
+    /deep/ .ivu-card-body {
+      background: #F4F5F5
+    }
+  }
+
 </style>

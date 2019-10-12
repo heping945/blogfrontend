@@ -15,6 +15,12 @@ import iView from 'iview';
 import 'iview/dist/styles/iview.css';
 Vue.use(iView);
 
+
+
+router.afterEach(route => {
+    iView.LoadingBar.finish();
+});
+
 Vue.config.productionTip = false
 
  //  拦截器
@@ -22,8 +28,10 @@ router.beforeEach( (to,from,next)=> {
   if(to.meta.requireAuth){
   //  需要登录
     if(store.state.userinfo.token){
+          iView.LoadingBar.start();
       next()
     }else {
+          iView.LoadingBar.start();
       next({name:'Login',query:{backurl:to.fullPath}})
     }
   }else {

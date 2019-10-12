@@ -26,7 +26,6 @@
               <Dropdown trigger="click" @on-click="selectmenu">
                 <a href="javascript:void(0)">
                   {{indexshow}}
-                  <!--                <Icon type="ios-arrow-down"></Icon>-->
                 </a>
                 <DropdownMenu slot="list">
                   <DropdownItem v-for="(item,index) in droplist" :key="index"
@@ -63,7 +62,7 @@
           <Col :xs="6" :sm="5" :md="4" :lg="2" :xl="3">
             <div class="auth">
               <template v-if="this.$store.state.userinfo.token">
-                <Dropdown trigger="click" @on-click="selectmenu">
+                <Dropdown trigger="click" >
                   <a href="javascript:void(0)">
                     <Avatar icon="ios-person" :src="avatar"/>
                   </a>
@@ -155,12 +154,10 @@
       window.removeEventListener('scroll', this.showBtn)
     },
     created() {
-      // if (this.$route.query.q){
-      //   this.search_arg = this.$route.query.q
-      // };
       for (var i = 0; i < this.droplist.length; i++) {
         if (this.droplist[i].url == this.$route.path) {
           this.cindex = i;
+          this.indexshow = this.droplist[i].title
           return
         } else {
           this.cindex = null

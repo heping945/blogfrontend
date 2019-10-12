@@ -3,7 +3,7 @@
     <Row>
       <Col :xs="24" :sm="24" :md="24" :lg="18">
         <div class="indexpost">
-          <Card :bordered="false">
+          <Card :bordered="true">
             <p>
               <span>
                 <router-link :to="{name:'index',query:{sort:'oldest'}}" @click.native="sort">最旧</router-link>
@@ -75,5 +75,9 @@
       }
     }
   }
-
+  @media (max-width: 576px) {
+    /deep/ .ivu-card-body {
+      background: #F4F5F5
+    }
+  }
 </style>
