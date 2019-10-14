@@ -110,3 +110,21 @@ export const getAllVote = () => {
 export const updateVote = params => {
   return api.put('/uservote/' + params.id + '/', params)
 };
+
+
+//获得评论列表
+export const getComment = params =>{
+   return api.get(`/comments/`, {params: params})
+};
+
+//创建评论
+
+export const createComment = params => {
+  return api.post('/comments/', params)
+};
+
+
+//删除评论
+export const deleteComment = params => {
+  return api.delete('/comments/' + params.id + '/', params)
+};

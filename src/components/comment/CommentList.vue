@@ -4,20 +4,23 @@
       <div class="commentlist">
         <List item-layout="vertical">
 
-          <ListItem v-for="item,index in comment" :key="item.id">
+          <ListItem v-for="item,index in commentlist" :key="item.id">
             <div class="maincomment">
               <ListItemMeta
-                :avatar="item.avatar"
-                :title="item.username+' : '+item.content"/>
+                :avatar="item.author.avatar"
+                :title="item.author.username+' ： '+item.content"/>
               <CommentAction :item="item"></CommentAction>
             </div>
 
-            <div class="extracomment" v-if="item.sub_comment">
+            <div class="extracomment" v-if="item.sub_comments">
 
-              <List item-layout="vertical" v-for="i in item.sub_comment" :key="i.id">
-                <ListItemMeta
-                  :avatar="i.avatar"
-                  :title="i.content"/>
+              <List item-layout="vertical" v-for="i in item.sub_comments" :key="i.id">
+                <ListItemMeta v-if="i.reply_to"
+                  :avatar="i.author.avatar"
+                  :title="i.author.username+'：@'+i.reply_to.author.username+'：'+i.content"/>
+                <ListItemMeta v-else
+                  :avatar="i.author.avatar"
+                  :title="i.author.username+'：'+i.content"/>
                 <CommentAction :i="i"></CommentAction>
 
               </List>
@@ -27,7 +30,7 @@
 
         </List>
       </div>
-      <div class="addcomment" :autosize="true">
+      <div class="addcomment">
         <Input v-model="newcom" type="textarea" :autosize="true" :maxlength="240" clearable placeholder=">__<..."/>
       </div>
     </Card>
@@ -36,6 +39,8 @@
 
 <script>
   import CommentAction from './CommentAction'
+  import {getComment} from '../../api/api'
+  import {createComment} from '../../api/api'
 
   export default {
     name: "CommentList",
@@ -60,7 +65,7 @@
             content: 'dsdwsdwdwd',
             time: '2019-8-3',
             id: 5,
-            parent:null,
+            parent: null,
             sub_comment: [
               {
                 username: 'heping',
@@ -105,7 +110,29 @@
               },
             ]
           },
-        ]
+        ],
+        commentquery: {},
+        commentlist: []
+      }
+    },
+    computed: {
+      cq() {
+        let post_id = this.$route.params.id;
+        this.commentquery = {exist_parent_comment: 2, post: post_id}
+        return this.commentquery
+      }
+    },
+    mounted() {
+      this.initcommentlist()
+    },
+    methods: {
+      initcommentlist() {
+        getComment(this.cq).then(res => {
+          this.commentlist = res.data.results
+          console.log(this.commentlist)
+        }).catch(err => {
+          console.log(err)
+        })
       }
     }
   }
@@ -164,7 +191,7 @@
     border-left: 2px solid #8a8a8a;
 
     /deep/ .ivu-list-item-meta-title {
-      font-weight: 300;
+      font-weight: 400;
     }
   }
 
