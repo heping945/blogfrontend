@@ -129,7 +129,7 @@
         }
       }
     },
-    created() {
+    mounted() {
       this.initdata();
       if (this.$store.state.userinfo.token) {
         this.initFavsVote();
@@ -186,9 +186,9 @@
           let v = votelist.filter(item => {
             return item.post == this.$route.params.id
           });
-          console.log(v)
+          // console.log(v)
           if (v.length) {
-            console.log(v[0].vote, 'vvvvvvvvvvvvvvvvvvvvvvvvvv')
+            // console.log(v[0].vote, 'vvvvvvvvvvvvvvvvvvvvvvvvvv')
             this.PostVotestate(v[0].vote)
           } else {
             this.PostVotestate(null)

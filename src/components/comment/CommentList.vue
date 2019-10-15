@@ -9,19 +9,19 @@
               <ListItemMeta
                 :avatar="item.author.avatar"
                 :title="item.author.username+' ： '+item.content"/>
-              <CommentAction :item="item"></CommentAction>
+              <CommentAction :item="item" @addcom="changecl" @delc="changec2"></CommentAction>
             </div>
 
             <div class="extracomment" v-if="item.sub_comments">
 
               <List item-layout="vertical" v-for="i in item.sub_comments" :key="i.id">
                 <ListItemMeta v-if="i.reply_to"
-                  :avatar="i.author.avatar"
-                  :title="i.author.username+'：@'+i.reply_to.author.username+'：'+i.content"/>
+                              :avatar="i.author.avatar"
+                              :title="i.author.username+'：@'+i.reply_to.author.username+'：'+i.content"/>
                 <ListItemMeta v-else
-                  :avatar="i.author.avatar"
-                  :title="i.author.username+'：'+i.content"/>
-                <CommentAction :i="i"></CommentAction>
+                              :avatar="i.author.avatar"
+                              :title="i.author.username+'：'+i.content"/>
+                <CommentAction :i="i" @addcom="changecl" @delc="changec2"></CommentAction>
 
               </List>
             </div>
@@ -31,7 +31,18 @@
         </List>
       </div>
       <div class="addcomment">
-        <Input v-model="newcom" type="textarea" :autosize="true" :maxlength="240" clearable placeholder=">__<..."/>
+        <template v-if="!commentlist.length&&!showin">
+          <Alert @click.native="fn2">暂无评论呢，添加一条评论吧→_→
+          </Alert>
+        </template>
+        <template v-if="showin">
+          <Input v-model.trim="newcom" type="textarea" :autosize="true" :maxlength="240" clearable
+                 placeholder=">__<..."/>
+          <div class="confb">
+            <Button @click="canc">取消</Button>
+            <Button @click="addparcom" type="success">回复</Button>
+          </div>
+        </template>
       </div>
     </Card>
   </div>
@@ -49,70 +60,11 @@
     },
     data() {
       return {
-        newcom: 'hello world',
-        comment: [
-          {
-            username: 'heping',
-            avatar: 'http://127.0.0.1:6655/media/avatars/heping--7132df/avatar/521eb36d.gif',
-            content: 'hp太帅了爱了',
-            time: '2019-8-8',
-            id: 1,
-            sub_comment: null
-          },
-          {
-            username: 'jack',
-            avatar: 'http://127.0.0.1:6655/media/avatars/default.png',
-            content: 'dsdwsdwdwd',
-            time: '2019-8-3',
-            id: 5,
-            parent: null,
-            sub_comment: [
-              {
-                username: 'heping',
-                id: 3,
-                avatar: 'http://127.0.0.1:6655/media/avatars/heping--7132df/avatar/521eb36d.gif',
-                content: 'dwdwdwdwdwdwd',
-                time: '2019-4-8',
-                reply_to: null
-              },
-              {
-                username: 'jack',
-                avatar: 'http://127.0.0.1:6655/media/avatars/default.png',
-                content: '哈哈水中贵族xxxxxxxxxx',
-                id: 4,
-                time: '3232-9-8',
-                reply_to: 3
-              },
-            ]
-          },
-          {
-            username: 'jack',
-            avatar: 'http://127.0.0.1:6655/media/avatars/default.png',
-            content: '你好啊哥哥',
-            time: '2019-8-3',
-            id: 6,
-            sub_comment: [
-              {
-                username: 'heping',
-                id: 3,
-                avatar: 'http://127.0.0.1:6655/media/avatars/heping--7132df/avatar/521eb36d.gif',
-                content: '没有啊嘻嘻',
-                time: '2019-4-8',
-                reply_to: null
-              },
-              {
-                username: 'jack',
-                avatar: 'http://127.0.0.1:6655/media/avatars/default.png',
-                content: '哈哈哈哈哈埃斯你了',
-                id: 4,
-                time: '3232-9-8',
-                reply_to: 3
-              },
-            ]
-          },
-        ],
+        newcom: '',
+        post_id: this.$route.params.id,
         commentquery: {},
-        commentlist: []
+        commentlist: [],
+        showin: false
       }
     },
     computed: {
@@ -128,11 +80,86 @@
     methods: {
       initcommentlist() {
         getComment(this.cq).then(res => {
-          this.commentlist = res.data.results
+          this.commentlist = res.data.results;
+          if (this.commentlist.length) {
+            this.showin = true
+          }
           console.log(this.commentlist)
         }).catch(err => {
           console.log(err)
         })
+      },
+      //添加评论
+      changecl(arg) {
+        console.log(arg, 'arg');
+        //获得评论的父评论
+        let x = this.commentlist.filter(item => {
+          return item.id == arg.parent_comment
+        });
+        console.log(x[0])
+        x[0].sub_comments.push(arg);
+        console.log(this.commentlist)
+      },
+      //删除评论
+      changec2(cid, pid) {
+        console.log(cid, pid);
+        if (pid) {
+          // 删除子评论
+          let res = this.commentlist.filter(item => {
+            return item.id == pid
+          });
+          res[0].sub_comments = res[0].sub_comments.filter(i => {
+            return i.id != cid
+          })
+          //删除回复此评论的其他评论(不好用暂时不用)
+          res[0].sub_comments = res[0].sub_comments.filter(i => {
+            return i.reply_to.id != cid
+          });
+        } else {
+          // 删除父评论
+          this.commentlist = this.commentlist.filter(item => {
+            return item.id != cid
+          })
+        }
+      },
+      fn2() {
+        this.showin = true
+      }
+      ,
+      canc() {
+        this.newcom = ''
+      }
+      ,
+      //添加父级评论
+      addparcom() {
+        if (this.newcom) {
+          if (!this.$store.state.userinfo.username){
+            this.tolog()
+          }else {
+            createComment(
+              {
+                "content": this.newcom,
+                "post": this.post_id,
+                "reply_to": null,
+                "parent_comment": null,
+              }
+            ).then(res => {
+              console.log(res);
+              this.$Message.success('评论添加成功');
+              this.commentlist.push(res.data)
+              this.newcom = ''
+            }).catch(err => {
+              console.log(err.response)
+            })
+          }
+
+        }
+      },
+      tolog() {
+        this.$Message.error('评论请先登录');
+        setTimeout(() => {
+          this.$router.push({name: 'Login', query: {backurl: 'post/' + this.$route.params.id}})
+        }, 1000)
       }
     }
   }
@@ -189,11 +216,19 @@
     margin-left: 15px;
     padding-left: 25px;
     border-left: 2px solid #8a8a8a;
+    background: #F6F8FA;
 
     /deep/ .ivu-list-item-meta-title {
       font-weight: 400;
     }
   }
 
+  /deep/ .ivu-btn-ghost {
+    color: #F6F8FA
+  }
 
+  .confb {
+    text-align: right;
+    margin-top: 5px;
+  }
 </style>

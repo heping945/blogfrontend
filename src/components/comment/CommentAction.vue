@@ -11,12 +11,12 @@
         <span class="h">
         <Button type="text" ghost @click="reply" size="small">回复</Button>
         </span>
-        <span v-if="ifcandel">
+        <span v-if="ifcandel" class="d">
         <Button type="text" ghost @click="deletec">删除</Button>
          </span>
       </Row>
       <Row v-if="f">
-        <Input v-model="cv" type="textarea" :autosize="true" :maxlength="240" clearable placeholder=">__<..."/>
+        <Input v-model.trim="cv" type="textarea" :autosize="true" :maxlength="240" clearable placeholder=">__<..."/>
         <div class="confb">
           <Button @click="canc">取消</Button>
           <Button @click="postcommentdata" type="success">回复</Button>
@@ -35,12 +35,14 @@
   export default {
     name: "CommentAction",
     props: ['item', 'i'],
+    inject: ['reload'],
     data() {
       return {
         f: false,
         cv: '',
         post_id: this.$route.params.id,
-        cuser: this.$store.state.userinfo.username
+        cuser: this.$store.state.userinfo.username,
+        newaddc: {}
       }
     },
     computed: {
@@ -66,46 +68,78 @@
       },
       postcommentdata() {
         if (this.cv) {
-          if (this.item) {
-            createComment(
-              {
-                "content": this.cv,
-                "post": this.post_id,
-                "reply_to": null,
-                "parent_comment": this.item.id
-              }
-            ).then(res => {
-              console.log(res)
-              this.f = false
-              this.cv = ''
-            }).catch(err => {
-              console.log(err)
-            })
+          if (!this.$store.state.userinfo.username) {
+            this.tolog()
           } else {
-            createComment(
-              {
-                "content": this.cv,
-                "post": this.post_id,
-                "reply_to": this.i.id,
-                "parent_comment": this.i.parent_id
-              }
-            ).then(res => {
-              console.log(res)
-              this.f = false
-              this.cv = ''
-            }).catch(err => {
-              console.log(err)
-            })
+            //   是对父级评论的回复  无reply_to
+            if (this.item) {
+              createComment(
+                {
+                  "content": this.cv,
+                  "post": this.post_id,
+                  "reply_to": null,
+                  "parent_comment": this.item.id,
+                }
+              ).then(res => {
+                console.log(res);
+                this.$Message.success('评论添加成功');
+                this.newaddc = res.data;
+                this.$emit('addcom', this.newaddc)
+                this.f = false
+                this.cv = ''
+              }).catch(err => {
+                console.log(err)
+              })
+            } else {
+              // 对子级评论的回复  有 reply_to
+              console.log(this.i)
+              createComment(
+                {
+                  "content": this.cv,
+                  "post": this.post_id,
+                  "reply_to": this.i.id,
+                  "parent_comment": this.i.parent_comment
+                }
+              ).then(res => {
+                console.log(res);
+                this.$Message.success('评论添加成功');
+                let ret_to = {}
+                ret_to['author'] = this.i.author
+                ret_to['id'] = this.i.id
+                this.newaddc = res.data;
+                this.newaddc.reply_to = ret_to
+                this.$emit('addcom', this.newaddc);
+                this.f = false
+                this.cv = ''
+              }).catch(err => {
+                console.log(err)
+              })
+            }
           }
+
         }
       },
       deletec() {
-        let t = this.i || this.item
+        let t = this.i || this.item;
         deleteComment({id: t.id}).then(res => {
-          console.log(res)
+          console.log(res);
+          this.$Message.success('评论删除成功');
+          //  三元表达式的应用
+          const pid = this.i ? this.i.parent_comment : this.item.parent_comment;
+          console.log(pid)
+          this.$emit('delc', t.id, parseInt(pid))
         }).catch(err => {
-          console.log(err)
+          this.$Message.error("发生了一个错误，将刷新页面");
+          setTimeout(() => {
+            this.reload()
+          }, 1000)
         })
+      },
+      tolog() {
+        this.$Message.error('评论请先登录');
+        setTimeout(() => {
+          this.$router.push({name: 'Login', query: {backurl: 'post/' + this.$route.params.id}})
+        }, 1000)
       }
     }
   }
@@ -128,6 +162,10 @@
 
   .h .ivu-btn-text:hover {
     color: rebeccapurple;
+  }
+
+  .d .ivu-btn-text:hover {
+    color: hotpink;
   }
 
   .confb {
