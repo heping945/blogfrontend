@@ -33,7 +33,7 @@
                 </li>
                 <li>
                   <Icon type="md-chatbubbles"/>
-                  {{item.comment_count}}
+                  {{item.get_post_comment_count}}
                 </li>
                 <li>
                   <Icon type="md-eye"/>

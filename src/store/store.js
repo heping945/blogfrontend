@@ -18,6 +18,7 @@ export default new Vuex.Store({
     favstate: false,
     votestate: null,
     postuc: null,
+    can_scroll: true
   },
   mutations: {
     SaveToken(state, usertoken) {
@@ -58,7 +59,10 @@ export default new Vuex.Store({
       state.postuc = uc
     },
     PostUpvoteCountOperation(state, num) {
-      state.postuc +=num
+      state.postuc += num
+    },
+    setcanscroll(state, f) {
+      state.can_scroll = f
     },
   },
   actions: {
@@ -85,6 +89,9 @@ export default new Vuex.Store({
     },
     PostUpvoteCountOperation(context, num) {
       context.commit('PostUpvoteCountOperation', num)
+    },
+    setcanscroll(context, f) {
+      context.commit('setcanscroll', f)
     },
   },
   getters: {

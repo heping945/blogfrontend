@@ -1,6 +1,6 @@
 <template>
   <div id="postdetail" class="postdetail p-container commonpositiontop">
-    <ArticleSuspendedPanel></ArticleSuspendedPanel>
+    <ArticleSuspendedPanel :get_post_comment_count="postdatail.get_post_comment_count"></ArticleSuspendedPanel>
     <Row>
       <Col :xs="24" :sm="24" :md="24" :lg="18">
         <!--左侧文章区域-->

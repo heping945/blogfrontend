@@ -1,5 +1,5 @@
 <template>
-  <div >
+  <div>
     <div class="topfix">
       <div class="p-container topixtop">
         <ul>
@@ -10,7 +10,7 @@
       </div>
     </div>
 
-    <main >
+    <main class="p-container setmain">
       <Card>
         <router-view name="settingtab"></router-view>
       </Card>
@@ -20,6 +20,8 @@
 </template>
 
 <script>
+  import {mapActions,} from 'vuex'
+
   export default {
     name: "SettingsContent",
     data() {
@@ -27,13 +29,16 @@
         tablist: [
           {title: '个人资料', pathname: 'settprofile'},
           {title: '文章管理', pathname: 'settposts'},
+          {title: '账号关联', pathname: 'account'},
+          {title: '密码修改', pathname: 'password'},
         ],
-        cindex:0
+        cindex: 0
       }
     },
-    methods:{
-      changei(i){
-        this.cindex=i
+    methods: {
+      ...mapActions(['setcanscroll',]),
+      changei(i) {
+        this.cindex = i
       }
     }
   }
@@ -48,6 +53,7 @@
     background: #FFF;
     width: 100%;
     height: 4rem;
+    z-index: 241;
 
     .topixtop {
       line-height: 4rem;
@@ -66,10 +72,14 @@
       top: 50px;
     }
   }
-main{
-  position: relative;
-  top: 120px;
-  z-index: 100;
-}
 
+  main {
+    position: relative;
+    top: 120px;
+    z-index: 100;
+  }
+
+  .setmain {
+    z-index: 240;
+  }
 </style>

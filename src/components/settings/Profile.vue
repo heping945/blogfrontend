@@ -1,5 +1,7 @@
 <template>
-    <div style="height: 1900px">profile</div>
+    <div style="height: 700px" >profile
+
+    </div>
 </template>
 
 <script>

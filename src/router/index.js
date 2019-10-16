@@ -17,6 +17,8 @@ const UserPosts = () => import('@/components/accounts/UserPosts');
 const SettingsContent = () => import('@/components/settings/SettingsContent');
 const Profile = () => import('@/components/settings/Profile');
 const Post = () => import('@/components/settings/Post');
+const Account = () => import('@/components/settings/Account');
+const Password = () => import('@/components/settings/Password');
 const SearchContent = () => import('@/components/search/SearchContent');
 const Login = () => import('@/components/auth/Login');
 ;
@@ -165,6 +167,8 @@ export default new Router({
           redirect: {name: 'settprofile'},
           meta: {
             requireAuth: true,
+            dnotscroll: true
+
           },
           children: [
             {
@@ -186,6 +190,28 @@ export default new Router({
               },
               meta: {
                 title: '文章管理',
+                requireAuth: true,
+              }
+            },
+            {
+              path: 'account',
+              name: 'account',
+              components: {
+                settingtab: Account,
+              },
+              meta: {
+                title: '账户关联',
+                requireAuth: true,
+              }
+            },
+               {
+              path: 'password',
+              name: 'password',
+              components: {
+                settingtab: Password,
+              },
+              meta: {
+                title: '密码修改',
                 requireAuth: true,
               }
             },

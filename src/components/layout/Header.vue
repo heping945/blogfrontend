@@ -62,7 +62,7 @@
           <Col :xs="6" :sm="5" :md="4" :lg="2" :xl="3">
             <div class="auth">
               <template v-if="this.$store.state.userinfo.token">
-                <Dropdown trigger="click" >
+                <Dropdown trigger="click">
                   <a href="javascript:void(0)">
                     <Avatar icon="ios-person" :src="avatar"/>
                   </a>
@@ -105,12 +105,12 @@
 </template>
 
 <script>
-  import {mapActions} from 'vuex'
+  import {mapState, mapActions} from 'vuex'
   import storage from '../../assets/js/storage'
 
   export default {
     name: "Header",
-    inject:['reload'],
+    inject: ['reload'],
     data() {
       return {
         droplist: [
@@ -127,7 +127,7 @@
         ifshow: true,
         cindex: 0,
         scrollB: 0,
-        scrollA: 0
+        scrollA: 0,
       }
     },
     computed: {
@@ -144,10 +144,15 @@
           this.ifshow = true
           return this.ifshow
         }
-      }
+      },
+      ...mapState({
+        can_scroll: 'can_scroll',
+      })
     },
     mounted() {
-      window.addEventListener('scroll', this.showBtn) //scroll 滚动事件
+      if (this.can_scroll) {
+        window.addEventListener('scroll', this.showBtn) //scroll 滚动事件
+      }
       this.setsearchkey();
     },
     destroyed() { // 组件销毁取消监听

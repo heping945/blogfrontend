@@ -2,18 +2,27 @@
   <div class="commentaction">
     <div class="infoAndaction">
       <Row>
-        <span v-if="i">
+        <div class="trd">
+          <Col :xs="14" :sm="10" :md="7">
+            <span v-if="i">
         {{i.create_time}}
         </span>
-        <span v-if="item">
+          <span v-if="item">
         {{item.create_time}}
          </span>
-        <span class="h">
+        </Col>
+        <Col :xs="5" :sm="4" :md="3">
+                  <span class="r">
         <Button type="text" ghost @click="reply" size="small">回复</Button>
         </span>
+        </Col>
+        <Col :xs="5" :sm="4" :md="3">
         <span v-if="ifcandel" class="d">
-        <Button type="text" ghost @click="deletec">删除</Button>
+        <Button type="text" ghost @click="deletec" size="small">删除</Button>
          </span>
+        </Col>
+        </div>
+
       </Row>
       <Row v-if="f">
         <Input v-model.trim="cv" type="textarea" :autosize="true" :maxlength="240" clearable placeholder=">__<..."/>
@@ -160,7 +169,7 @@
     font-size: 1rem;
   }
 
-  .h .ivu-btn-text:hover {
+  .r .ivu-btn-text:hover {
     color: rebeccapurple;
   }
 
@@ -171,5 +180,9 @@
   .confb {
     text-align: right;
     margin-top: 5px;
+  }
+
+  .trd{
+    height: 25px;
   }
 </style>

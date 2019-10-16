@@ -7,7 +7,11 @@
         </Badge>
       </li>
       <li title="评论一下吧" @click="tocomment">
-        <a href="#hpcomment"><Icon type="ios-chatbubbles"/></a>
+        <Badge :count="get_post_comment_count" :offset="[0,0]" type="info">
+          <a href="#hpcomment">
+            <Icon type="ios-chatbubbles"/>
+          </a>
+        </Badge>
       </li>
       <li :class='favstate? "fav" :""' @click="favOrdisfav" title="收藏">
         <Icon type="md-star"/>
@@ -36,6 +40,7 @@
 
   export default {
     name: "ArticleSuspendedPanel",
+    props: ['get_post_comment_count'],
     data() {
       return {
         // curhasfav: this.$store.state.favstate
@@ -196,7 +201,7 @@
           }, 300
         );
       },
-      tocomment(){
+      tocomment() {
         // this.$router.push('')
       }
     }
