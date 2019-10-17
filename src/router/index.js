@@ -21,6 +21,8 @@ const Account = () => import('@/components/settings/Account');
 const Password = () => import('@/components/settings/Password');
 const SearchContent = () => import('@/components/search/SearchContent');
 const Login = () => import('@/components/auth/Login');
+const notFound = () => import('@/components/notFound');
+const FeedBack = () => import('@/components/feedback/FeedBack');
 ;
 
 Vue.use(Router)
@@ -204,7 +206,7 @@ export default new Router({
                 requireAuth: true,
               }
             },
-               {
+            {
               path: 'password',
               name: 'password',
               components: {
@@ -219,7 +221,6 @@ export default new Router({
         },
       ]
     },
-
     {
       path: '/login',
       name: 'Login',
@@ -228,6 +229,24 @@ export default new Router({
         title: '登录'
       }
     },
+    {
+      path: '/FeedBack',
+      name: 'FeedBack',
+      component: FeedBack,
+      meta: {
+        title: '反馈交流'
+      }
+    },
+
+    {
+      path: "/404",
+      name: "notFound",
+      component: notFound
+    },
+    {
+      path: "*", // 此处需特别注意置于最底部
+      redirect: "/404"
+    }
   ]
 })
 

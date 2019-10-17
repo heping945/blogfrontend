@@ -12,7 +12,7 @@
         <span>使用指南</span>
       </p>
       <p>
-        <span><a href="/feedback">建议反馈</a></span>
+        <span><a href="/feedback" target="_blank">建议反馈</a></span>
         ·
         <span>联系作者</span>
       </p>

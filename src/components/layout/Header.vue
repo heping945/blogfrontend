@@ -184,7 +184,7 @@
       },
       changei(index) {
         this.cindex = index;
-        console.log(this.$route)
+        // console.log(this.$route)
       },
       search() {
         // 如果输入搜索参数，本地保存参数（用作组件刷新后取值）,store(用去组件传参)

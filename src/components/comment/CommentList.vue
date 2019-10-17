@@ -1,49 +1,55 @@
 <template>
   <div id="commentlist">
     <Card :bordered="true" style="background: #fbfbfb">
-      <div class="commentlist">
-        <List item-layout="vertical">
+      <div v-if="can_comment">
+        <div class="commentlist">
+          <List item-layout="vertical">
 
-          <ListItem v-for="item,index in commentlist" :key="item.id">
-            <div class="maincomment">
-              <ListItemMeta
-                :avatar="item.author.avatar"
-                :title="item.author.username+' ： '+item.content"/>
-              <CommentAction :item="item" @addcom="changecl" @delc="changec2"></CommentAction>
+            <ListItem v-for="item,index in commentlist" :key="item.id">
+              <div class="maincomment">
+                <ListItemMeta
+                  :avatar="item.author.avatar"
+                  :title="item.author.username+' ： '+item.content"/>
+                <CommentAction :item="item" @addcom="changecl" @delc="changec2"></CommentAction>
+              </div>
+
+              <div class="extracomment" v-if="item.sub_comments">
+
+                <List item-layout="vertical" v-for="i in item.sub_comments" :key="i.id">
+                  <ListItemMeta v-if="i.reply_to"
+                                :avatar="i.author.avatar"
+                                :title="i.author.username+'：@'+i.reply_to.author.username+'：'+i.content"/>
+                  <ListItemMeta v-else
+                                :avatar="i.author.avatar"
+                                :title="i.author.username+'：'+i.content"/>
+                  <CommentAction :i="i" @addcom="changecl" @delc="changec2"></CommentAction>
+
+                </List>
+              </div>
+
+            </ListItem>
+
+          </List>
+        </div>
+        <div class="addcomment">
+          <template v-if="!commentlist.length&&!showin">
+            <Alert @click.native="fn2">暂无评论呢，添加一条评论吧→_→
+            </Alert>
+          </template>
+          <template v-if="showin">
+            <Input v-model.trim="newcom" type="textarea" :autosize="true" :maxlength="240" clearable
+                   placeholder=">__<..."/>
+            <div class="confb">
+              <Button @click="canc">取消</Button>
+              <Button @click="addparcom" type="success">回复</Button>
             </div>
-
-            <div class="extracomment" v-if="item.sub_comments">
-
-              <List item-layout="vertical" v-for="i in item.sub_comments" :key="i.id">
-                <ListItemMeta v-if="i.reply_to"
-                              :avatar="i.author.avatar"
-                              :title="i.author.username+'：@'+i.reply_to.author.username+'：'+i.content"/>
-                <ListItemMeta v-else
-                              :avatar="i.author.avatar"
-                              :title="i.author.username+'：'+i.content"/>
-                <CommentAction :i="i" @addcom="changecl" @delc="changec2"></CommentAction>
-
-              </List>
-            </div>
-
-          </ListItem>
-
-        </List>
+          </template>
+        </div>
       </div>
-      <div class="addcomment">
-        <template v-if="!commentlist.length&&!showin">
-          <Alert @click.native="fn2">暂无评论呢，添加一条评论吧→_→
-          </Alert>
-        </template>
-        <template v-if="showin">
-          <Input v-model.trim="newcom" type="textarea" :autosize="true" :maxlength="240" clearable
-                 placeholder=">__<..."/>
-          <div class="confb">
-            <Button @click="canc">取消</Button>
-            <Button @click="addparcom" type="success">回复</Button>
-          </div>
-        </template>
+      <div v-else>
+        <Alert @click.native="fn2">关闭评论←_←</Alert>
       </div>
+
     </Card>
   </div>
 </template>
@@ -52,12 +58,14 @@
   import CommentAction from './CommentAction'
   import {getComment} from '../../api/api'
   import {createComment} from '../../api/api'
+  import {mapState} from 'vuex'
 
   export default {
     name: "CommentList",
     components: {
       CommentAction
     },
+    // props: ['can_comment',],
     data() {
       return {
         newcom: '',
@@ -72,9 +80,14 @@
         let post_id = this.$route.params.id;
         this.commentquery = {exist_parent_comment: 2, post: post_id}
         return this.commentquery
-      }
+      },
+      ...mapState({
+        can_comment: 'can_comment'
+      })
     },
-    mounted() {
+    created() {
+      // 这里有一个bug暂时无法解决，插眼以后解决
+      // console.log(this.can_comment);
       this.initcommentlist()
     },
     methods: {
@@ -84,37 +97,38 @@
           if (this.commentlist.length) {
             this.showin = true
           }
-          console.log(this.commentlist)
         }).catch(err => {
           console.log(err)
         })
       },
       //添加评论
       changecl(arg) {
-        console.log(arg, 'arg');
+        // console.log(arg, 'arg');
         //获得评论的父评论
         let x = this.commentlist.filter(item => {
           return item.id == arg.parent_comment
         });
-        console.log(x[0])
+        // console.log(x[0])
         x[0].sub_comments.push(arg);
-        console.log(this.commentlist)
+        // console.log(this.commentlist)
       },
       //删除评论
       changec2(cid, pid) {
-        console.log(cid, pid);
+        // console.log(cid, pid);
+        //pid  父评论id  cid 删除的评论的id
         if (pid) {
           // 删除子评论
           let res = this.commentlist.filter(item => {
             return item.id == pid
           });
+          //删除回复此评论的其他评论(不好用暂时不用)
+          // res[0].sub_comments = res[0].sub_comments.filter(i => {
+          //   return i.reply_to.id != cid
+          // });
           res[0].sub_comments = res[0].sub_comments.filter(i => {
             return i.id != cid
           })
-          //删除回复此评论的其他评论(不好用暂时不用)
-          res[0].sub_comments = res[0].sub_comments.filter(i => {
-            return i.reply_to.id != cid
-          });
+
         } else {
           // 删除父评论
           this.commentlist = this.commentlist.filter(item => {
@@ -133,9 +147,9 @@
       //添加父级评论
       addparcom() {
         if (this.newcom) {
-          if (!this.$store.state.userinfo.username){
+          if (!this.$store.state.userinfo.username) {
             this.tolog()
-          }else {
+          } else {
             createComment(
               {
                 "content": this.newcom,

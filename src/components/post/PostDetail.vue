@@ -45,7 +45,7 @@
         </article>
         <!--        评论区-->
         <div id="hpcomment">
-          <CommentList></CommentList>
+          <CommentList :can_comment="postdatail.can_comment"></CommentList>
         </div>
 
       </Col>
@@ -80,10 +80,11 @@
   import SuspensionPanelBottom from '../utils/SuspensionPanelBottom'
   import SuspensionPanel from '../utils/SuspensionPanel'
   import CatLog from '../utils/CatLog'
-  import CommentList from '../comment/CommentList'
+  // import CommentList from '../comment/CommentList'
+  const CommentList =()=>import('../comment/CommentList')
   import authenticate from '../../assets/js/authenticate'
 
-  import {mapActions} from 'vuex'
+  import {mapActions,mapState} from 'vuex'
   import Axios from 'axios'
 
 
@@ -127,16 +128,16 @@
           this.ifauthor = true
           return this.ifauthor
         }
-      }
+      },
     },
-    mounted() {
+    created() {
       this.initdata();
       if (this.$store.state.userinfo.token) {
         this.initFavsVote();
       }
     },
     methods: {
-      ...mapActions(['PostFavstate', 'PostVotestate', 'PostUpvoteCount']),
+      ...mapActions(['PostFavstate', 'PostVotestate', 'PostUpvoteCount','ifcancomment']),
       // 初始化post数据
       initdata() {
         getPostDetail(
@@ -149,6 +150,7 @@
             this.catlog = this.toToc(this.postdatail.body)
             // 配置 postdetail 页的标题栏
             this.$store.dispatch('SetPostTitle', this.postdatail.title);
+            this.ifcancomment(this.postdatail.can_comment)
 
             if (this.$store.state.userinfo.username) {
               if (this.$store.state.userinfo.username == this.author.username) {

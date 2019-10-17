@@ -18,7 +18,8 @@ export default new Vuex.Store({
     favstate: false,
     votestate: null,
     postuc: null,
-    can_scroll: true
+    can_scroll: true,
+    can_comment:null
   },
   mutations: {
     SaveToken(state, usertoken) {
@@ -64,6 +65,9 @@ export default new Vuex.Store({
     setcanscroll(state, f) {
       state.can_scroll = f
     },
+    ifcancomment(state, v) {
+      state.can_comment = v
+    },
   },
   actions: {
     SaveToken({commit}, usertoken) {
@@ -92,6 +96,9 @@ export default new Vuex.Store({
     },
     setcanscroll(context, f) {
       context.commit('setcanscroll', f)
+    },
+    ifcancomment(context, v) {
+      context.commit('ifcancomment', v)
     },
   },
   getters: {

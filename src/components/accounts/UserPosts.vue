@@ -1,16 +1,24 @@
 <template>
   <div>
     <Card :bordered="false">
-      <div style="text-align:center">
-        <h3>userposts</h3>
-      </div>
+
     </Card>
   </div>
 </template>
 
 <script>
+  import {getIndexPost} from '../../api/api'
+
   export default {
-    name: "UserPosts"
+    name: "UserPosts",
+    data() {
+      return {}
+    },
+    methods: {
+      initcuruserpost(){
+        getIndexPost({})
+      }
+    }
   }
 </script>
 

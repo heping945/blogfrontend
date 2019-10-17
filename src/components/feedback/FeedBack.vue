@@ -1,12 +1,12 @@
 <template>
-    <div>
-
+    <div id="feedback">
+      这里是feedback
     </div>
 </template>
 
 <script>
     export default {
-        name: "Post"
+        name: "FeedBack"
     }
 </script>
 

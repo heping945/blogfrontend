@@ -7,20 +7,20 @@
             <span v-if="i">
         {{i.create_time}}
         </span>
-          <span v-if="item">
+            <span v-if="item">
         {{item.create_time}}
          </span>
-        </Col>
-        <Col :xs="5" :sm="4" :md="3">
+          </Col>
+          <Col :xs="5" :sm="4" :md="3">
                   <span class="r">
         <Button type="text" ghost @click="reply" size="small">回复</Button>
         </span>
-        </Col>
-        <Col :xs="5" :sm="4" :md="3">
+          </Col>
+          <Col :xs="5" :sm="4" :md="3">
         <span v-if="ifcandel" class="d">
         <Button type="text" ghost @click="deletec" size="small">删除</Button>
          </span>
-        </Col>
+          </Col>
         </div>
 
       </Row>
@@ -121,7 +121,10 @@
                 this.f = false
                 this.cv = ''
               }).catch(err => {
-                console.log(err)
+                this.$Message.error("发生了一个错误，将刷新页面");
+                setTimeout(() => {
+                  this.reload()
+                }, 1000)
               })
             }
           }
@@ -130,12 +133,15 @@
       },
       deletec() {
         let t = this.i || this.item;
+        let v = confirm('确认删除？')
+        if (v){
         deleteComment({id: t.id}).then(res => {
-          console.log(res);
+          // console.log(res);
+          // console.log(this.i,'i');
+          // console.log(this.item,'item');
           this.$Message.success('评论删除成功');
           //  三元表达式的应用
           const pid = this.i ? this.i.parent_comment : this.item.parent_comment;
-          console.log(pid)
           this.$emit('delc', t.id, parseInt(pid))
         }).catch(err => {
           this.$Message.error("发生了一个错误，将刷新页面");
@@ -143,6 +149,8 @@
             this.reload()
           }, 1000)
         })
+        }
+
       },
       tolog() {
         this.$Message.error('评论请先登录');
@@ -182,7 +190,7 @@
     margin-top: 5px;
   }
 
-  .trd{
+  .trd {
     height: 25px;
   }
 </style>
