@@ -96,7 +96,7 @@
           this.userinfo = res.data
           console.log(this.userinfo)
         }).catch(err => {
-          console.log(err.response)
+          this.$router.push({name:'index'})
         })
       },
       toeditprofile() {

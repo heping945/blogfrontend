@@ -14,9 +14,17 @@
     data() {
       return {}
     },
+    created() {
+      this.initcuruserpost()
+    },
     methods: {
-      initcuruserpost(){
-        getIndexPost({})
+      initcuruserpost() {
+        let username = this.$route.params.username
+        getIndexPost({author__username: username}).then(res => {
+          console.log(res)
+        }).catch(err => {
+          console.log(err)
+        })
       }
     }
   }
