@@ -7,13 +7,13 @@
             <div class="inputform">
               <h1>注册</h1>
               <div class="social-container">
-                <a href="">
+                <a :href="host+'qq'">
                   <Icon custom="icofont icon-qq" class="shareicon" :size="20"/>
                 </a>
-                <a href="">
+                <a :href="host+'weixin'">
                   <Icon custom="icofont icon-weixin" class="shareicon" :size="20"/>
                 </a>
-                <a href="">
+                <a :href="host+'weibo'">
                   <Icon custom="icofont icon-weibo1" class="shareicon" :size="20"/>
                 </a>
               </div>
@@ -43,13 +43,13 @@
             <div class="inputform">
               <h1>登录</h1>
               <div class="social-container">
-                <a href="">
+                <a :href="host+'qq'">
                   <Icon custom="icofont icon-qq" class="shareicon" :size="20"/>
                 </a>
-                <a href="">
+                <a :href="host+'weixin'">
                   <Icon custom="icofont icon-weixin" class="shareicon" :size="20"/>
                 </a>
-                <a href="">
+                <a :href="host+'weibo'">
                   <Icon custom="icofont icon-weibo1" class="shareicon" :size="20"/>
                 </a>
               </div>
@@ -97,6 +97,7 @@
 <script>
   import {login} from "../../api/api";
   import {register} from "../../api/api";
+  import Axios from 'axios'
 
   export default {
     name: "Login",
@@ -116,6 +117,7 @@
         err: '',
         isDisable: false,
         ifshow: false,
+        host: 'http://127.0.0.1:6655/login/',
         userinfo: {
           username: 'heping',
           password: 'pp123456',
@@ -194,6 +196,9 @@
             this.$Message.error('请检查输入');
           }
         })
+      },
+      l(x) {
+        this.$router.push('www.baidu.com')
       },
       Login() {
         //防止重复提交
