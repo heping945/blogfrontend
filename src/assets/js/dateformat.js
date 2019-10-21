@@ -11,6 +11,7 @@ export const  dateFormat=time=>{
     var minutes=date.getMinutes()<10 ? "0"+date.getMinutes() : date.getMinutes();
     var seconds=date.getSeconds()<10 ? "0"+date.getSeconds() : date.getSeconds();
     // 拼接
-    return year+"年"+month+"月"+day+"日"
+    // return year+"年"+month+"月"+day+"日"
+    return year+"-"+month+"-"+day+" "+hours+":"+minutes
     // return year+"-"+month+"-"+day;
 };

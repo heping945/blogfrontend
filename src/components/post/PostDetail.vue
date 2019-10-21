@@ -4,10 +4,10 @@
     <Row>
       <Col :xs="24" :sm="24" :md="24" :lg="18">
         <!--左侧文章区域-->
-        <article class="lg-left-main">
+        <article class="lg-left-main" v-cloak>
           <Card :bordered="true" style="background: #fbfbfb">
             <!--头侧作者信息区-->
-            <div class="author-info-box" style="width: 100%;min-height: 40px">
+            <div class="author-info-box" style="width: 100%;min-height: 40px" v-cloak>
               <div style="float: left;margin-top: 5px">
                 <Avatar icon="ios-person" :src="author.avatar"/>
               </div>
@@ -20,6 +20,9 @@
                 </div>
                 <div style="font-size: 1.1rem;margin: 12px 0 0 5px">
                   {{fomatdate}}&nbsp;&nbsp;阅读 {{postdatail.views_count}}
+                  <a :href="postdatail.reproduce_source" v-if="postdatail.reproduce" style="margin-left: 30px" target="_blank">
+                    <Icon type="ios-link-outline" />
+                  </a>
                 </div>
               </div>
 
@@ -43,6 +46,10 @@
             </main>
           </Card>
         </article>
+        <!--        文章标签分类-->
+        <div id="hptagcat">
+          <PostTagCat :cat="postcatname"  :catslug="postcatslug" :tag="postdatail.tags"></PostTagCat>
+        </div>
         <!--        评论区-->
         <div id="hpcomment">
           <CommentList :can_comment="postdatail.can_comment"></CommentList>
@@ -81,10 +88,11 @@
   import SuspensionPanel from '../utils/SuspensionPanel'
   import CatLog from '../utils/CatLog'
   // import CommentList from '../comment/CommentList'
-  const CommentList =()=>import('../comment/CommentList')
+  const CommentList = () => import('../comment/CommentList')
+  const PostTagCat = () => import('./PostTagCat')
   import authenticate from '../../assets/js/authenticate'
 
-  import {mapActions,mapState} from 'vuex'
+  import {mapActions, mapState} from 'vuex'
   import Axios from 'axios'
 
 
@@ -95,6 +103,9 @@
         value: `<code>hello world</code>`,
         author: {},
         postdatail: {},
+        spinShow: true,
+        postcatname:null,
+        postcatslug:null,
         toolbars: {
           readmodel: true,
         },
@@ -110,7 +121,8 @@
       SuspensionPanelBottom,
       SuspensionPanel,
       CatLog,
-      CommentList
+      CommentList,
+      PostTagCat
     },
     computed: {
       fomatdate() {
@@ -131,13 +143,16 @@
       },
     },
     created() {
+      this.$Spin.show();
       this.initdata();
       if (this.$store.state.userinfo.token) {
         this.initFavsVote();
       }
+      ;
+      // this.spinshow()
     },
     methods: {
-      ...mapActions(['PostFavstate', 'PostVotestate', 'PostUpvoteCount','ifcancomment']),
+      ...mapActions(['PostFavstate', 'PostVotestate', 'PostUpvoteCount', 'ifcancomment']),
       // 初始化post数据
       initdata() {
         getPostDetail(
@@ -147,6 +162,8 @@
             this.postdatail = res.data;
             this.PostUpvoteCount(this.postdatail.upvote_count);
             this.author = this.postdatail.author;
+            this.postcatname = this.postdatail.category.name
+            this.postcatslug = this.postdatail.category.slug
             this.catlog = this.toToc(this.postdatail.body)
             // 配置 postdetail 页的标题栏
             this.$store.dispatch('SetPostTitle', this.postdatail.title);
@@ -163,6 +180,8 @@
             } else {
               this.value = this.postdatail.body
             }
+            ;
+            this.$Spin.hide();
           }
         ).catch(
           err => {
@@ -207,6 +226,12 @@
         const postid = this.$route.params.id;
         this.$router.push({name: "PostEdit", params: {id: postid}})
       },
+      spinshow() {
+        this.$Spin.show();
+        setTimeout(() => {
+          this.$Spin.hide();
+        }, 3000);
+      }
     }
   }
 </script>
@@ -219,6 +244,9 @@
       padding-right: 20px;
     }
     #hpcomment {
+      padding-right: 20px;
+    }
+    #hptagcat {
       padding-right: 20px;
     }
   }
@@ -261,7 +289,14 @@
     }
   }
 
-  #hpcomment{
+  #hpcomment {
     margin-top: 2rem;
+  }
+  #hptagcat {
+    margin-top: 2rem;
+  }
+
+  [v-cloak] {
+    display: none;
   }
 </style>

@@ -11,9 +11,14 @@
     </div>
 
     <main class="p-container setmain">
-      <Card>
-        <router-view name="settingtab"></router-view>
-      </Card>
+      <Row>
+        <Col :xs="24" :sm="24" :md="24" :lg="18">
+          <Card>
+            <router-view name="settingtab"></router-view>
+          </Card>
+        </Col>
+      </Row>
+
     </main>
 
   </div>
@@ -72,6 +77,13 @@
       top: 50px;
     }
   }
+
+  @media (min-width: 576px) {
+    /deep/ .ivu-card-body {
+      padding: 32px 48px 84px !important;
+    }
+  }
+
 
   main {
     position: relative;

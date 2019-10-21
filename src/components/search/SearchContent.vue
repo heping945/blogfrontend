@@ -18,7 +18,7 @@
         </div>
         <main class="searchres">
           <Card v-show="cindex==0">
-            <Table :columns="postcolumn" :data="p" border
+            <Table :columns="postcolumn" :data="p" border height="525" @on-row-click="to_post"
                    no-data-text="没有查询到数据啊"
             ></Table>
           </Card>
@@ -37,6 +37,7 @@
 <script>
   import storage from '../../assets/js/storage'
   import {search} from '../../api/api'
+  import {dateFormat} from '../../assets/js/dateformat'
 
   export default {
     name: "SearchContent",
@@ -89,9 +90,16 @@
         ],
         tagcolumn: [
           {
-            title: '名称',
-            key: 'name'
+            title: 'id',
+            key: 'id',
+            align: 'center',
           },
+          {
+            title: '名称',
+            key: 'name',
+            align: 'center',
+          },
+
           {
             title: '文章数量',
             key: 'get_post_count'
@@ -100,7 +108,8 @@
         categorycolumn: [
           {
             title: '名称',
-            key: 'name'
+            key: 'name',
+            align: 'center',
           },
           {
             title: '文章数量',
@@ -130,9 +139,14 @@
     computed: {
       p() {
         // return this.searchres[0].res
-      //  post数据
+        //  post数据
         let _p = this.searchres[0].res
-        _p.map(item=>{return item['author']=item['author']['username']})
+        _p.map(item => {
+          return item['author'] = item['author']['username']
+        });
+        _p.map(item => {
+          return item['create_date'] = this.dateFormat(item['create_date'])
+        });
         return _p
       },
       t() {
@@ -146,6 +160,10 @@
       changei_search(index, item) {
         this.cindex = index;
         this.initsearch()
+      },
+      dateFormat,
+      to_post(selection, row) {
+        this.$router.push({name: 'postdetail', params: {id: selection.id}})
       },
       initsearch() {
         let type = this.$route.query.type

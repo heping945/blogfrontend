@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div style="margin: 20px auto;text-align: center">
+    <div style="margin: 50px auto;text-align: center">
       <img src="/static/404.png" alt="" style="width: 90%;height: auto;max-width: 600px">
     </div>
     <div class="tips">
