@@ -8,38 +8,44 @@ import store from './store/store'
 // 引入mavon-editor
 import mavonEditor from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
+
 Vue.use(mavonEditor);
 
 //全局引入iView
 import iView from 'iview';
 import 'iview/dist/styles/iview.css';
+
 Vue.use(iView);
 
+import "./assets/scss/reset.scss";
+import "./assets/scss/base.scss";
+import "../static/iconfont/iconfont.css";
 
 
 router.afterEach(route => {
-    iView.LoadingBar.finish();
+  iView.LoadingBar.finish();
 });
 
 Vue.config.productionTip = false
 
- //  拦截器
-router.beforeEach( (to,from,next)=> {
-  if(to.meta.requireAuth){
-  //  需要登录
-    if(store.state.userinfo.token){
-          iView.LoadingBar.start();
+//  拦截器
+router.beforeEach((to, from, next) => {
+  if (to.meta.requireAuth) {
+    //  需要登录
+    if (store.state.userinfo.token) {
+      iView.LoadingBar.start();
       next()
-    }else {
-          iView.LoadingBar.start();
-      next({name:'Login',query:{backurl:to.fullPath}})
+    } else {
+      iView.LoadingBar.start();
+      next({name: 'Login', query: {backurl: to.fullPath}})
     }
-  }else {
+  } else {
     next()
-  };
-  if(to.meta.title) {
-      document.title = to.meta.title
-    }
+  }
+  ;
+  if (to.meta.title) {
+    document.title = to.meta.title
+  }
 
 });
 
@@ -49,10 +55,9 @@ const vue = new Vue({
   el: '#app',
   store,
   router,
-  components: { App },
+  components: {App},
   template: '<App/>'
 });
-
 
 
 export default vue

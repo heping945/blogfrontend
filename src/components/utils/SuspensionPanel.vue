@@ -18,7 +18,7 @@
   }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   .feedbackbutton {
     z-index: 9999;
     position: fixed;
@@ -41,11 +41,11 @@
   .ivu-back-top{
     z-index: 9999;
   }
-  .ivu-back-top-inner {
+  /deep/ .ivu-back-top-inner {
     border-radius: 50%;
     width: 30px;
     height: 30px;
-    background: white;
+    background: white !important;
     border: 1px solid #f1f1f1;
     .ivu-icon {
       position: relative;

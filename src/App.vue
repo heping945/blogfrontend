@@ -30,9 +30,6 @@
 </script>
 
 <style lang="scss">
-  @import "./assets/scss/reset";
-  @import "./assets/scss/base";
-  @import "../static/iconfont/iconfont.css";
 
   #app {
     -webkit-font-smoothing: antialiased;
