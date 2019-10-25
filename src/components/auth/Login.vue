@@ -146,7 +146,7 @@
     computed: {
       host() {
         let url = '';
-        process.env.NODE_ENV === 'development' ? url = 'http://127.0.0.1:6655/login/' : url = 'http://106.14.176.87/login/';
+        process.env.NODE_ENV === 'development' ? url = 'http://127.0.0.1:6655/login/' : url = 'http://106.14.176.87:8000/login/';
         return url
       }
 

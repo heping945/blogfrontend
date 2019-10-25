@@ -133,7 +133,8 @@
       avatar() {
         if (this.$store.state.userinfo) {
           var url = ''
-          process.env.NODE_ENV === 'development' ? url = 'http://127.0.0.1:6655' : url = 'http://106.14.176.87'
+          process.env.NODE_ENV === 'development' ? url = 'http://127.0.0.1:6655' : url = 'http://106.14.176.87:8000';
+          console.log(this.$store.state.userinfo.avatar)
           return url + this.$store.state.userinfo.avatar
         }
       },

@@ -20,8 +20,9 @@
                 </div>
                 <div style="font-size: 1.1rem;margin: 12px 0 0 5px">
                   {{fomatdate}}&nbsp;&nbsp;阅读 {{postdatail.views_count}}
-                  <a :href="postdatail.reproduce_source" v-if="postdatail.reproduce" style="margin-left: 30px" target="_blank">
-                    <Icon type="ios-link-outline" />
+                  <a :href="postdatail.reproduce_source" v-if="postdatail.reproduce" style="margin-left: 30px"
+                     target="_blank">
+                    <Icon type="ios-link-outline"/>
                   </a>
                 </div>
               </div>
@@ -48,7 +49,7 @@
         </article>
         <!--        文章标签分类-->
         <div id="hptagcat">
-          <PostTagCat :cat="postcatname"  :catslug="postcatslug" :tag="postdatail.tags"></PostTagCat>
+          <PostTagCat :cat="postcatname" :catslug="postcatslug" :tag="postdatail.tags"></PostTagCat>
         </div>
         <!--        评论区-->
         <div id="hpcomment">
@@ -104,8 +105,8 @@
         author: {},
         postdatail: {},
         spinShow: true,
-        postcatname:null,
-        postcatslug:null,
+        postcatname: null,
+        postcatslug: null,
         toolbars: {
           readmodel: true,
         },
@@ -162,6 +163,7 @@
             this.postdatail = res.data;
             this.PostUpvoteCount(this.postdatail.upvote_count);
             this.author = this.postdatail.author;
+            console.log(this.author.avatar)
             this.postcatname = this.postdatail.category.name
             this.postcatslug = this.postdatail.category.slug
             this.catlog = this.toToc(this.postdatail.body)
@@ -251,9 +253,13 @@
     }
   }
 
-  @media (max-width: 765px) {
+  @media (max-width: 768px) {
     .xs-sm-hidden {
       display: none;
+    }
+  ;
+    /deep/ .v-note-wrapper .v-note-panel .v-note-show .v-show-content, .v-note-wrapper .v-note-panel .v-note-show .v-show-content-html {
+      padding: 0 0;
     }
   }
 
@@ -287,11 +293,13 @@
         margin: 1.3rem 0;
       }
     }
+  ;
   }
 
   #hpcomment {
     margin-top: 2rem;
   }
+
   #hptagcat {
     margin-top: 2rem;
   }
@@ -299,4 +307,6 @@
   [v-cloak] {
     display: none;
   }
+
+
 </style>

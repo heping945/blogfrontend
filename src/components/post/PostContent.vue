@@ -63,7 +63,7 @@
     computed: {
       url() {
         let u = '';
-        process.env.NODE_ENV === 'development' ? u = 'http://127.0.0.1:6655/api/v1/chapter/' : u = 'http://106.14.176.87/api/v1/chapter/';
+        process.env.NODE_ENV === 'development' ? u = 'http://127.0.0.1:6655/api/v1/chapter/' : u = 'http://106.14.176.87:8000/api/v1/chapter/';
         return u
       }
     },
