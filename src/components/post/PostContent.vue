@@ -17,7 +17,7 @@
     <!--    <Table stripe :columns="columns1" :data="postlist"></Table>-->
     <hr>
     <br>
-    <Upload action="http://127.0.0.1:6655/api/v1/chapter/" :format="['md']" :data="uploaddata" name="md_File"
+    <Upload :action="url" :format="['md']" :data="uploaddata" name="md_File"
             :on-success="getmd">
       <Button icon="ios-cloud-upload-outline">Upload files</Button>
     </Upload>
@@ -58,6 +58,13 @@
         uploaddata: {
           topic: 3
         }
+      }
+    },
+    computed: {
+      url() {
+        let u = '';
+        process.env.NODE_ENV === 'development' ? u = 'http://127.0.0.1:6655/api/v1/chapter/' : u = 'http://106.14.176.87/api/v1/chapter/';
+        return u
       }
     },
     async created() {

@@ -122,7 +122,6 @@
         ],
         search_arg: '',
         indexshow: '首页',
-        host: 'http://127.0.0.1:6655',
         backFlag: true,
         ifshow: true,
         cindex: 0,
@@ -133,7 +132,9 @@
     computed: {
       avatar() {
         if (this.$store.state.userinfo) {
-          return this.host + this.$store.state.userinfo.avatar
+          var url = ''
+          process.env.NODE_ENV === 'development' ? url = 'http://127.0.0.1:6655' : url = 'http://106.14.176.87'
+          return url + this.$store.state.userinfo.avatar
         }
       },
       postheadershow() {
@@ -150,6 +151,7 @@
       })
     },
     mounted() {
+      console.log(process.env.NODE_ENV)
       if (this.can_scroll) {
         window.addEventListener('scroll', this.showBtn) //scroll 滚动事件
       }

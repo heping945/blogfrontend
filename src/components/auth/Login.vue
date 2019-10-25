@@ -143,6 +143,14 @@
       }
     }
     ,
+    computed: {
+      host() {
+        let url = '';
+        process.env.NODE_ENV === 'development' ? url = 'http://127.0.0.1:6655/login/' : url = 'http://106.14.176.87/login/';
+        return url
+      }
+
+    },
     mounted() {
       if (this.$store.state.userinfo.token) {
         this.$router.push({name: 'index'})
