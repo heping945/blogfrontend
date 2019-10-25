@@ -4,7 +4,7 @@ import vue from '../main'
 
 
 const api = axios.create({
-  baseURL: 'http://127.0.0.1:6655/api/v1/',
+  baseURL: process.env.API_ROOT,
   timeout: 10000,
 });
 
