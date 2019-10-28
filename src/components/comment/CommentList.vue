@@ -99,6 +99,7 @@
           }
         }).catch(err => {
           // console.log(err)
+          this.$router.push({name:'notFound'})
         })
       },
       //添加评论

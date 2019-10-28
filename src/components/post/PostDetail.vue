@@ -188,7 +188,8 @@
         ).catch(
           err => {
             // 返回首页
-            this.$router.push('/')
+            this.$Spin.hide();
+            this.$router.push({name: 'notFound'})
           }
         )
       },
