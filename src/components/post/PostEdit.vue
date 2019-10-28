@@ -176,7 +176,7 @@
             this.post.reproduce = this.postdatail.reproduce
             this.post.reproduce_source = this.postdatail.reproduce_source
             this.post.can_comment = this.postdatail.can_comment
-            console.log('hwllo wolel', this.post)
+            console.log('hello world', this.post)
           }
         ).catch(
           err => {
