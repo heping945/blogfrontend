@@ -21,6 +21,12 @@ import "./assets/scss/reset.scss";
 import "./assets/scss/base.scss";
 import "../static/iconfont/iconfont.css";
 
+import VConsole from 'vconsole'
+
+const vConsole = new VConsole()
+
+console.log(vConsole.version)
+
 
 router.afterEach(route => {
   iView.LoadingBar.finish();

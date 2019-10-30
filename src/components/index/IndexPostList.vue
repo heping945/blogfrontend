@@ -41,6 +41,7 @@
                 </li>
                 <li v-if="$route.query.sort!='mod'">
                   <Icon type="md-calendar"/>
+                  <!--                  <Time :time="item.create_date"/>-->
                   {{handleDate(item.create_date)}}
 
                 </li>
@@ -50,7 +51,9 @@
                 </li>
               </template>
               <template slot="extra">
-                <img src="http://imgsrc.baidu.com/forum/w=580/sign=aa2ad7a6b1b7d0a27bc90495fbef760d/324b5b540923dd5451501c7cd209b3de9c82485f.jpg" style="width: 280px;height: 140px">
+                <img
+                  src="http://imgsrc.baidu.com/forum/w=580/sign=aa2ad7a6b1b7d0a27bc90495fbef760d/324b5b540923dd5451501c7cd209b3de9c82485f.jpg"
+                  style="width: 280px;height: 140px">
               </template>
             </ListItem>
           </List>
@@ -74,12 +77,12 @@
                 </li>
                 <li v-if="$route.query.sort!='mod'">
                   <Icon type="md-calendar"/>
-                  {{handleDate(item.create_date)}}
-
+<!--                  {{handleDate(item.create_date)}}-->
+                  {{item.create_date}}
                 </li>
                 <li v-else>
                   <Icon type="md-calendar"/>
-                  {{handleDate(item.mod_date)}}
+                  {{item.mod_date}}
                 </li>
               </template>
             </ListItem>

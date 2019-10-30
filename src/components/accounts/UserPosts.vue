@@ -6,8 +6,9 @@
           <ListItemMeta :title="item.title" :description="item.excerpt"/>
           {{ item.content }}
           发布于：
-          <Time :time="item.create_date"/>&nbsp;&nbsp;------------&nbsp;&nbsp;最后一次更新：
-          <Time :time="item.mod_date"/>
+
+          {{handleDate(item.create_date)}}&nbsp;&nbsp;------------&nbsp;&nbsp;最后一次更新：
+          {{handleDate(item.mod_date)}}
 
         </ListItem>
       </List>
@@ -17,6 +18,7 @@
 
 <script>
   import {getIndexPost} from '../../api/api'
+  import {handleDate} from '@/assets/js/datetimeformat'
   import Axios from 'axios'
 
   export default {
@@ -30,8 +32,8 @@
     created() {
       this.initcuruserpost();
     },
-    watch:{
-      next(){
+    watch: {
+      next() {
         this.getmore()
       }
     },
@@ -46,6 +48,7 @@
           console.log(err)
         })
       },
+      handleDate,
       getmore() {
         if (this.next) {
           Axios.get(this.next).then(res => {

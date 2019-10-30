@@ -3,6 +3,7 @@
     <Row>
       <Col :xs="0" :sm="0" :md="24" :lg="24">
         <div :class="{'container':true,'right-panel-active':ifshow}" id="container">
+          <!--          注册-->
           <div class="form-container sign-up-container">
             <div class="inputform">
               <h1>注册</h1>
@@ -39,6 +40,7 @@
               </Form>
             </div>
           </div>
+<!--          登录-->
           <div class="form-container sign-in-container">
             <div class="inputform">
               <h1>登录</h1>
@@ -117,7 +119,6 @@
         err: '',
         isDisable: false,
         ifshow: false,
-        host: 'http://127.0.0.1:6655/login/',
         userinfo: {
           username: 'heping',
           password: 'pp123456',
@@ -146,7 +147,6 @@
     computed: {
       host() {
         let url = '';
-        // process.env.NODE_ENV === 'development' ? url = 'http://127.0.0.1:6655/login/' : url = 'http://106.14.176.87:8000/login/';
         process.env.NODE_ENV === 'development' ? url = 'http://127.0.0.1:6655/login/' : url = 'https://zhaoheping.com/login/';
         return url
       }
@@ -205,9 +205,6 @@
             this.$Message.error('请检查输入');
           }
         })
-      },
-      l(x) {
-        this.$router.push('www.baidu.com')
       },
       Login() {
         //防止重复提交

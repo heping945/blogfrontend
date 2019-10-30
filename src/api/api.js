@@ -28,7 +28,7 @@ export const getIndexPost = params => {
 
 //获取文章详情
 export const getPostDetail = params => {
-  return api.get(`/posts/` + params.id, {params: params})
+  return api.get(`/posts/` + params.id, params)
 };
 //创建文章
 export const createPost = params => {

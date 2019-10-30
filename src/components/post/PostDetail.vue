@@ -88,7 +88,6 @@
   import SuspensionPanelBottom from '../utils/SuspensionPanelBottom'
   import SuspensionPanel from '../utils/SuspensionPanel'
   import CatLog from '../utils/CatLog'
-  // import CommentList from '../comment/CommentList'
   const CommentList = () => import('../comment/CommentList')
   const PostTagCat = () => import('./PostTagCat')
   import authenticate from '../../assets/js/authenticate'
@@ -189,6 +188,7 @@
           err => {
             // 返回首页
             this.$Spin.hide();
+            console.log(err.response)
             this.$router.push({name: 'notFound'})
           }
         )
@@ -254,7 +254,8 @@
     }
   }
 
-  @media (max-width: 768px) {
+  /*编辑按钮在移动端隐藏*/
+  @media (max-width: 576px) {
     .xs-sm-hidden {
       display: none;
     }

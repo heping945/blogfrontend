@@ -213,6 +213,7 @@
           this.$refs.md.$img2Url(pos, url.data.img);
           // $vm.$img2Url(pos, url.data.img);
         }).catch(err => {
+          console.log(err.response)
           this.$Message.error('格式或类型错误，请重新上传')
         })
       },
