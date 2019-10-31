@@ -1,7 +1,7 @@
 <template>
   <div class="authen">
     <Row>
-      <Col :xs="0" :sm="0" :md="24" :lg="24">
+      <Col :xs="0" :sm="0" :md="0" :lg="24">
         <div :class="{'container':true,'right-panel-active':ifshow}" id="container">
           <!--          注册-->
           <div class="form-container sign-up-container">
@@ -40,7 +40,7 @@
               </Form>
             </div>
           </div>
-<!--          登录-->
+          <!--          登录-->
           <div class="form-container sign-in-container">
             <div class="inputform">
               <h1>登录</h1>
@@ -58,12 +58,12 @@
               <span style="margin-bottom: 20px">第三方账号登录</span>
               <Form ref="formInline" :model="userinfo" :rules="ruleInline">
                 <FormItem prop="username">
-                  <Input type="text" v-model="userinfo.username" placeholder="Username">
+                  <Input type="text" v-model="userinfo.username" placeholder="用户名">
                     <Icon type="ios-person-outline" slot="prepend"></Icon>
                   </Input>
                 </FormItem>
                 <FormItem prop="password">
-                  <Input type="password" v-model="userinfo.password" placeholder="Password">
+                  <Input type="password" v-model="userinfo.password" placeholder="密码">
                     <Icon type="ios-lock-outline" slot="prepend"></Icon>
                   </Input>
                 </FormItem>
@@ -88,6 +88,39 @@
               </div>
             </div>
           </div>
+        </div>
+      </Col>
+      <Col :xs="24" :sm="24" :md="24" :lg="0">
+        <div id="m-log">
+          <Card>
+            <div class="social-container">
+              <a :href="host+'qq'">
+                <Icon custom="icofont icon-qq" class="shareicon" :size="20"/>
+              </a>
+              <a :href="host+'weixin'">
+                <Icon custom="icofont icon-weixin" class="shareicon" :size="20"/>
+              </a>
+              <a :href="host+'weibo'">
+                <Icon custom="icofont icon-weibo1" class="shareicon" :size="20"/>
+              </a>
+            </div>
+            <Form ref="formInline" :model="userinfo" :rules="ruleInline">
+              <FormItem prop="username">
+                <Input type="text" v-model="userinfo.username" placeholder="用户名">
+                  <Icon type="ios-person-outline" slot="prepend"></Icon>
+                </Input>
+              </FormItem>
+              <FormItem prop="password">
+                <Input type="password" v-model="userinfo.password" placeholder="密码">
+                  <Icon type="ios-lock-outline" slot="prepend"></Icon>
+                </Input>
+              </FormItem>
+              <FormItem style="text-align: center">
+                <Button type="primary" @click="Login('formInline')" :disabled="isDisable">登录</Button>
+              </FormItem>
+
+            </Form>
+          </Card>
         </div>
       </Col>
     </Row>
@@ -120,8 +153,8 @@
         isDisable: false,
         ifshow: false,
         userinfo: {
-          username: 'heping',
-          password: 'pp123456',
+          username: '',
+          password: '',
         },
         reguserinfo: {
           username: '',
@@ -264,16 +297,19 @@
     box-sizing: border-box;
   }
 
-  .authen {
-    background: #f6f5f7;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    font-family: 'Montserrat', sans-serif;
-    position: relative;
-    top: 20vh;
+  @media (min-width: 992px) {
+    .authen {
+      background: #f6f5f7;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      font-family: 'Montserrat', sans-serif;
+      position: relative;
+      top: 20vh;
+    }
   }
+
 
   h1 {
     font-weight: bold;
@@ -497,5 +533,23 @@
   .ivu-icon:hover {
     color: #86ADD3;
     cursor: pointer;
+  }
+
+  /*  移动端*/
+  #m-log {
+
+    width: 80%;
+    margin: 0 auto;
+    position: relative;
+    top: 20vh;
+    height: 50vh;
+  }
+
+  /*#m-log .ivu-card-body {*/
+  /*  width: 100%;*/
+  /*}*/
+  #m-log .social-container{
+    display: flex;
+    justify-content: center;
   }
 </style>

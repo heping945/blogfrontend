@@ -47,6 +47,7 @@
                 </li>
                 <li v-else>
                   <Icon type="md-calendar"/>
+                  <!--                  <Time :time="item.mod_date"/>-->
                   {{handleDate(item.mod_date)}}
                 </li>
               </template>
@@ -77,12 +78,12 @@
                 </li>
                 <li v-if="$route.query.sort!='mod'">
                   <Icon type="md-calendar"/>
-<!--                  {{handleDate(item.create_date)}}-->
-                  {{item.create_date}}
+                  {{handleDate(item.create_date)}}
+                  <!--                  {{item.create_date}}-->
                 </li>
                 <li v-else>
                   <Icon type="md-calendar"/>
-                  {{item.mod_date}}
+                  {{handleDate(item.mod_date)}}
                 </li>
               </template>
             </ListItem>

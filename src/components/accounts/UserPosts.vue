@@ -9,7 +9,6 @@
 
           {{handleDate(item.create_date)}}&nbsp;&nbsp;------------&nbsp;&nbsp;最后一次更新：
           {{handleDate(item.mod_date)}}
-
         </ListItem>
       </List>
     </Card>

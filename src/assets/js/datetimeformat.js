@@ -1,7 +1,9 @@
 // 将后端django传入的日期转化为时间戳格式
 var timeStamp = time => {
   var jstime = new Date(time);
-  return jstime.getTime()
+  var timezone = 8; //目标时区时间，东八区
+  var offset_GMT = new Date().getTimezoneOffset();
+  return jstime.getTime()+offset_GMT * 60 * 1000+timezone * 60 * 60 * 1000
 };
 
 // 计算时间差
