@@ -1,6 +1,6 @@
 <template>
   <div id="postdetail" class="postdetail p-container commonpositiontop">
-    <ArticleSuspendedPanel :get_post_comment_count="postdatail.get_post_comment_count"></ArticleSuspendedPanel>
+    <ArticleSuspendedPanel :get_post_comment_count="postdetail.get_post_comment_count"></ArticleSuspendedPanel>
     <Row>
       <Col :xs="24" :sm="24" :md="24" :lg="18">
         <!--左侧文章区域-->
@@ -19,8 +19,8 @@
                   <div v-else v-text="author.username"></div>
                 </div>
                 <div style="font-size: 1.1rem;margin: 12px 0 0 5px">
-                  {{fomatdate}}&nbsp;&nbsp;阅读 {{postdatail.views_count}}
-                  <a :href="postdatail.reproduce_source" v-if="postdatail.reproduce" style="margin-left: 30px"
+                  {{postdetail.create_date}}&nbsp;&nbsp;阅读 {{postdetail.views_count}}
+                  <a :href="postdetail.reproduce_source" v-if="postdetail.reproduce" style="margin-left: 30px"
                      target="_blank">
                     <Icon type="ios-link-outline"/>
                   </a>
@@ -39,21 +39,21 @@
               </div>
             </div>
             <!--标题-->
-            <h3 style="text-align: center">{{postdatail.title}}</h3>
+            <h3 style="text-align: center">{{postdetail.title}}</h3>
             <!--主体文章body区-->
             <main>
-              <mavon-editor v-model="value" :codeStyle="postdatail.codestyle" :boxShadow="false"
+              <mavon-editor v-model="value" :codeStyle="postdetail.codestyle" :boxShadow="false"
                             :toolbarsFlag="false" ref="md" :subfield="false" defaultOpen="preview"/>
             </main>
           </Card>
         </article>
         <!--        文章标签分类-->
         <div id="hptagcat">
-          <PostTagCat :cat="postcatname" :catslug="postcatslug" :tag="postdatail.tags"></PostTagCat>
+          <PostTagCat :cat="postcatname" :catslug="postcatslug" :tag="postdetail.tags"></PostTagCat>
         </div>
         <!--        评论区-->
         <div id="hpcomment">
-          <CommentList :can_comment="postdatail.can_comment"></CommentList>
+          <CommentList :can_comment="postdetail.can_comment"></CommentList>
         </div>
 
       </Col>
@@ -81,7 +81,7 @@
   import {getPostDetail} from '../../api/api'
   import {getFav} from '../../api/api'
   import {getAllFavs, getAllVote} from '../../api/api'
-  import {dateFormat} from '../../assets/js/dateformat'
+  // import {dateFormat} from '../../assets/js/dateformat'
   import {toToc} from '../../assets/js/transtoc'
   import SideBarRight from '../utils/SideBarRight'
   import ArticleSuspendedPanel from '../utils/ArticleSuspendedPanel'
@@ -102,7 +102,7 @@
       return {
         value: `<code>hello world</code>`,
         author: {},
-        postdatail: {},
+        postdetail: {},
         spinShow: true,
         postcatname: null,
         postcatslug: null,
@@ -125,9 +125,9 @@
       PostTagCat
     },
     computed: {
-      fomatdate() {
-        return dateFormat(this.postdatail.create_date)
-      },
+      // fomatdate() {
+      //   return dateFormat(this.postdetail.create_date)
+      // },
       authstate() {
         if (authenticate.ifLogin()) {
           this.ifauth = true
@@ -159,16 +159,16 @@
           {id: this.$route.params.id}
         ).then(
           res => {
-            this.postdatail = res.data;
-            this.PostUpvoteCount(this.postdatail.upvote_count);
-            this.author = this.postdatail.author;
+            this.postdetail = res.data;
+            this.PostUpvoteCount(this.postdetail.upvote_count);
+            this.author = this.postdetail.author;
             console.log(this.author.avatar)
-            this.postcatname = this.postdatail.category.name
-            this.postcatslug = this.postdatail.category.slug
-            this.catlog = this.toToc(this.postdatail.body)
+            this.postcatname = this.postdetail.category.name
+            this.postcatslug = this.postdetail.category.slug
+            this.catlog = this.toToc(this.postdetail.body)
             // 配置 postdetail 页的标题栏
-            this.$store.dispatch('SetPostTitle', this.postdatail.title);
-            this.ifcancomment(this.postdatail.can_comment)
+            this.$store.dispatch('SetPostTitle', this.postdetail.title);
+            this.ifcancomment(this.postdetail.can_comment)
 
             if (this.$store.state.userinfo.username) {
               if (this.$store.state.userinfo.username == this.author.username) {
@@ -176,10 +176,10 @@
               }
             } else {
             }
-            if (this.postdatail.body_md) {
-              this.value = this.postdatail.body_md;
+            if (this.postdetail.body_md) {
+              this.value = this.postdetail.body_md;
             } else {
-              this.value = this.postdatail.body
+              this.value = this.postdetail.body
             }
             ;
             this.$Spin.hide();
@@ -222,7 +222,7 @@
           console.log(voteerr, 'voteerr');
         }));
       },
-      dateFormat,
+      // dateFormat,
       toToc,
       // 跳转到文章编辑页面
       toedit() {

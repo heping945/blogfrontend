@@ -80,5 +80,9 @@ module.exports = {
     net: 'empty',
     tls: 'empty',
     child_process: 'empty'
-  }
+  },
+//  配置cdn使用
+  externals: {
+      'moment': 'moment',
+  },
 }

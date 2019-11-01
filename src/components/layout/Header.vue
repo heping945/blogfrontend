@@ -93,7 +93,7 @@
       </header>
     </div>
 
-    <div v-else :class="{'header':true,'ifshow':postheadershow}" id="show-in-post">
+    <div v-else :class="{'header':true,'ifShow':postheadershow}" id="show-in-post">
       <header class="p-container">
         {{this.$store.state.post_title}}
       </header>
@@ -153,7 +153,7 @@
       })
     },
     mounted() {
-      console.log(process.env.NODE_ENV)
+      // console.log(process.env.NODE_ENV)
       if (this.can_scroll) {
         window.addEventListener('scroll', this.showBtn) //scroll 滚动事件
       }
@@ -322,7 +322,7 @@
     }
   }
 
-  .ifshow {
+  .ifShow {
     display: none;
   }
 

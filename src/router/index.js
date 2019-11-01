@@ -10,6 +10,7 @@ const PostContent = () => import('@/components/post/PostContent');
 const PostDetail = () => import('@/components/post/PostDetail');
 const PostAdd = () => import('@/components/post/PostAdd');
 const PostEdit = () => import('@/components/post/PostEdit');
+const SubjectIndex = () => import('@/components/subject/SubjectIndex');
 const SubjectContent = () => import('@/components/subject/SubjectContent');
 const CategoryContent = () => import('@/components/category/CategoryContent');
 const UserContent = () => import('@/components/accounts/UserContent');
@@ -120,7 +121,19 @@ export default new Router({
         },
         {
           path: '/subject',
-          name: 'subject',
+          name: 'subjectindex',
+          components: {
+            header: Header,
+            content: SubjectIndex,
+            footer: Footer
+          },
+          meta: {
+            title: '专题'
+          }
+        },
+        {
+          path: '/subject/:title/:id',
+          name: 'subjectcontent',
           components: {
             header: Header,
             content: SubjectContent,
