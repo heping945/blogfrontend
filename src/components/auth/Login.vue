@@ -543,6 +543,7 @@
     position: relative;
     top: 20vh;
     height: 50vh;
+    max-width: 400px;
   }
 
   /*#m-log .ivu-card-body {*/

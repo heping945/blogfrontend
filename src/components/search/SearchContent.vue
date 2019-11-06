@@ -37,7 +37,7 @@
 <script>
   import storage from '../../assets/js/storage'
   import {search} from '../../api/api'
-  import {dateFormat} from '../../assets/js/dateformat'
+  // import {dateFormat} from '../../assets/js/dateformat'
 
   export default {
     name: "SearchContent",
@@ -145,7 +145,7 @@
           return item['author'] = item['author']['username']
         });
         _p.map(item => {
-          return item['create_date'] = this.dateFormat(item['create_date'])
+          return item['create_date'] = item['create_date']
         });
         return _p
       },
@@ -161,7 +161,8 @@
         this.cindex = index;
         this.initsearch()
       },
-      dateFormat,
+      // dateFormat,
+      moment,
       to_post(selection, row) {
         this.$router.push({name: 'postdetail', params: {id: selection.id}})
       },

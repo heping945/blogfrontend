@@ -83,6 +83,6 @@ module.exports = {
   },
 //  配置cdn使用
   externals: {
-      'moment': 'moment',
+      moment: 'moment',
   },
 }

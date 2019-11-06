@@ -7,8 +7,8 @@
           {{ item.content }}
           发布于：
 
-          {{handleDate(item.create_date)}}&nbsp;&nbsp;------------&nbsp;&nbsp;最后一次更新：
-          {{handleDate(item.mod_date)}}
+          {{moment(item.create_date).fromNow()}}&nbsp;&nbsp;------------&nbsp;&nbsp;最后一次更新：
+          {{moment(item.mod_date).fromNow()}}
         </ListItem>
       </List>
     </Card>
@@ -17,7 +17,7 @@
 
 <script>
   import {getIndexPost} from '../../api/api'
-  import {handleDate} from '@/assets/js/datetimeformat'
+  // import {handleDate} from '@/assets/js/datetimeformat'
   import Axios from 'axios'
 
   export default {
@@ -47,7 +47,8 @@
           console.log(err)
         })
       },
-      handleDate,
+      // handleDate,
+      moment,
       getmore() {
         if (this.next) {
           Axios.get(this.next).then(res => {

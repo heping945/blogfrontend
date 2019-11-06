@@ -19,7 +19,9 @@ export default new Vuex.Store({
     votestate: null,
     postuc: null,
     can_scroll: true,
-    can_comment:null
+    can_comment: null,
+    subjectAndid: {},
+    collAndshadow: true,
   },
   mutations: {
     SaveToken(state, usertoken) {
@@ -46,6 +48,12 @@ export default new Vuex.Store({
     },
     SetPostTitle(state, title) {
       state.post_title = title
+    },
+    SetSubject(state, subjectAndid) {
+      state.subjectAndid = subjectAndid
+    },
+    setcollAndshadow(state) {
+      state.collAndshadow = !state.collAndshadow
     },
     PostSearchArg(state, arg) {
       state.search_arg = arg
@@ -78,6 +86,12 @@ export default new Vuex.Store({
     },
     SetPostTitle(context, title) {
       context.commit('SetPostTitle', title)
+    },
+    SetSubject(context, subjectAndid) {
+      context.commit('SetSubject', subjectAndid)
+    },
+    setcollAndshadow(context) {
+      context.commit('setcollAndshadow' )
     },
     PostSearchArg(context, arg) {
       context.commit('PostSearchArg', arg)

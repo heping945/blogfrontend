@@ -42,13 +42,15 @@
                 <li v-if="$route.query.sort!='mod'">
                   <Icon type="md-calendar"/>
                   <!--                  <Time :time="item.create_date"/>-->
-                  {{item.create_date}}
+<!--                  {{item.create_date}}-->
+                  {{moment(item.create_date).fromNow()}}
 
                 </li>
                 <li v-else>
                   <Icon type="md-calendar"/>
                   <!--                  <Time :time="item.mod_date"/>-->
-                  {{item.mod_date}}
+<!--                  {{item.mod_date}}-->
+                  {{moment(item.mod_date).fromNow()}}
                 </li>
               </template>
               <template slot="extra">
@@ -78,12 +80,12 @@
                 </li>
                 <li v-if="$route.query.sort!='mod'">
                   <Icon type="md-calendar"/>
-                  {{item.create_date}}
+                  {{moment(item.create_date).fromNow()}}
                   <!--                  {{item.create_date}}-->
                 </li>
                 <li v-else>
                   <Icon type="md-calendar"/>
-                  {{item.mod_date}}
+                  {{moment(item.mod_date).fromNow()}}
                 </li>
               </template>
             </ListItem>
@@ -101,7 +103,7 @@
 
 <script>
   import {getIndexPost} from '../../api/api'
-  import {handleDate} from '../../assets/js/datetimeformat'
+  // import {handleDate} from '../../assets/js/datetimeformat'
   import LoadingSpain from '../utils/LoadingSpain'
   import NoContent from '../utils/NoContent'
   import Axios from 'axios'
@@ -152,7 +154,7 @@
             break;
         }
         return this.orderparams
-      }
+      },
     },
     methods: {
       initIndexPost() {
@@ -168,6 +170,7 @@
           console.log('err.response', err.response);
         })
       },
+      moment,
       //监视滚动条到底部的方法 ，
       scrollHander() {
         var scr = document.documentElement.scrollTop || document.body.scrollTop; // 向上滚动的那一部分高度
@@ -200,10 +203,10 @@
         })
       }
       ,
-      handleDate,
-      xx(x) {
-        console.log(x)
-      },
+      // handleDate,
+      // xx(x) {
+      //   console.log(x)
+      // },
       todetail(item) {
         this.$router.push({name: 'postdetail', params: {id: item.id}})
       }

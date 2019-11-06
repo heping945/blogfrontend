@@ -2,8 +2,26 @@
   <div class="lg-index-sidebar">
     <Card :bordered="false">
       <p slot="title">关于本站</p>
-      <p>Content of no border type. Content of no border type. Content of no border type. Content of no border
-        type. </p>
+      <ul>
+        <li>
+          后端：django drf
+        </li>
+        <li>
+          前端：vue iview
+        </li>
+        <li>
+          部署：gunicorn nginx
+        </li>
+      </ul>
+      <!--      <p>-->
+      <!--        后端：django   drf-->
+      <!--      </p>-->
+      <!--      <p>-->
+      <!--        前端：vue iview-->
+      <!--      </p>-->
+      <!--      <p>-->
+      <!--        部署 gunicorn nginx supervisor-->
+      <!--      </p>-->
     </Card>
     <div class="info">
       <p>
@@ -33,6 +51,11 @@
     position: fixed;
     top: 80px;
     width: 240px;
+
+    li {
+      margin: 5px 0;
+      font-weight: 800;
+    }
   }
 
   .info {

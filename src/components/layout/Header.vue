@@ -95,7 +95,16 @@
 
     <div v-else :class="{'header':true,'ifShow':postheadershow}" id="show-in-post">
       <header class="p-container">
-        {{this.$store.state.post_title}}
+
+        <template v-if="this.$route.name=='postdetail'">
+          {{this.$store.state.post_title}}
+        </template>
+        <template v-else>
+          <div>
+            {{this.$store.state.subjectAndid.title}}:{{this.$store.state.subjectAndid.id}}
+          </div>
+
+        </template>
       </header>
     </div>
 
@@ -140,7 +149,7 @@
         }
       },
       postheadershow() {
-        if (this.$route.name == 'postdetail') {
+        if (this.$route.name == 'postdetail' || this.$route.name == 'subjectcontent') {
           this.ifshow = false
           return this.ifshow
         } else {
