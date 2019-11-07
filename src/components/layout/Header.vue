@@ -93,15 +93,15 @@
       </header>
     </div>
 
-    <div v-else :class="{'header':true,'ifShow':postheadershow}" id="show-in-post">
-      <header class="p-container">
+    <div v-else :class="{'header':true,'ifShow':postheadershow,'thidden':!postheadershow}" id="show-in-post">
+      <header class="p-container ">
 
         <template v-if="this.$route.name=='postdetail'">
           {{this.$store.state.post_title}}
         </template>
         <template v-else>
           <div>
-            {{this.$store.state.subjectAndid.title}}:{{this.$store.state.subjectAndid.id}}
+            {{this.$store.state.subjectAndid.title}}
           </div>
 
         </template>
@@ -127,7 +127,7 @@
           {title: '文章', url: '/post', divided: false},
           {title: '分类', url: '/category', divided: false},
           {title: '专题', url: '/subject', divided: false},
-          {title: '系统设计', url: '/design', divided: true},
+          {title: '算法', url: '/algorithm', divided: true},
         ],
         search_arg: '',
         indexshow: '首页',
@@ -333,6 +333,12 @@
 
   .ifShow {
     display: none;
+
+  }
+  .thidden{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
   }
 
   #show-in-post {

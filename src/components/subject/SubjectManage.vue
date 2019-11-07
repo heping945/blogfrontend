@@ -1,21 +1,5 @@
 <template>
-  <div class="commonpositiontop p-container">
-    <!--    这里是postcontent页面-->
-    <!--    <Row>-->
-    <!--      <Col :xs="24" :sm="24" :md="24" :lg="24">-->
-    <!--        <Icon custom="icofont icon-weixin" size="24"/>-->
-    <!--      </Col>-->
-    <!--    </Row>-->
-    <!--    <div>-->
-    <!--      <input type="file" id="upload_ele" multiple="false" accept="image/*" @change="uploadFile()" ref="img"/>-->
-    <!--    </div>-->
-    <!--    <hr>-->
-    <!--    <br>-->
-    <!--    <div><img :src="xi" alt="图"></div>-->
-    <!--    <h1>测试get请求的query</h1>-->
-    <!--    <button @click="getpost">getpost</button>-->
-    <!--    <Table stripe :columns="columns1" :data="postlist"></Table>-->
-    <hr>
+  <div class="commonpositiontop p-container" style="z-index: 199">
     <br>
     <Upload :action="url" :format="['md']" :data="uploaddata" name="md_File"
             :on-success="getmd">
@@ -23,8 +7,6 @@
     </Upload>
     <br>
     <div>
-      <mavon-editor v-model="value" :boxShadow="false"
-                    :toolbarsFlag="false" ref="md" :subfield="false" defaultOpen="preview"/>
 
     </div>
   </div>
@@ -37,7 +19,7 @@
 
 
   export default {
-    name: "PostContent",
+    name: "SubjectManage",
     data() {
       return {
         codestylelist: [],
@@ -63,15 +45,12 @@
     computed: {
       url() {
         let u = '';
-        // process.env.NODE_ENV === 'development' ? u = 'http://127.0.0.1:6655/api/v1/chapter/' : u = 'http://106.14.176.87:8000/api/v1/chapter/';
-        process.env.NODE_ENV === 'development' ? u = 'http://127.0.0.1:6655/api/v1/chapters/' : u = 'https://zhaoheping.com/api/v1/chapters/';
+        process.env.NODE_ENV === 'development' ? u = 'http://127.0.0.1:6655/api/v1/chapter/' : u = 'https://zhaoheping.com/api/v1/chapter/';
         return u
       }
     },
-    async created() {
-      let codestyle = await Axios.get('./static/codestyle.json')
-      this.codestylelist = codestyle.data.codestyle
-      // console.log(this.codestylelist.codestyle)
+    created() {
+
     },
     methods: {
       uploadFile() {

@@ -12,6 +12,7 @@ const PostAdd = () => import('@/components/post/PostAdd');
 const PostEdit = () => import('@/components/post/PostEdit');
 const SubjectIndex = () => import('@/components/subject/SubjectIndex');
 const SubjectContent = () => import('@/components/subject/SubjectContent');
+const SubjectManage = () => import('@/components/subject/SubjectManage');
 const CategoryContent = () => import('@/components/category/CategoryContent');
 const UserContent = () => import('@/components/accounts/UserContent');
 const UserActivites = () => import('@/components/accounts/UserActivites');
@@ -141,6 +142,19 @@ export default new Router({
           },
           meta: {
             title: '专题'
+          }
+        },
+        {
+          path: '/subject/m',
+          name: 'subjectmanage',
+          components: {
+            header: Header,
+            content: SubjectManage,
+            footer: Footer
+          },
+          meta: {
+            title: '专题管理',
+            requireAuth: true,
           }
         },
         {

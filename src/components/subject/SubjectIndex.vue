@@ -4,30 +4,47 @@
       <Col :xs="24" :sm="24" :md="24" :lg="18">
         <div class="subjectindex">
           <Card>
-            <Button @click="fn1">dianwo</Button>
+            <List item-layout="vertical">
+              <ListItem v-for="item in subjecttopic" :key="item.id" @click.native="tosubject(item)">
+                <ListItemMeta :title="item.title" :description="item.desc"/>
+              </ListItem>
+            </List>
           </Card>
         </div>
+
       </Col>
       <Col :xs="0" :sm="0" :md="0" :lg="6">
         <Card></Card>
       </Col>
     </Row>
+
+
   </div>
 </template>
 
 <script>
+  import {getSubject} from '@/api/api'
+
   export default {
     name: "SubjectIndex",
     data() {
-      return {}
+      return {
+        subjecttopic: []
+      }
     },
     created() {
-      console.log(moment('2019-11-01 02:19').fromNow())
-      console.log(moment)
+      this.initsubjectdata()
     },
     methods: {
-      fn1() {
-        this.$router.push({name: 'subjectcontent', params: {title: 'django', id: 111}})
+      tosubject(i) {
+        this.$router.push({name: 'subjectcontent', params: {title: i.urltag, id: i.get_first_id}})
+      },
+      initsubjectdata() {
+        getSubject().then(res => {
+          this.subjecttopic = res.data.results
+        }).catch(err => {
+          console.log(err.response)
+        })
       }
     }
   }
@@ -38,5 +55,9 @@
     .subjectindex {
       padding-right: 20px;
     }
+  }
+
+  .ivu-list-item {
+    cursor: pointer;
   }
 </style>

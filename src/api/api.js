@@ -128,3 +128,23 @@ export const createComment = params => {
 export const deleteComment = params => {
   return api.delete('/comments/' + params.id + '/', params)
 };
+
+//专题
+
+//获得专题列表
+export const getSubject = params =>{
+     return api.get(`/topics/`, {params: params})
+};
+
+//获得某个专题章节目录
+
+export const getChapterSummary = params =>{
+     return api.get(`/chapters/`, {params: params})
+};
+
+
+// 章节详情
+
+export const getChapter = params => {
+  return api.get(`/chapters/` + params.id, params)
+};

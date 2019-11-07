@@ -3,56 +3,39 @@
     <div id="chaptersummary">
       <Card :style="{'margin-left':(collAndshadow?'-320px':0)}">
         <Timeline>
-          <TimelineItem color="green">发布1.0版本</TimelineItem>
-          <TimelineItem color="green">发布2.0版本</TimelineItem>
-          <TimelineItem color="red">严重故障</TimelineItem>
-          <TimelineItem color="blue">发布3.0版本</TimelineItem>
-          <TimelineItem color="green">发布1.0版本</TimelineItem>
-          <TimelineItem color="green">发布2.0版本</TimelineItem>
-          <TimelineItem color="red">严重故障</TimelineItem>
-          <TimelineItem color="blue">发布3.0版本</TimelineItem>
-          <TimelineItem color="green">发布1.0版本</TimelineItem>
-          <TimelineItem color="green">发布2.0版本</TimelineItem>
-          <TimelineItem color="red">严重故障</TimelineItem>
-          <TimelineItem color="blue">发布3.0版本</TimelineItem>
-          <TimelineItem color="green">发布1.0版本</TimelineItem>
-          <TimelineItem color="green">发布2.0版本</TimelineItem>
-          <TimelineItem color="red">严重故障</TimelineItem>
-          <TimelineItem color="blue">发布3.0版本</TimelineItem>
-          <TimelineItem color="green">发布1.0版本</TimelineItem>
-          <TimelineItem color="green">发布2.0版本</TimelineItem>
-          <TimelineItem color="red">严重故障</TimelineItem>
-          <TimelineItem color="blue">发布3.0版本</TimelineItem>
-          <TimelineItem color="green">发布1.0版本</TimelineItem>
-          <TimelineItem color="green">发布2.0版本</TimelineItem>
-          <TimelineItem color="red">严重故障</TimelineItem>
-          <TimelineItem color="blue">发布3.0版本</TimelineItem>
+          <TimelineItem color="green" v-for="item in summary" :key="item.id" @click.native="changechapter(item.id)">
+            {{item.title}}
+          </TimelineItem>
         </Timeline>
       </Card>
     </div>
-<!--    <button @click="coll=!coll;ifdisplay=false" style="margin-left: 400px;margin-top: -100px">点击</button>-->
     <Row>
-      <Col :xs="0" :sm="0" :md="24" :lg="24">
+      <Col :xs="0" :sm="0" :md="0" :lg="24">
+        <!--        电脑设备-->
         <div class="chaptercontent" :style="{'margin-left':(collAndshadow?'0':'320px')}">
           <Card>
-            <mavon-editor v-model="value" codeStyle="monokai" :boxShadow="false"
+            <h3>{{chapter.title}}</h3>
+            <mavon-editor v-model="chapter.md_body" :codeStyle="cs" :boxShadow="false"
                           :toolbarsFlag="false" ref="md" :subfield="false" defaultOpen="preview"/>
 
           </Card>
         </div>
       </Col>
-      <Col :xs="24" :sm="24" :md="0" :lg="0">
+      <!--      移动设备-->
+      <Col :xs="24" :sm="24" :md="24" :lg="0">
         <div class="chaptercontent">
           <Card>
-            <mavon-editor v-model="value" codeStyle="monokai" :boxShadow="false"
+            <h3>
+              {{chapter.title}}</h3>
+            <mavon-editor v-model="chapter.md_body" :codeStyle="cs" :boxShadow="false"
                           :toolbarsFlag="false" ref="md" :subfield="false" defaultOpen="preview"/>
 
           </Card>
         </div>
       </Col>
     </Row>
+    <!--    shadow遮罩层-->
     <div :class="{shadow:true,ifdisplay:collAndshadow} " @click="setcollAndshadow"></div>
-
     <SuspensionPanel></SuspensionPanel>
   </div>
 </template>
@@ -60,6 +43,8 @@
 <script>
   const SuspensionPanel = () => import('@/components/utils/SuspensionPanel')
   import {mapState, mapActions} from 'vuex'
+  import {getChapterSummary} from '@/api/api'
+  import {getChapter} from '@/api/api'
 
   export default {
     name: "SubjectContent",
@@ -70,40 +55,17 @@
       return {
         coll: true,
         ifdisplay: true,
-        value: '# 服务器 5：【单进程异步】模型服务器 5：【单进程异步】模型服务器 5：【单进程异步】模型\n' +
-          '\n' +
-          '本小节我们开始讲 RPC 的异步模型。异步模型是现代服务器的通用模型，它比古典的同步模型在效率上要高出一大截，但是编程难度上也要加大不少，需要程序员有较高的编程素养。关于如何应用异步模型，我们需要要先从非阻塞 IO 开始讲起，逐步理解基本原理和必备的工具和库之后，再用代码实现。\n' +
-          '本小节我们开始讲 RPC 的异步模型。异步模型是现代服务器的通用模型，它比古典的同步模型在效率上要高出一大截，但是编程难度上也要加大不少，需要程序员有较高的编程素养。关于如何应用异步模型，我们需要要先从非阻塞 IO 开始讲起，逐步理解基本原理和必备的工具和库之后，再用代码实现。\n' +
-          '本小节我们开始讲 RPC 的异步模型。异步模型是现代服务器的通用模型，它比古典的同步模型在效率上要高出一大截，但是编程难度上也要加大不少，需要程序员有较高的编程素养。关于如何应用异步模型，我们需要要先从非阻塞 IO 开始讲起，逐步理解基本原理和必备的工具和库之后，再用代码实现。\n' +
-          '本小节我们开始讲 RPC 的异步模型。异步模型是现代服务器的通用模型，它比古典的同步模型在效率上要高出一大截，但是编程难度上也要加大不少，需要程序员有较高的编程素养。关于如何应用异步模型，我们需要要先从非阻塞 IO 开始讲起，逐步理解基本原理和必备的工具和库之后，再用代码实现。\n' +
-          '本小节我们开始讲 RPC 的异步模型。异步模型是现代服务器的通用模型，它比古典的同步模型在效率上要高出一大截，但是编程难度上也要加大不少，需要程序员有较高的编程素养。关于如何应用异步模型，我们需要要先从非阻塞 IO 开始讲起，逐步理解基本原理和必备的工具和库之后，再用代码实现。\n' +
-          '本小节我们开始讲 RPC 的异步模型。异步模型是现代服务器的通用模型，它比古典的同步模型在效率上要高出一大截，但是编程难度上也要加大不少，需要程序员有较高的编程素养。关于如何应用异步模型，我们需要要先从非阻塞 IO 开始讲起，逐步理解基本原理和必备的工具和库之后，再用代码实现。\n' +
-          '本小节我们开始讲 RPC 的异步模型。异步模型是现代服务器的通用模型，它比古典的同步模型在效率上要高出一大截，但是编程难度上也要加大不少，需要程序员有较高的编程素养。关于如何应用异步模型，我们需要要先从非阻塞 IO 开始讲起，逐步理解基本原理和必备的工具和库之后，再用代码实现。\n' +
-          '本小节我们开始讲 RPC 的异步模型。异步模型是现代服务器的通用模型，它比古典的同步模型在效率上要高出一大截，但是编程难度上也要加大不少，需要程序员有较高的编程素养。关于如何应用异步模型，我们需要要先从非阻塞 IO 开始讲起，逐步理解基本原理和必备的工具和库之后，再用代码实现。\n' +
-          '本小节我们开始讲 RPC 的异步模型。异步模型是现代服务器的通用模型，它比古典的同步模型在效率上要高出一大截，但是编程难度上也要加大不少，需要程序员有较高的编程素养。关于如何应用异步模型，我们需要要先从非阻塞 IO 开始讲起，逐步理解基本原理和必备的工具和库之后，再用代码实现。\n' +
-          '\n' +
-          '## 非阻塞 IO\n' +
-          '\n' +
-          '操作系统提供的文件读写操作默认都是同步的，它必须等到数据就绪后才能返回，如果数据没有就绪，它就会阻塞当前的线程，其它的事什么都干不了，这是对操作系统线程资源的一种浪费。\n' +
-          '\n' +
-          '为了解决这个问题，操作系统给文件读写提供了非阻塞选项。当我们读写文件时，提供一个 O\\_NONBLOCK 选项，读写操作就不会阻塞。\n' +
-          '\n' +
-          '内核套接字的 ReadBuffer 有多少字节，read 操作就返回多少字节。内核套接字的 WriteBuffer 有多少剩余字节空间，write 操作就写多少字节。我们通过读写的返回值就可以知道读写了多少数据。接下来线程就可以继续干别的事去了，稍后再继续进行读写。\n' +
-          '\n' +
-          '```py\n' +
-          'socket = socket.socket()\n' +
-          'socket.setblocking(0)  # 开启非阻塞模式\n' +
-          'socket.read()  # 有多少读多少\n' +
-          'socket.write()  # 能写多少是多少\n' +
-          '\n' +
-          '```\n' +
-          '\n' +
-          '## 事件轮询'
+        summary: [],
+        cs: '',
+        chapter: {},
+        value: 'hello world',
       }
     },
-    created() {
+    mounted() {
       console.log(this.$route.params);
-      this.SetSubject({title: this.$route.params.title, id: this.$route.params.id})
+        this.$Spin.show();
+      this.initsubjectsummary();
+      this.initchapterdetail()
     },
     computed: {
       ...mapState({
@@ -112,9 +74,44 @@
       })
     },
     methods: {
-      ...mapActions(['SetSubject','setcollAndshadow']),
-      fn1() {
-        alert(1)
+      ...mapActions(['SetSubject', 'setcollAndshadow']),
+      changechapter(a) {
+        let id = this.$route.params.id;
+        let title = this.$route.params.title
+        let _screenwidth = document.body.offsetWidth;
+        console.log(_screenwidth)
+        console.log(a, id, title, 666)
+        if (a != id) {
+          this.$router.push({name: 'subjectcontent', params: {title: title, id: a}});
+          this.initchapterdetail()
+        } else {
+        }
+        ;
+        if (_screenwidth < 800) {
+          this.setcollAndshadow()
+        }
+      },
+      initsubjectsummary() {
+        let title = this.$route.params.title
+        getChapterSummary({topic__urltag: title}).then(res => {
+          console.log(res);
+          this.summary = res.data.results
+        }).catch(err => {
+          console.log(err.response)
+        })
+      },
+      initchapterdetail() {
+        let id = this.$route.params.id
+        getChapter({id: id}).then(res => {
+          this.chapter = res.data;
+          this.cs = res.data.topic.codestyle
+          console.log(this.chapter);
+          console.log(this.cs);
+          this.SetSubject({title: this.chapter.topic.title});
+            this.$Spin.hide();
+        }).catch(err => {
+          console.log(err.response)
+        })
       }
     },
   }
@@ -131,14 +128,21 @@
     z-index: 1999;
     background-color: #000;
     opacity: 0.6;
-    /*display:block;*/
+  }
+
+  /*大于此尺寸的设备都将关闭遮罩层*/
+  @media (min-width: 800px) {
+    .shadow {
+      width: 0;
+      height: 0;
+    }
   }
 
   .ifdisplay {
     display: none;
   }
 
-  /*大屏设备固定尺寸*/
+  /*大屏设备目录固定尺寸*/
   #chaptersummary .ivu-card {
     position: fixed;
     top: 60px;
@@ -147,8 +151,6 @@
     border: none;
     width: 320px;
     z-index: 2000;
-    /*background: #F0F1F4;*/
-    /*background: green;*/
     overflow: auto;
     padding-bottom: 50px;
     cursor: default;
@@ -158,7 +160,7 @@
   @media (max-width: 576px) {
     #chaptersummary .ivu-card {
       top: 50px;
-      width: 260px;
+      width: 220px;
     }
   }
 
@@ -168,13 +170,24 @@
 
   /*内容区*/
   .chaptercontent .ivu-card {
-    max-width: 800px;
+    /*800太小调成940好一点*/
+    max-width: 940px;
     margin: 0 auto;
-    padding: 4px 20px 24px;
+    width: 100%;
+    /*padding: 4px 20px 24px;*/
+    /*padding: 4px 10px 24px;*/
     box-shadow: 1px 1px 8px rgba(0, 0, 0, .15);
     border-radius: 2px;
     box-sizing: border-box;
-    background: #fbfbfb
+    background: #fbfbfb;
+
+    h3 {
+      font-size: 2.5rem;
+      margin: 1.6rem 0;
+      text-align: center;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   }
 
   /deep/ .v-note-wrapper .v-note-panel .v-note-show .v-show-content, .v-note-wrapper .v-note-panel .v-note-show .v-show-content-html {
@@ -182,49 +195,4 @@
   }
 
 
-  /*!*写在前面*!*/
-  /*!*大设备<lg>* chaptersummary/*/
-  /*!*平板设备<md-768>*!*/
-  /*!*小设备<sm.xs>*!*/
-  /*@media (min-width: 800px) {*/
-  /*  main {*/
-  /*    width: 800px;*/
-  /*    padding: 20px 60px 40px;*/
-  /*    background: hotpink;*/
-  /*    text-align: center;*/
-  /*  }*/
-  /*;*/
-  /*}*/
-
-  /*@media (max-width: 800px) {*/
-  /*  main {*/
-  /*    width: 100%;*/
-  /*    padding: 20px 60px 40px;*/
-  /*    background: red;*/
-  /*  }*/
-  /*;*/
-  /*}*/
-
-  /*/deep/ .ivu-drawer-content {*/
-  /*  top: 60px*/
-  /*}*/
-
-  /*.chaptersummary {*/
-  /*  width: 320px;*/
-  /*  position: fixed;*/
-  /*  background: yellow;*/
-  /*  left: 0;*/
-  /*  top: 60px;*/
-  /*  height: 100%;*/
-  /*  cursor: default;*/
-  /*  flex-shrink: 0;*/
-  /*  z-index: 2;*/
-  /*  border-right: 1px solid #ddd;*/
-  /*  transition: all .3s cubic-bezier(.4, 0, .2, 1);*/
-  /*  will-change: left;*/
-  /*}*/
-
-  /*.chaptercontent {*/
-  /*  margin-left: 320px;*/
-  /*}*/
 </style>
