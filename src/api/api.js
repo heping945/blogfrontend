@@ -136,6 +136,12 @@ export const getSubject = params =>{
      return api.get(`/topics/`, {params: params})
 };
 
+//获得专题详情
+export const getSubjectDetail = params =>{
+     return api.get(`/topics/` + params.urltag , params)
+};
+
+
 //获得某个专题章节目录
 
 export const getChapterSummary = params =>{

@@ -145,7 +145,7 @@ export default new Router({
           }
         },
         {
-          path: '/subject/m',
+          path: '/subject/manage',
           name: 'subjectmanage',
           components: {
             header: Header,

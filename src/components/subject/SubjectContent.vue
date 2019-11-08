@@ -2,6 +2,12 @@
   <div class="commonpositiontop scindex">
     <div id="chaptersummary">
       <Card :style="{'margin-left':(collAndshadow?'-320px':0)}">
+        <Alert type="warning" v-if="subject.reproduce"  show-icon>
+          <b style="font-weight: bolder;color: indianred">原载于
+          <a :href="subject.reproduce_source" target="_Blank">
+            <Icon type="ios-undo-outline" color="orange"/>
+          </a>,仅供个人学习，请勿转发商用</b>
+        </Alert>
         <Timeline>
           <TimelineItem color="green" v-for="item in summary" :key="item.id" @click.native="changechapter(item.id)">
             {{item.title}}
@@ -44,6 +50,7 @@
   const SuspensionPanel = () => import('@/components/utils/SuspensionPanel')
   import {mapState, mapActions} from 'vuex'
   import {getChapterSummary} from '@/api/api'
+  import {getSubjectDetail} from '@/api/api'
   import {getChapter} from '@/api/api'
 
   export default {
@@ -57,13 +64,15 @@
         ifdisplay: true,
         summary: [],
         cs: '',
+        subject: {},
         chapter: {},
         value: 'hello world',
       }
     },
     mounted() {
       console.log(this.$route.params);
-        this.$Spin.show();
+      this.$Spin.show();
+      this.initsubjectdetail()
       this.initsubjectsummary();
       this.initchapterdetail()
     },
@@ -91,6 +100,7 @@
           this.setcollAndshadow()
         }
       },
+      //初始化专题章节列表
       initsubjectsummary() {
         let title = this.$route.params.title
         getChapterSummary({topic__urltag: title}).then(res => {
@@ -100,6 +110,7 @@
           console.log(err.response)
         })
       },
+      //初始化第一个专题第一个章节详情
       initchapterdetail() {
         let id = this.$route.params.id
         getChapter({id: id}).then(res => {
@@ -108,9 +119,20 @@
           console.log(this.chapter);
           console.log(this.cs);
           this.SetSubject({title: this.chapter.topic.title});
-            this.$Spin.hide();
+          this.$Spin.hide();
         }).catch(err => {
+          // 返回首页
+          this.$Spin.hide();
           console.log(err.response)
+          this.$router.push({name: 'notFound'})
+        })
+      },
+      initsubjectdetail() {
+        getSubjectDetail({urltag: this.$route.params.title}).then(res => {
+          console.log(res);
+          this.subject = res.data
+        }).catch(err => {
+          console.log(err)
         })
       }
     },
@@ -194,5 +216,12 @@
     padding: 0 0;
   }
 
+  /deep/ .ivu-timeline-item-content {
+    cursor: pointer;
+  }
 
+/*  alert覆盖*/
+  .ivu-alert.ivu-alert-with-icon {
+    padding: 8px 28px 8px 38px;
+}
 </style>

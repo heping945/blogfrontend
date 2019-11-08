@@ -64,7 +64,7 @@
               <template v-if="this.$store.state.userinfo.token">
                 <Dropdown trigger="click">
                   <a href="javascript:void(0)">
-                    <Avatar icon="ios-person" :src="avatar"/>
+                    <Avatar icon="ios-person" :src="avatar" :title="$store.state.userinfo.username"/>
                   </a>
                   <DropdownMenu slot="list">
                     <DropdownItem>
@@ -79,6 +79,9 @@
                     </DropdownItem>
                     <DropdownItem>
                       <router-link :to="{name:'postadd'}">写文章</router-link>
+                    </DropdownItem>
+                    <DropdownItem>
+                      <router-link :to="{name:'subjectmanage'}">写专题</router-link>
                     </DropdownItem>
                   </DropdownMenu>
                 </Dropdown>

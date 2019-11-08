@@ -1,93 +1,165 @@
 <template>
   <div class="commonpositiontop p-container" style="z-index: 199">
-    <br>
-    <Upload :action="url" :format="['md']" :data="uploaddata" name="md_File"
-            :on-success="getmd">
-      <Button icon="ios-cloud-upload-outline">Upload files</Button>
-    </Upload>
-    <br>
-    <div>
+    <Row>
+      <Col :xs="24" :sm="24" :md="0" :lg="0">
+        <div style="text-align:center;padding: 100px 100px">
+          <h3 style="font-size: 2rem;color: rebeccapurple">此设备不支持编辑文章请更换大设备</h3>
+        </div>
+      </Col>
+      <Col :xs="0" :sm="0" :md="24" :lg="24">
+        <Select v-model="topicselect" style="width:100%" placeholder="请选择专题标题" @on-change="getsubjectsummary">
+          <Option v-for="item in subjectlist" :value="item.id" :key="item.id">{{ item.title }}</Option>
+        </Select>
+        <Alert type="success" style="margin-top: 20px" v-if="summary.length">
+          <List>
+            <ListItem v-for="item,index in summary" :key="item.id">
+              <b>{{index+1}}</b>：&nbsp;&nbsp;<b style="color: #007fff">{{item.order}}</b>：&nbsp;&nbsp;<b
+              style="color: rebeccapurple">{{item.id}}</b>：&nbsp;&nbsp;{{item.title}}
+            </ListItem>
+          </List>
+        </Alert>
+        <Alert type="warning" style="margin-top: 20px">权限，顺序控制请联系管理</Alert>
+        <Upload :action="url" :format="['md']" :data="uploaddata" name="md_File" :paste="true" :multiple="true"
+                accept=".md"
+                :on-success="getmd" :on-error="prerr" :headers="h" :before-upload="validatetopic">
+          <div style="padding: 10px 0">
+            <Button icon="ios-cloud-upload-outline" style="margin: 0 auto" title="只能选择md格式文件，可以多选">上传md文件</Button>
+          </div>
 
-    </div>
+        </Upload>
+      </Col>
+    </Row>
+
+
   </div>
 </template>
 
 <script>
-  import Axios from 'axios'
-  import {postimgupload} from '../../api/api'
-  import {getIndexPost} from '../../api/api'
+  // import Axios from 'axios'
+  // import {postimgupload} from '../../api/api'
+  // import {getIndexPost} from '../../api/api'
+  import {getChapterSummary} from '@/api/api'
+  import {getSubject} from '../../api/api'
 
 
   export default {
     name: "SubjectManage",
     data() {
       return {
-        codestylelist: [],
-        codestyle: '',
-        xi: '',
-        value: `<code>hello world</code>`,
-        postlist: [],
-        columns1: [
-          {
-            title: 'Title',
-            key: 'title'
-          },
-          {
-            title: 'Url',
-            key: 'url'
-          },
-        ],
-        uploaddata: {
-          topic: 1
-        }
+        header: {},
+        subjectlist: [],
+        topicselect: '',
+        summary: []
       }
     },
     computed: {
       url() {
         let u = '';
-        process.env.NODE_ENV === 'development' ? u = 'http://127.0.0.1:6655/api/v1/chapter/' : u = 'https://zhaoheping.com/api/v1/chapter/';
+        process.env.NODE_ENV === 'development' ? u = 'http://127.0.0.1:6655/api/v1/chapters/' : u = 'https://zhaoheping.com/api/v1/chapters/';
         return u
+      },
+      h() {
+        let token = this.$store.state.userinfo.token
+        if (token) {
+          this.header['Authorization'] = 'JWT ' + token;
+          return this.header
+        }
+      },
+      uploaddata() {
+        var d = {}
+        d['topic'] = this.topicselect
+        return d
       }
-    },
+    }
+    ,
     created() {
-
-    },
+      //初始化专题列表
+      this.initsubjectlist()
+    }
+    ,
     methods: {
-      uploadFile() {
-        var img = this.$refs.img.files[0]
-        var formdata = new FormData();
-        formdata.append('img', img);
-        // Axios({
-        //   url: 'http://127.0.0.1:6655/api/v1/postimg/',
-        //   method: 'post',
-        //   data: formdata,
-        //   headers: {'Content-Type': 'multipart/form-data'},
-        postimgupload(formdata).then(res => {
-          alert('success')
-          console.log(res.data)
-          this.xi = res.data.img
+      initsubjectlist() {
+        getSubject().then(res => {
+          this.subjectlist = res.data.results
+        }).catch(err => {
+          console.log(err)
+        })
+      }
+      ,
+
+      getsubjectsummary(x) {
+        getChapterSummary({topic: x}).then(res => {
+          console.log(res);
+          this.summary = res.data.results
         }).catch(err => {
           console.log(err.response)
         })
       },
-      getpost() {
-        getIndexPost(
-          {
-            params: {
-              'page': 2
-            }
-          }
-        ).then(data => {
-          this.postlist = data.data.results
-        }).catch(err => {
-          console.log('err.response', err.response);
-        })
-      },
+      //保留
+      // uploadFile() {
+      //   var img = this.$refs.img.files[0]
+      //   var formdata = new FormData();
+      //   formdata.append('img', img);
+      //   // Axios({
+      //   //   url: 'http://127.0.0.1:6655/api/v1/postimg/',
+      //   //   method: 'post',
+      //   //   data: formdata,
+      //   //   headers: {'Content-Type': 'multipart/form-data'},
+      //   postimgupload(formdata).then(res => {
+      //     alert('success')
+      //     console.log(res.data)
+      //     this.xi = res.data.img
+      //   }).catch(err => {
+      //     console.log(err.response)
+      //   })
+      // },
+      // getpost() {
+      //   getIndexPost(
+      //     {
+      //       params: {
+      //         'page': 2
+      //       }
+      //     }
+      //   ).then(data => {
+      //     this.postlist = data.data.results
+      //   }).catch(err => {
+      //     console.log('err.response', err.response);
+      //   })
+      // }
+      // ,
       getmd(response, file, fileList) {
         console.log(response)
+        console.log(response.id)
+        let r = this.summary.filter(item => {
+          return item.id == response.id
+        });
+        if (r.length) {
+          this.$Notice.warning({
+            title: '请勿重复上传',
+            duration: 1
+          });
+        }else {
+          this.$Notice.success({
+            title: '上传成功',
+            duration: 1
+          });
+          this.summary.push(response)
+        }
+
         console.log(file)
         console.log(fileList)
-        this.value = response.md_body
+        // this.value = response.md_body
+      }
+      ,
+      prerr(error, file, fileList) {
+        //打印错误
+        this.$Message.error(file.detail);
+      },
+      validatetopic() {
+        if (!this.topicselect) {
+          this.$Message.warning('请选择一个专题');
+          return false
+        }
       }
     }
   }
@@ -96,5 +168,9 @@
 <style scoped>
   .ivu-icon {
     font-family: 'iconfont'
+  }
+
+  b {
+    font-weight: bolder;
   }
 </style>
