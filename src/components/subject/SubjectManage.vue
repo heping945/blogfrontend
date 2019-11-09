@@ -7,12 +7,13 @@
         </div>
       </Col>
       <Col :xs="0" :sm="0" :md="24" :lg="24">
+        <!--        大屏设备（平板，桌面）端显示-->
         <Select v-model="topicselect" style="width:100%" placeholder="请选择专题标题" @on-change="getsubjectsummary">
           <Option v-for="item in subjectlist" :value="item.id" :key="item.id">{{ item.title }}</Option>
         </Select>
         <Alert type="success" style="margin-top: 20px" v-if="summary.length">
           <List>
-            <ListItem v-for="item,index in summary" :key="item.id">
+            <ListItem v-for="item,index in summary" :key="item.id" >
               <b>{{index+1}}</b>：&nbsp;&nbsp;<b style="color: #007fff">{{item.order}}</b>：&nbsp;&nbsp;<b
               style="color: rebeccapurple">{{item.id}}</b>：&nbsp;&nbsp;{{item.title}}
             </ListItem>
@@ -23,7 +24,7 @@
                 accept=".md"
                 :on-success="getmd" :on-error="prerr" :headers="h" :before-upload="validatetopic">
           <div style="padding: 10px 0">
-            <Button icon="ios-cloud-upload-outline" style="margin: 0 auto" title="只能选择md格式文件，可以多选">上传md文件</Button>
+            <Button icon="ios-cloud-upload-outline" style="margin: 0 auto" title="只能选择md格式文件，可以多选" long>上传md文件</Button>
           </div>
 
         </Upload>
@@ -86,7 +87,6 @@
         })
       }
       ,
-
       getsubjectsummary(x) {
         getChapterSummary({topic: x}).then(res => {
           console.log(res);
@@ -138,7 +138,7 @@
             title: '请勿重复上传',
             duration: 1
           });
-        }else {
+        } else {
           this.$Notice.success({
             title: '上传成功',
             duration: 1
@@ -159,6 +159,13 @@
         if (!this.topicselect) {
           this.$Message.warning('请选择一个专题');
           return false
+        } else {
+          let user = this.$store.state.userinfo.username
+          console.log(user)
+          if (user != 'heping') {
+            this.$Message.error('您没有权限!!!请联系管理员开通权限');
+            return false
+          }
         }
       }
     }
@@ -172,5 +179,10 @@
 
   b {
     font-weight: bolder;
+  }
+
+  /*上传div变block*/
+  /deep/ .ivu-upload-select {
+    display: block;
   }
 </style>

@@ -13,7 +13,7 @@ const PostEdit = () => import('@/components/post/PostEdit');
 const SubjectIndex = () => import('@/components/subject/SubjectIndex');
 const SubjectContent = () => import('@/components/subject/SubjectContent');
 const SubjectManage = () => import('@/components/subject/SubjectManage');
-const CategoryContent = () => import('@/components/category/CategoryContent');
+const ArchiveContent = () => import('@/components/archive/ArchiveContent');
 const UserContent = () => import('@/components/accounts/UserContent');
 const UserActivites = () => import('@/components/accounts/UserActivites');
 const UserPosts = () => import('@/components/accounts/UserPosts');
@@ -109,11 +109,11 @@ export default new Router({
           }
         },
         {
-          path: '/category',
-          name: 'category',
+          path: '/archive',
+          name: 'archive',
           components: {
             header: Header,
-            content: CategoryContent,
+            content: ArchiveContent,
             footer: Footer
           },
           meta: {

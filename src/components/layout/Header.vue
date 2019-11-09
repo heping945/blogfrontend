@@ -128,7 +128,7 @@
         droplist: [
           {title: '首页', url: '/', divided: false},
           {title: '文章', url: '/post', divided: false},
-          {title: '分类', url: '/category', divided: false},
+          {title: '归档', url: '/archive', divided: false},
           {title: '专题', url: '/subject', divided: false},
           {title: '算法', url: '/algorithm', divided: true},
         ],

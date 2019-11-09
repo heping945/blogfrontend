@@ -4,14 +4,14 @@
       <Col :xs="24" :sm="24" :md="24" :lg="18">
         <div class="subjectindex">
           <Card>
-            <List >
+            <List>
               <ListItem v-for="item in subjecttopic" :key="item.id" @click.native="tosubject(item)">
-                <ListItemMeta  :title="item.title" :description="item.desc"/>
+                <ListItemMeta :title="item.title" :description="item.desc"/>
                 <template slot="action" v-if="item.reproduce">
-                <li>
-                  <Icon type="ios-undo-outline" color="orange" />
-                </li>
-            </template>
+                  <li>
+                    <Icon type="ios-undo-outline" color="orange"/>
+                  </li>
+                </template>
               </ListItem>
             </List>
           </Card>
@@ -22,7 +22,7 @@
         <SideBarRight></SideBarRight>
       </Col>
     </Row>
-
+    <SuspensionPanel></SuspensionPanel>
 
   </div>
 </template>
@@ -31,11 +31,13 @@
   import {getSubject} from '@/api/api'
 
   const SideBarRight = () => import('../utils/SideBarRight')
+  const SuspensionPanel = () => import('../utils/SuspensionPanel')
 
   export default {
     name: "SubjectIndex",
     components: {
-      SideBarRight
+      SideBarRight,
+      SuspensionPanel
     },
     data() {
       return {

@@ -7,7 +7,7 @@
       <!--              {{item.author}}·-->
       <!--      <span v-if="$route.query.sort!='mod'">{{handleDate(item.create_date)}}</span>-->
       <!--      <span v-else>{{handleDate(item.mod_date)}}</span>-->
-      <!--              ·{{item.category}}-->
+      <!--              ·{{item.archive}}-->
       <!--            </div>-->
       <!--            &lt;!&ndash;标题&ndash;&gt;-->
       <!--            <div class="title">-->

@@ -2,11 +2,11 @@
   <div class="commonpositiontop scindex">
     <div id="chaptersummary">
       <Card :style="{'margin-left':(collAndshadow?'-320px':0)}">
-        <Alert type="warning" v-if="subject.reproduce"  show-icon>
+        <Alert type="warning" v-if="subject.reproduce" show-icon>
           <b style="font-weight: bolder;color: indianred">原载于
-          <a :href="subject.reproduce_source" target="_Blank">
-            <Icon type="ios-undo-outline" color="orange"/>
-          </a>,仅供个人学习，请勿转发商用</b>
+            <a :href="subject.reproduce_source" target="_Blank">
+              <Icon type="ios-undo-outline" color="orange"/>
+            </a>,仅供个人学习，请勿转发商用</b>
         </Alert>
         <Timeline>
           <TimelineItem color="green" v-for="item in summary" :key="item.id" @click.native="changechapter(item.id)">
@@ -110,7 +110,7 @@
           console.log(err.response)
         })
       },
-      //初始化第一个专题第一个章节详情
+      //初始化章节详情
       initchapterdetail() {
         let id = this.$route.params.id
         getChapter({id: id}).then(res => {
@@ -118,8 +118,14 @@
           this.cs = res.data.topic.codestyle
           console.log(this.chapter);
           console.log(this.cs);
-          this.SetSubject({title: this.chapter.topic.title});
-          this.$Spin.hide();
+          //如果文章id对应的主题urltag不对，即url不对，依然返回404
+          if (res.data.topic.urltag == this.$route.params.title) {
+            this.SetSubject({title: this.chapter.topic.title});
+            this.$Spin.hide();
+          } else {
+            this.$Spin.hide();
+            this.$router.push({name: 'notFound'})
+          }
         }).catch(err => {
           // 返回首页
           this.$Spin.hide();
@@ -220,8 +226,8 @@
     cursor: pointer;
   }
 
-/*  alert覆盖*/
+  /*  alert覆盖*/
   .ivu-alert.ivu-alert-with-icon {
     padding: 8px 28px 8px 38px;
-}
+  }
 </style>
