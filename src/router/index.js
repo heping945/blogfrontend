@@ -5,6 +5,7 @@ import Router from 'vue-router'
 const Index = () => import('@/components/Index');
 const Header = () => import('@/components/layout/Header');
 const Footer = () => import('@/components/layout/Footer');
+const About = () => import('@/components/About');
 const IndexContent = () => import('@/components/index/IndexContent');
 const PostContent = () => import('@/components/post/PostContent');
 const PostDetail = () => import('@/components/post/PostDetail');
@@ -54,6 +55,18 @@ export default new Router({
           },
           meta: {
             title: '首页'
+          }
+        },
+        {
+          path: '/about',
+          name: 'about',
+          components: {
+            header: Header,
+            content: About,
+            footer: Footer
+          },
+          meta: {
+            title: '关于'
           }
         },
         {

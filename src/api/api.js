@@ -154,3 +154,10 @@ export const getChapterSummary = params =>{
 export const getChapter = params => {
   return api.get(`/chapters/` + params.id, params)
 };
+
+// 更新章节（patch更新顺序或者title因为md文件设置的必须）
+
+export const updateChapter = params => {
+  return api.patch(`/chapters/` + params.id+'/', params)
+};
+

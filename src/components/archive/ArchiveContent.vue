@@ -7,7 +7,7 @@
             <Tabs value="cat">
               <!--              分类 包括标签和专题-->
               <TabPane label="分类" name="cat">
-                <Input placeholder="过滤......" v-model="tofilval" suffix="ios-funnel-outline"/>"/>
+                <Input placeholder="过滤......" v-model="tofilval" suffix="ios-funnel-outline"/>
                 <Tabs value="name" type="card" style="margin-top: 30px">
                   <!--                  分类-->
                   <TabPane label="分类" name="name">
@@ -42,6 +42,11 @@
                         </ListItem>
                       </List>
                     </Alert>
+                    <!--                    分页-->
+                    <div style="text-align: center;margin-bottom: 30px">
+                      <Page :total="postcount" show-elevator v-show="postcount>10" @on-change="getnewr"/>
+                    </div>
+
                   </TabPane>
                   <!--                  标签区-->
                   <TabPane label="标签" name="name2">
@@ -109,7 +114,8 @@
         subjectlist: [],
         tagselected: {},
         subselected: {},
-        tofilval: ''
+        tofilval: '',
+        postcount: null
       }
     },
     computed: {
@@ -191,7 +197,8 @@
           this.catselected = x;
           getIndexPost({top_category: x.id}).then(res => {
             console.log(res);
-            this.postres = res.data.results
+            this.postres = res.data.results;
+            this.postcount = res.data.count
           }).catch(err => {
             console.log(err)
           })
@@ -218,6 +225,17 @@
       },
       topost(k) {
         this.$router.push({name: 'postdetail', params: {id: k}})
+      },
+      //分页切换发送请求显示结果
+      getnewr(p) {
+        console.log(p);
+        getIndexPost({top_category: this.catselected.id, page: p}).then(res => {
+          console.log(res);
+          this.postres = res.data.results;
+          this.postcount = res.data.count
+        }).catch(err => {
+          console.log(err)
+        })
       }
     }
   }

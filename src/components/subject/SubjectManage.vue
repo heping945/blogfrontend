@@ -13,7 +13,7 @@
         </Select>
         <Alert type="success" style="margin-top: 20px" v-if="summary.length">
           <List>
-            <ListItem v-for="item,index in summary" :key="item.id" >
+            <ListItem v-for="item,index in summary" :key="item.id" @click.native="updatechapter(item)">
               <b>{{index+1}}</b>：&nbsp;&nbsp;<b style="color: #007fff">{{item.order}}</b>：&nbsp;&nbsp;<b
               style="color: rebeccapurple">{{item.id}}</b>：&nbsp;&nbsp;{{item.title}}
             </ListItem>
@@ -31,16 +31,36 @@
       </Col>
     </Row>
 
+    <Modal
+      v-model="modal1"
+      title="请输入更改信息"
+      ok-text="更新"
+      @on-ok="ok"
+      @on-cancel="cancel">
+      <!--      <p>-->
+      <!--        <span style="width: 100px;font-weight: bolder;margin-right: 100px">title:</span><Input v-model="chaptertitle" placeholder="Enter something..." style="width: 300px"/>-->
+      <!--      </p>-->
+      <!--      <p>-->
+      <!--       <span style="width: 100px;font-weight: bolder">order:</span><Input v-model="chapterorder" placeholder="Enter something..." style="width: 300px"/>-->
 
+      <!--      </p>-->
+      <Form :label-width="50">
+        <FormItem label="标题">
+          <Input v-model.trim="chaptertitle" placeholder="Enter title..." :maxlength="64"></Input>
+        </FormItem>
+        <FormItem label="顺序">
+          <Input v-model="chapterorder" placeholder="Enter order..." type="number"></Input>
+        </FormItem>
+      </Form>
+
+    </Modal>
   </div>
 </template>
 
 <script>
-  // import Axios from 'axios'
-  // import {postimgupload} from '../../api/api'
-  // import {getIndexPost} from '../../api/api'
   import {getChapterSummary} from '@/api/api'
   import {getSubject} from '../../api/api'
+  import {updateChapter} from '../../api/api'
 
 
   export default {
@@ -50,7 +70,12 @@
         header: {},
         subjectlist: [],
         topicselect: '',
-        summary: []
+        summary: [],
+        modal1: false,
+        value: '',
+        chaptertitle: '',
+        chapterorder: null,
+        chapterid: null
       }
     },
     computed: {
@@ -94,6 +119,38 @@
         }).catch(err => {
           console.log(err.response)
         })
+      },
+      //更改章节信息（顺序，标题）
+      updatechapter(x) {
+        console.log(x);
+        this.chaptertitle = x.title;
+        this.chapterorder = x.order;
+        this.chapterid = x.id;
+        this.modal1 = true
+      },
+      ok() {
+        if (!this.chaptertitle || !this.chapterorder) {
+          this.$Message.warning('无效输入，请检查')
+        } else {
+          updateChapter({id: this.chapterid, title: this.chaptertitle, order: this.chapterorder}).then(res => {
+            console.log(res)
+            console.log(this.summary)
+          //  操作数组（删除原来id的元素，在数组里按照新返回元素重新插入）
+           this.summary = this.summary.filter(i=>{
+              //获得一个没有此元素的新列表
+              return i.id!=this.chapterid
+            });
+            this.summary.filter(i=>{
+              // return i.order ==
+            })
+          }).catch(err => {
+            this.$Message.error('输入错误，请检查输入类型（order只能为正整数）')
+          })
+        }
+
+      },
+      cancel() {
+        // this.$Message.info('Clicked cancel');
       },
       //保留
       // uploadFile() {
@@ -184,5 +241,10 @@
   /*上传div变block*/
   /deep/ .ivu-upload-select {
     display: block;
+  }
+
+  /*列表指针*/
+  .ivu-list-item {
+    cursor: pointer;
   }
 </style>

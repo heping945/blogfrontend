@@ -9,7 +9,8 @@
             </a>,仅供个人学习，请勿转发商用</b>
         </Alert>
         <Timeline>
-          <TimelineItem color="green" v-for="item in summary" :key="item.id" @click.native="changechapter(item.id)">
+          <TimelineItem  :color="item.id==$route.params.id?'red':'green'" v-for="item in summary" :key="item.id" @click.native="changechapter(item.id)"
+                        :class="{'active':item.id==$route.params.id}">
             {{item.title}}
           </TimelineItem>
         </Timeline>
@@ -229,5 +230,9 @@
   /*  alert覆盖*/
   .ivu-alert.ivu-alert-with-icon {
     padding: 8px 28px 8px 38px;
+  }
+
+  .active {
+    color: red;
   }
 </style>

@@ -3,7 +3,7 @@
     <Collapse simple>
       <Panel name="1">
         分类：
-        <router-link to="/category" title="查看分类更多内容"> <Tag color="cyan">{{cat}}</Tag></router-link>
+        <router-link to="/archive" title="查看分类更多内容"> <Tag color="cyan">{{cat}}</Tag></router-link>
         <p slot="content" style="padding-left: 30px">
           标签：
           <Tag :color="color[Math.floor(Math.random()*color.length)]" v-for="t in tag" :key="tag.id">

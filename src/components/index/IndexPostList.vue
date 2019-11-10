@@ -198,7 +198,7 @@
           this.$Loading.finish();
           this.loadingspainflag = false
         }).catch(err => {
-          console.log(err);
+          console.log(err.response);
           this.$Loading.error();
         })
       }

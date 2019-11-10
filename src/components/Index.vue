@@ -1,6 +1,8 @@
 <template>
   <div class="main-wrapper">
-    <router-view name="header" keep-alive ></router-view>
+    <keep-alive>
+      <router-view name="header"></router-view>
+    </keep-alive>
     <transition name="fade" :duration="100">
       <router-view name="content"></router-view>
     </transition>
@@ -12,8 +14,7 @@
   export default {
     name: "Index",
     data() {
-      return {
-      }
+      return {}
     }
   }
 </script>

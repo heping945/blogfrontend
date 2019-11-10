@@ -25,7 +25,9 @@
     </Card>
     <div class="info">
       <p>
-        <span> <a href="">关于</a></span>
+        <span>
+        <router-link :to="{name:'about'}" target="_blank">关于</router-link>
+        </span>
         ·
         <span>使用指南</span>
       </p>
