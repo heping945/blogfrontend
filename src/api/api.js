@@ -161,3 +161,9 @@ export const updateChapter = params => {
   return api.patch(`/chapters/` + params.id+'/', params)
 };
 
+//反馈建议留言
+export const createMessage = params => {
+  return api.post(`/messages/` , params)
+};
+
+

@@ -128,9 +128,9 @@
       return {
         droplist: [
           {title: '首页', url: '/', divided: false},
-          {title: '文章', url: '/post', divided: false},
           {title: '归档', url: '/archive', divided: false},
           {title: '专题', url: '/subject', divided: false},
+          {title: '问题', url: '/question', divided: false},
           {title: '算法', url: '/algorithm', divided: true},
         ],
         search_arg: '',
@@ -306,7 +306,8 @@
 
     .about {
       text-align: center;
-      a{
+
+      a {
         color: #13c2c2;
         font-weight: bolder;
       }
@@ -344,7 +345,8 @@
     display: none;
 
   }
-  .thidden{
+
+  .thidden {
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;

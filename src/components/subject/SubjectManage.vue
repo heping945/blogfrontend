@@ -49,7 +49,7 @@
           <Input v-model.trim="chaptertitle" placeholder="Enter title..." :maxlength="64"></Input>
         </FormItem>
         <FormItem label="顺序">
-          <Input v-model="chapterorder" placeholder="Enter order..." type="number"></Input>
+           <InputNumber :max="200" :min="0" v-model="chapterorder" placeholder="Enter order..." style="width: 100%"></InputNumber>
         </FormItem>
       </Form>
 
@@ -135,14 +135,35 @@
           updateChapter({id: this.chapterid, title: this.chaptertitle, order: this.chapterorder}).then(res => {
             console.log(res)
             console.log(this.summary)
-          //  操作数组（删除原来id的元素，在数组里按照新返回元素重新插入）
-           this.summary = this.summary.filter(i=>{
+            //  操作数组（删除原来id的元素，在数组里按照新返回元素重新插入）
+            this.summary = this.summary.filter(i => {
               //获得一个没有此元素的新列表
-              return i.id!=this.chapterid
+              return i.id != this.chapterid
             });
-            this.summary.filter(i=>{
-              // return i.order ==
-            })
+            //查询是否有相同order
+            let r1 = this.summary.filter(i => {
+              return i.order == res.data.order
+            });
+            if (r1.length) {
+              //如果有  获得此元素的第一个的位置
+              let t = r1[0]
+              let ind = this.summary.indexOf(t)
+              this.summary.splice(ind, 0, res.data)
+              this.$Message.success('更新成功')
+            } else {
+              //  没有的话获得大于order第一个元素的位置
+              let tid = this.summary.indexOf(this.summary.filter(i => {
+                return i.order > res.data.order
+              })[0]);
+              console.log(tid);
+              //是否是最大的order
+              if (tid != -1) {
+                this.summary.splice(tid, 0, res.data)
+              } else {
+                this.summary.push(res.data)
+              }
+              this.$Message.success('更新成功')
+            }
           }).catch(err => {
             this.$Message.error('输入错误，请检查输入类型（order只能为正整数）')
           })

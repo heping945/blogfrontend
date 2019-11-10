@@ -7,7 +7,6 @@ const Header = () => import('@/components/layout/Header');
 const Footer = () => import('@/components/layout/Footer');
 const About = () => import('@/components/About');
 const IndexContent = () => import('@/components/index/IndexContent');
-const PostContent = () => import('@/components/post/PostContent');
 const PostDetail = () => import('@/components/post/PostDetail');
 const PostAdd = () => import('@/components/post/PostAdd');
 const PostEdit = () => import('@/components/post/PostEdit');
@@ -69,18 +68,18 @@ export default new Router({
             title: '关于'
           }
         },
-        {
-          path: '/post',
-          name: 'post',
-          components: {
-            header: Header,
-            content: PostContent,
-            footer: Footer
-          },
-          meta: {
-            title: '文章'
-          }
-        },
+        // {
+        //   path: '/post',
+        //   name: 'post',
+        //   components: {
+        //     header: Header,
+        //     content: PostContent,
+        //     footer: Footer
+        //   },
+        //   meta: {
+        //     title: '文章'
+        //   }
+        // },
         {
           path: '/post/add',
           name: 'postadd',
