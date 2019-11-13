@@ -56,8 +56,7 @@
           </Col>
           <Col :xs="0" :sm="0" :md="0" :lg="2" :xl="2">
             <div class="about">
-              <router-link :to="{name:'about'}" target="_blank"> 关于</router-link>
-
+              <router-link :to="{name:'info',params:{info:'about'}}" target="_blank"> 关于</router-link>
             </div>
           </Col>
           <Col :xs="6" :sm="5" :md="4" :lg="2" :xl="3">

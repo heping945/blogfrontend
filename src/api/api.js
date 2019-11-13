@@ -167,3 +167,8 @@ export const createMessage = params => {
 };
 
 
+//获得关于信息
+
+export  const  getinfo = params =>{
+  return api.get(`/info/`+ params.id+'/', params)
+}

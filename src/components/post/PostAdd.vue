@@ -292,4 +292,9 @@
     z-index: 234;
 
   }
+
+    ol, ul {
+    list-style-type: disc !important;
+  }
+
 </style>

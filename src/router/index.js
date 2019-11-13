@@ -5,7 +5,7 @@ import Router from 'vue-router'
 const Index = () => import('@/components/Index');
 const Header = () => import('@/components/layout/Header');
 const Footer = () => import('@/components/layout/Footer');
-const About = () => import('@/components/About');
+const Info = () => import('@/components/Info');
 const IndexContent = () => import('@/components/index/IndexContent');
 const PostDetail = () => import('@/components/post/PostDetail');
 const PostAdd = () => import('@/components/post/PostAdd');
@@ -57,11 +57,11 @@ export default new Router({
           }
         },
         {
-          path: '/about',
-          name: 'about',
+          path: '/:info(about|guide|version)',
+          name: 'info',
           components: {
             header: Header,
-            content: About,
+            content: Info,
             footer: Footer
           },
           meta: {
