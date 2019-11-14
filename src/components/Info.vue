@@ -8,11 +8,12 @@
 
 <script>
   import {getinfo} from '@/api/api'
-    const SuspensionPanel = () => import('@/components/utils/SuspensionPanel')
+
+  const SuspensionPanel = () => import('@/components/utils/SuspensionPanel')
 
   export default {
     name: "About",
-    components:{
+    components: {
       SuspensionPanel
     },
     data() {
@@ -36,6 +37,9 @@
             break;
           case 'guide':
             infoid = 3
+            break;
+          case 'recommend':
+            infoid = 4
             break;
         }
         console.log(urlname)

@@ -34,7 +34,7 @@
             <div class="sj"></div>
            <div class="dm">
              添加请注明缘由
-             <img src="/static/wx.jpg" alt="" width="160px" >
+             <img src="/static/wx.jpg" alt="" width="160px">
            </div>
           </div>
         </span>
@@ -43,9 +43,14 @@
            <span>
           <router-link :to="{name:'info',params:{info:'version'}}" target="_blank">版本更新</router-link>
         </span>
+        ·
+        <span>
+          <router-link :to="{name:'info',params:{info:'recommend'}}" target="_blank">学习推荐</router-link>
+        </span>
       </p>
 
       <p>苏ICP备19007507号-1</p>
+      <p>©2019 pinge · Powered by zhp</p>
     </div>
   </div>
 
@@ -99,7 +104,7 @@
 
     .cm {
       position: absolute;
-      top:24px;
+      top: 24px;
       color: yellow;
       text-align: center;
 

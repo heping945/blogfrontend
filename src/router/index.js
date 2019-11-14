@@ -57,7 +57,7 @@ export default new Router({
           }
         },
         {
-          path: '/:info(about|guide|version)',
+          path: '/:info(about|guide|version|recommend)',
           name: 'info',
           components: {
             header: Header,
@@ -133,7 +133,7 @@ export default new Router({
           }
         },
         {
-          path: '/subject',
+          path: '/topic',
           name: 'subjectindex',
           components: {
             header: Header,
@@ -145,7 +145,7 @@ export default new Router({
           }
         },
         {
-          path: '/subject/:title/:id',
+          path: '/topic/:title/:id',
           name: 'subjectcontent',
           components: {
             header: Header,
@@ -157,7 +157,7 @@ export default new Router({
           }
         },
         {
-          path: '/subject/manage',
+          path: '/topic/manage',
           name: 'subjectmanage',
           components: {
             header: Header,

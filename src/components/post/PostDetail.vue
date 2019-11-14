@@ -22,7 +22,7 @@
                   {{postdetail.create_date}}&nbsp;&nbsp;阅读 {{postdetail.views_count}}
                   <a :href="postdetail.reproduce_source" v-if="postdetail.reproduce" style="margin-left: 30px"
                      target="_blank">
-                    <Icon type="ios-link-outline" color="rebeccapurple" :size="16"/>
+                    <Icon type="ios-link" color="rebeccapurple" :size="16"/>
                   </a>
                 </div>
               </div>

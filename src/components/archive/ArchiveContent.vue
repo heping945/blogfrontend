@@ -11,6 +11,7 @@
                 <Tabs value="name" type="card" style="margin-top: 30px">
                   <!--                  分类-->
                   <TabPane label="分类" name="name">
+                    <!--                    三级分类-->
                     <p>
                       <Tag :color="color[Math.floor(Math.random()*color.length)]" v-for="i in topcatlist" :key="i.id"
                            @click.native="selectc(i)">
@@ -29,12 +30,14 @@
                         {{i.name}}
                       </Tag>
                     </p>
+                    <!--                    面包屑-->
                     <Breadcrumb separator=">" style="margin-top: 15px;font-weight: bolder"
                                 v-show="Object.keys(catselected).length > 0">
                       <BreadcrumbItem v-if="catselected.parent_category">{{catselected.parent_category.name}}
                       </BreadcrumbItem>
                       <BreadcrumbItem>{{catselected.name}}</BreadcrumbItem>
                     </Breadcrumb>
+                    <!--                    结果-->
                     <Alert type="success" style="margin-top: 20px" v-if="postres.length">
                       <List>
                         <ListItem v-for="item,index in postres" :key="item.id" @click.native="topost(item.id)">
@@ -62,6 +65,11 @@
                         </ListItem>
                       </List>
                     </Alert>
+                    <!--                    分页-->
+                    <div style="text-align: center;margin-bottom: 30px">
+                      <Page :total="postcount2" show-elevator v-show="postcount2>10" @on-change="getnewr2"/>
+                    </div>
+
                   </TabPane>
                   <!--                  专题区-->
                   <TabPane label="专题" name="name3">
@@ -115,7 +123,8 @@
         tagselected: {},
         subselected: {},
         tofilval: '',
-        postcount: null
+        postcount: null,
+        postcount2: null,
       }
     },
     computed: {
@@ -213,6 +222,7 @@
           getIndexPost({tags: x.id}).then(res => {
             console.log(res);
             this.postres2 = res.data.results
+            this.postcount2 = res.data.count
           }).catch(err => {
             console.log(err)
           })
@@ -236,7 +246,17 @@
         }).catch(err => {
           console.log(err)
         })
-      }
+      },
+            getnewr2(p) {
+        console.log(p);
+        getIndexPost({tags: this.tagselected.id, page: p}).then(res => {
+          console.log(res);
+          this.postres2 = res.data.results;
+          this.postcount2 = res.data.count
+        }).catch(err => {
+          console.log(err)
+        })
+      },
     }
   }
 </script>
