@@ -1,7 +1,7 @@
 <template>
   <div id="catlog">
     <div style="position: fixed;top: 100px;" v-if="catlog.length">
-      <Anchor show-ink >
+      <Anchor show-ink>
         <div v-for="item,index in newcatlog">
           <AnchorLink :href="'#'+item.id" :title="item.title" v-if="item.tag===catlog[0].tag">
             <template v-for="it,i in newcatlog.slice(index+1,n(newcatlog,'tag',item.tag,index)) ">
@@ -110,6 +110,9 @@
   ;
   }
 
+  /deep/ .ivu-anchor-wrapper {
+    max-height: 80vh !important;
+  }
 
 
 </style>

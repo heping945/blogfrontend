@@ -47,7 +47,7 @@
           console.log(res);
           this.value = res.data.body_md
         }).catch(err => {
-          // this.$router.push({name: 'notFound'})
+          this.$router.push({name: 'notFound'})
         })
       }
     }
