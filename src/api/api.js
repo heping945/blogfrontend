@@ -172,3 +172,14 @@ export const createMessage = params => {
 export  const  getinfo = params =>{
   return api.get(`/info/`+ params.id+'/', params)
 }
+
+
+//长网址转短网址
+export const createShorturl = params =>{
+    return api.post(`/dwz/` , params)
+}
+//短网址转长网址
+
+export const getLongurl = params => {
+  return api.get(`/dwz/` + params.arg, params)
+};

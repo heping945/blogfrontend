@@ -15,7 +15,7 @@ const SubjectContent = () => import('@/components/subject/SubjectContent');
 const SubjectManage = () => import('@/components/subject/SubjectManage');
 const ArchiveContent = () => import('@/components/archive/ArchiveContent');
 const UserContent = () => import('@/components/accounts/UserContent');
-const UserActivites = () => import('@/components/accounts/UserActivites');
+const UserActivities = () => import('@/components/accounts/UserActivities');
 const UserPosts = () => import('@/components/accounts/UserPosts');
 const SettingsContent = () => import('@/components/settings/SettingsContent');
 const Profile = () => import('@/components/settings/Profile');
@@ -26,7 +26,8 @@ const SearchContent = () => import('@/components/search/SearchContent');
 const Login = () => import('@/components/auth/Login');
 const notFound = () => import('@/components/notFound');
 const FeedBack = () => import('@/components/feedback/FeedBack');
-;
+const DljIndex = () => import('@/components/dwz/DljIndex');
+const Dwztolong = () => import('@/components/dwz/Dwztolong');
 
 Vue.use(Router)
 
@@ -65,7 +66,7 @@ export default new Router({
             footer: Footer
           },
           meta: {
-            title: '关于'
+            title: '信息'
           }
         },
         // {
@@ -193,7 +194,7 @@ export default new Router({
               path: '/',
               name: 'userindex',
               components: {
-                userdetail: UserActivites,
+                userdetail: UserActivities,
               },
               meta: {
                 title: '动态',
@@ -289,7 +290,22 @@ export default new Router({
         title: '反馈交流'
       }
     },
-
+    {
+      path: '/dwz',
+      name: 'dwz',
+      component: DljIndex,
+      meta: {
+        title: '短链接'
+      }
+    },
+    {
+      path: '/t/:short_id',
+      name: 't',
+      component: Dwztolong,
+      meta: {
+        title: '跳转'
+      }
+    },
     {
       path: "/404",
       name: "notFound",

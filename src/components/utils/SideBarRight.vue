@@ -84,6 +84,7 @@
     li {
       margin: 5px 0;
       font-weight: 800;
+      list-style: none;
     }
   }
 

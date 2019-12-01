@@ -194,6 +194,7 @@
       //注销
       logout() {
         this.ClearToken();
+        this.reload();
         if (this.$route.meta.requireAuth) {
           this.$router.push({name: 'index'})
         }
@@ -292,8 +293,10 @@
       display: inline-block;
       height: 60px;
 
+
       li {
         float: left;
+        list-style: none;
       }
     ;
 

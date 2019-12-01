@@ -237,6 +237,7 @@
       padding: 3px;
       border: 1px solid #f1f1f1;
       box-shadow: 0 1px 2px 0;
+      list-style: none;
 
       .ivu-icon {
         font-size: 20px;
