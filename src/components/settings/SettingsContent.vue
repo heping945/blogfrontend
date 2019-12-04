@@ -84,6 +84,12 @@
     }
   }
 
+  @media(max-width: 360px) {
+    /deep/ .ivu-card-body {
+      padding: 16px 5px;
+    }
+  }
+
 
   main {
     position: relative;

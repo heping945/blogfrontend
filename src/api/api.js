@@ -183,3 +183,14 @@ export const createShorturl = params =>{
 export const getLongurl = params => {
   return api.get(`/dwz/` + params.arg, params)
 };
+
+
+// 获得个人资料
+export const getProfile = params => {
+  return api.get(`/users/` + params.username+'/', params)
+};
+
+// 更新资料profile
+export const updateProfile = params => {
+  return api.patch(`/users/` + params.username+'/', params)
+};
