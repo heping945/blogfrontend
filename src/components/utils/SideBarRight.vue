@@ -1,7 +1,7 @@
 <template>
   <div class="lg-index-sidebar">
     <Card :bordered="false">
-      <p slot="title">关于本站</p>
+      <p slot="title"><marquee>{{randomtext}}</marquee></p>
       <ul>
         <li>
           后端：django drf
@@ -57,11 +57,31 @@
 </template>
 
 <script>
+  import data from '../../../static/showtext.json';
   export default {
     name: "SideBarRight",
     data() {
       return {
-        cm: false
+        cm: false,
+        // showtext:[
+        //   '1',
+        //   '2',
+        //   '3',
+        //   '4',
+        // ]
+      }
+    },
+    created(){
+      console.log(data.data)
+    },
+    computed:{
+      showtext(){
+        return data.data
+      },
+      randomtext(){
+        let l = this.showtext.length;
+        console.log(l)
+        return this.showtext[Math.floor(Math.random()*l)]
       }
     },
     methods: {

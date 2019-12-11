@@ -24,7 +24,7 @@
       <Row>
         <Col :xs="0" :sm="0" :md="24" :lg="24">
           <List item-layout="vertical">
-            <ListItem v-for="item in postlist" :key="item.id" @click.native="todetail(item)">
+            <ListItem v-for="(item,index) in postlist" :key="item.id" @click.native="todetail(item)">
               <ListItemMeta :avatar="item.author.avatar" :title="item.title" :description="item.excerpt|excerptshort"/>
               <template slot="action">
                 <li>
@@ -42,21 +42,22 @@
                 <li v-if="$route.query.sort!='mod'">
                   <Icon type="md-calendar"/>
                   <!--                  <Time :time="item.create_date"/>-->
-<!--                  {{item.create_date}}-->
+                  <!--                  {{item.create_date}}-->
                   {{moment(item.create_date).fromNow()}}
 
                 </li>
                 <li v-else>
                   <Icon type="md-calendar"/>
                   <!--                  <Time :time="item.mod_date"/>-->
-<!--                  {{item.mod_date}}-->
+                  <!--                  {{item.mod_date}}-->
                   {{moment(item.mod_date).fromNow()}}
                 </li>
               </template>
               <template slot="extra">
-                <img
-                  src="http://imgsrc.baidu.com/forum/w=580/sign=aa2ad7a6b1b7d0a27bc90495fbef760d/324b5b540923dd5451501c7cd209b3de9c82485f.jpg"
-                  style="width: 280px;height: 140px">
+<!--                <img-->
+<!--                  :src="img_url(index)"-->
+<!--                  style="width: 280px;height: 140px">-->
+                                <div style="width: 200px;height: 100px"></div>
               </template>
             </ListItem>
           </List>
@@ -117,7 +118,20 @@
         tobottomonce: true,
         next: '',
         orderparams: {},
-        time: '1111111'
+        time: '1111111',
+        // imgurl:[
+        //   {id:1,url:'https://user-gold-cdn.xitu.io/2019/12/10/16eef6f84ec80f40?imageView2/1/w/1304/h/734/q/85/format/webp/interlace/1'},
+        //   {id:1,url:'http://dmimg.5054399.com/allimg/pkm/pk/22.jpg'},
+        //   {id:1,url:'https://dss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=2961109585,707599822&fm=26&gp=0.jpg'},
+        //   {id:1,url:'https://dss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3437217665,1564280326&fm=26&gp=0.jpg'},
+        //   {id:1,url:'http://img1.imgtn.bdimg.com/it/u=3132873326,2624245455&fm=26&gp=0.jpg'},
+        // ],
+        imgurl: [
+          // 'https://user-gold-cdn.xitu.io/2019/12/10/16eef6f84ec80f40?imageView2/1/w/1304/h/734/q/85/format/webp/interlace/1',
+          'http://dmimg.5054399.com/allimg/pkm/pk/22.jpg',
+          'https://dss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=2961109585,707599822&fm=26&gp=0.jpg',
+          'https://dss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3437217665,1564280326&fm=26&gp=0.jpg',
+        ],
       }
     },
     components: {
@@ -201,8 +215,10 @@
           console.log(err.response);
           this.$Loading.error();
         })
-      }
-      ,
+      },
+      img_url(id) {
+        return this.imgurl[Math.floor(Math.random() * 10) + id]
+      },
       // handleDate,
       // xx(x) {
       //   console.log(x)
