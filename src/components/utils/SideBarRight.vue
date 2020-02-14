@@ -1,7 +1,9 @@
 <template>
   <div class="lg-index-sidebar">
     <Card :bordered="false">
-      <p slot="title"><marquee>{{randomtext}}</marquee></p>
+      <p slot="title">
+        <marquee>{{randomtext}}</marquee>
+      </p>
       <ul>
         <li>
           后端：django drf
@@ -49,7 +51,11 @@
         </span>
       </p>
 
-      <p>苏ICP备19007507号-1</p>
+      <p>
+        <a href="http://www.beian.miit.gov.cn">
+          苏ICP备19007507号-1
+        </a>
+      </p>
       <p>©2019 pinge · Powered by zhp</p>
     </div>
   </div>
@@ -58,6 +64,7 @@
 
 <script>
   import data from '../../../static/showtext.json';
+
   export default {
     name: "SideBarRight",
     data() {
@@ -71,17 +78,17 @@
         // ]
       }
     },
-    created(){
+    created() {
       console.log(data.data)
     },
-    computed:{
-      showtext(){
+    computed: {
+      showtext() {
         return data.data
       },
-      randomtext(){
+      randomtext() {
         let l = this.showtext.length;
         console.log(l)
-        return this.showtext[Math.floor(Math.random()*l)]
+        return this.showtext[Math.floor(Math.random() * l)]
       }
     },
     methods: {

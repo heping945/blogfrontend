@@ -83,6 +83,10 @@ module.exports = {
   },
 //  配置cdn使用
   externals: {
-      moment: 'moment',
+    moment: 'moment',
+    vue: 'Vue',
+    axios: 'axios',
+    // iview: 'iview',
+    'vue-router': 'VueRouter',
   },
 }

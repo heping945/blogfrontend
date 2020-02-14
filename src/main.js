@@ -13,13 +13,13 @@ Vue.use(mavonEditor);
 
 //全局引入iView
 import iView from 'iview';
-import 'iview/dist/styles/iview.css';
-
-Vue.use(iView);
+// import 'iview/dist/styles/iview.css';
+//
+// Vue.use(iView);
 
 import "./assets/scss/reset.scss";
 import "./assets/scss/base.scss";
-import "../static/iconfont/iconfont.css";
+import "./assets/iconfont/iconfont.css";
 
 //正式上线会注释
 // import VConsole from 'vconsole'
